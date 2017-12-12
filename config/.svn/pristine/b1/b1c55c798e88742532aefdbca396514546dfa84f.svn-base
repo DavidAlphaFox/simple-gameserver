@@ -1,7 +1,0 @@
-%% 奇遇、奇才商店刷新需要的消耗配置
-%% {explore_shop_refresh_need, {消耗的道具ID，消耗的数量，每个道具等价的元宝}}.
-{explore_shop_refresh_need, {20003,1,50}}.
-
-{shop_refresh_guide_num,18}.
-
-{unioncoin_shop_refresh_need, 300}.

@@ -1,6 +1,0 @@
-%% 战役配置
-%% 关卡需求等级在data_chapter中配置,具体字段为activeNeedLevel
-{common_battle_start_dungeonID,30001}.
-{hard_battle_start_dungeonID,10001}.
-{fast_hard_battle_start_dungeonID,10001}.
-{transmigration_battle_start_dungeonID,33001}.
