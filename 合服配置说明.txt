@@ -1,0 +1,55 @@
+合服说明
+
+后端程序注意：开发新版本时合服程序需要修改的地方
+如果有新加的g表，在db_name.hrl的all_role_id_tables宏中加上新表的名字，并在db_sql.erl中添加对应的trans函数，如果有对原有表结构进行修改，也需要修改对应的trans函数
+
+运维合服说明
+
+1.首先要备份参加合服的各个服务器数据
+2.修改配置，在config/do_merge.config中，只需要在合服主服务器上修改此配置
+%% 配置说明
+%%注意，主服务器的ID必须为所有参与合服的服务器中最小的
+
+%% 是否删除死号 true删除 false则不删除
+{is_delete_dead_player, true}. 
+
+%% 删除死号的条件，离线超过多少天
+{offline_days, 14}. 
+
+%% 删除死号条件，等级低于多少级
+{level, 10}.
+
+%% 删除死号条件，充值低于多少
+{pay_gold, 0}.
+
+%% 出现重名时添加什么后缀
+{rename_fix, ".s"}.
+
+%% 合服的从服务器ID列表,不能包含目标服务器
+{server_id_list, [22,28]}.
+
+%% 合服从服务器的数据库连接配置，有几个从服务器参与合服就要写几条
+{{database, 22}, {"localhost",3306,"root","test","game2",10}}.
+{{database, 28}, {"localhost",3306,"root","test","game3",10}}.
+
+%% 合服日志输出文件路径
+{merge_log_path, "d:/log/merge.log"}.
+
+%% 只保留这个最近x天内的邮件,超过这个天数的将被删除.
+{mail_overdue_day, 7}.
+
+%% 合服后第一次启动前设在为true,并且重新加载此配置
+%% 合服后第一次启动后设在为false,并且重新加载此配置
+%% 此配置是用来在合服后进行数据修正的,务必配置准确
+{is_need_fix, true}.
+
+3. 修改setting/setting.config与目标服的setting.config保持一样,
+  然后进入主服目录的erlang shell控制台，执行tk_config:start_link(),
+  然后关掉控制台，重新进去控制台,调用merge:start().
+
+4.等待合服处理完成，完成后查看日志，日志最后输出合服完毕则表示合服完成
+
+5.此步骤很重要，修改帐号服务器server_list.config
+合服从服务器的登录入口要改为和合服主服务器一样的登录入口
+还需要修改合服主服务器的setting.config配置，在merge_server_id_list中添加已合并的
+服务器ID信息，比如主服合并掉了22服和28服，则改为{merge_server_id_list, [22, 28]}.

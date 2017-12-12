@@ -1,0 +1,77 @@
+//模块=bounty
+//编号=15300
+
+//message cs_bounty_info[id=15301]{
+//}
+
+//message	sc_bounty_info[id=15302]{
+//	required	int8		todayType	=1;
+//}
+
+message	cs_bounty_self_info[id=15303]{
+}
+
+message	sc_bounty_self_info[id=15304]{
+	repeated 	p_bounty_data data 		=1;
+	repeated	int16		buyGold		=2;//购买消耗元宝数量
+	required	int32		endTime		=3;
+}
+
+message p_bounty_data[id=15312]{
+	required 	int8 		restTimes 	=1;
+	required 	int8 		alreadyBuyTimes = 2;
+	required 	int8 		type 		=3;
+	repeated 	p_bounty_unit 	chapterInfo =4;
+}
+
+message	p_bounty_unit[id=15305]{
+	required	int16		chapterID	=1;
+	required	int8		isOpened	=2;//是否可以挑战该关卡 1 =>可以挑战,0=>未开启
+	required	int8		isPassed	=3;//是否通过了该关卡 1=> 已通过,0=> 未通过
+	required	int8		isGetReward	=4;//是否领取了奖励 1 => 已领取,0=>未领取
+}
+
+message	cs_bounty_challenge[id=15306]{
+	required	int16		chapterID	=1;
+	required 	int8 		type 		=2;
+}
+
+message	sc_bounty_challenge[id=15307]{
+	required	int8		result		=1;
+	//1 => 成功
+	//2 => 未达到挑战条件
+	//3 => 该boss已死
+	//4 => 没有挑战次数了
+	//5 => 没有该关卡
+	repeated	sc_fight_request	fightInfo	=2;//战斗的结果
+}
+
+message	cs_bounty_buy_times[id=15308]{
+	required 	int8 		type 		=2;
+    required    int8        but_times   =3;
+}
+
+message	sc_bounty_buy_times[id=15309]{
+	required	int8		result		=1;
+	//1 => 成功
+	//2 => 消耗品不足
+	//3 => 可购买次数已用尽
+	required 	int8 		type 		=2;
+	required 	int32 		restTimes	=3;
+	required 	int32 		alreadyBuyTimes	=4;
+}
+
+message	cs_bounty_get_reward[id=15310]{
+	required	int16		chapterID	=1;
+	required 	int8 		type 		=2;
+}
+
+message	sc_bounty_get_reward[id=15311]{
+	required	int8		result		=1;
+	//1 => 成功
+	//2 => 该奖励已领取
+	//3 => 尚未通关
+	//4 => 没有该关卡信息
+	//5 => 该关卡没有奖励
+	repeated	p_reward_info	reward		=2;
+}

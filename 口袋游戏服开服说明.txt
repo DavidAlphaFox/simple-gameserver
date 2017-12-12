@@ -1,0 +1,84 @@
+口袋开服说明
+
+1.编译好全部代码，将服务器目录打包，拷贝到目标服务器
+
+2.解压压缩包到指定路径
+
+3.修改common.config的开服时间serverOpenTime，修改setting/setting.config，
+setting.config修改详细说明
+%% 服务器监听端口
+{game_port, 12315}.
+
+%% 服务器ID
+{server_id, 4}.
+
+%% 服务器所属平台，混服为pmzz，app为pmapp，决定本服启动脚本里配置的节点名称
+{platform, pmzz}.
+
+%% 是否发布版，正式服都为true，设为false的话可以使用GM命令
+{is_release,true}.
+
+%% 服务器错误日志等级
+%% {0, no_log, "No log"}
+%% {1, critical, "Critical"}
+%% {2, error, "Error"}
+%% {3, warning, "Warning"}
+%% {4, info, "Info"}
+%% {5, debug, "Debug"}
+%% {6, dev, "Dev"}
+{log_level,3}.
+
+%% 服务器错误日志目录，请确保此目录存在，若不存在请创建
+{logger_file_dir, "./log"}.
+
+%% 连接帐号服务器密钥,与帐号服server_list.config里对应游戏服配置的key一致
+{account_server_connect_key, "12345678901234567890123456789012"}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% 注意，与三国不同的地方%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 帐号服务器内网IP
+{account_server_addr,"10.10.11.13"}.
+
+%% 帐号服务器的全局进程名称
+%% 请注意，帐号服的节点名称必须与此相同，配置时注意检查
+{platform_server, pm_platform_server}.
+
+%% 充值服务器内网IP
+{account_check_addr,"10.10.11.13"}.
+
+%% 充值服务器的全局进程名称
+%% 请注意，充值服的节点名称必须与此相同，配置时注意检查
+{pay_server, pm_pay_server}.
+
+%% 推送服务器 URL，根据推送服务器那边的内网IP和访问端口决定
+{push_url,"http://10.10.11.211:28082/recvpush"}.
+%% 与推送服务器common.config里配置的key一致
+{push_key,"1234567890"}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% 服务器最大同时在线玩家数,根据需要修改
+{max_online_num, 3000}.
+
+%% 数据库连接配置
+%% {database, {数据库IP,端口,用户名,密码,数据库名称,连接数量}}
+{database, {"localhost",3306,"root","test","pm_game",10}}.
+
+%% 广播消息的web接口使用的认证信息与接口使用的端口信息
+%% 请做好端口分配管理
+{passinfo, {"passed", 8089,"10.10.11.13"}}.
+
+%% 充值接口
+%% 请做好端口分配管理
+{pay_port, {8990,"10.10.11.13"}}.
+
+%% 客户端需求最低版本号,根据需要修改
+{client_version, {1,0,0}}.
+
+
+4.创建数据库，初始化数据库，注意要与setting.config配置的一致
+
+5.修改start.sh remsh.sh，注意节点取名要规范（例：混服一服为pmzz1，app一服为pmapp1）
+ 与setting.config中的platform选项的配置一致，即这里的节点名称为platform配置选项接上服务器ID
+
+6.启动服务器，查看日志和游戏服进程，确认启动成功,用remsh.sh进入到游戏节点，调用gen_account:get_config()生成机器人

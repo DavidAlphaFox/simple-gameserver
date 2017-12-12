@@ -1,0 +1,108 @@
+//模块=fire
+//编号=13100
+
+
+//====================核心协议流程==================================
+//
+//      Client								Server
+
+//=================流程完成==================================
+
+
+//打开爆竹界面，获得基本信息，并且服务器会推送数据变化
+message cs_firecracker_open[id=13101]{
+}
+
+message	sc_firecracker_open[id=13102]{
+	required	int8				status				=1;//0=>没有活动 1=>活动开启中
+	required	string				name				=2;//活动名称
+	required	string				description			=3;//活动描述
+	required	string				icon				=4;//活动图标
+	required	int32				startTime			=5;//开始时间戳
+	required	int32				rewardTime			=6;//领奖时间戳
+	required	int32				closeTime			=7;//关闭时间戳
+	required	int32				total				=8;//服务器燃放总数量
+	required	int8				markedPrice			=9;//标价
+	required	int8				tradedPrice			=10;//实际价格，如果和标价不一致，说明打折了
+	required	int32				count				=11;//玩家燃放总数量
+	required	int8				rank				=12;//玩家排名，未上榜则为0
+	required	int8				canReward			=13;//0=>不可以领奖 1=>可以领奖
+	required	int32				returnGold			=14;//返还给玩家的元宝数量
+	repeated	p_discount			discounts 			=15;//折扣信息列表
+    required    int16               minLevel            =16;//活动开启等级
+    required    int16               minVip              =17;//活动开启等级
+}
+
+message	p_discount[id=13103]{
+	required	int32				amount				=1;//数量
+	required	int8				discount			=2;//折扣
+}
+
+//爆竹信息同步
+message	sc_firecracker_info_sync[id=13104]{
+	required	int32				total				=1;//服务器燃放总数量
+	required	int8				tradedPrice			=2;//实际价格，如果和标价不一致，说明打折了
+    required    int32               returnGold          =3;//返还给玩家的元宝数量
+}
+
+
+//关闭爆竹界面，服务器会停止推送信息同步
+message cs_firecracker_close[id=13105, route=fire_server]{
+}
+
+
+//燃放爆竹
+message cs_firecracker_setoff[id=13106]{
+	required	int8				type				=1;//1=>点一次，2=>点十次
+}
+
+message	sc_firecracker_setoff[id=13107]{
+	required	int8				result				=1;//燃放结果
+	// 1=> 成功
+	// 2=> 失败，不在活动时间内
+	// 3=> 失败，元宝不够
+	// 4=> 失败，type错误
+	required	int32				count				=2;//玩家燃放总数量
+	required	int32				returnGold			=3;//应该返还的元宝数量
+	required	int8				canReward			=4;//0=>不可以领奖 1=>可以领奖
+	repeated	p_reward_info		rewardInfo			=5;//奖励信息｛包含保底银两｝
+}
+
+//查看爆竹排行榜
+message cs_firecracker_rank[id=13108, route=fire_server]{
+}
+
+message	sc_firecracker_rank[id=13109]{
+	repeated	p_firecracker_rank	rankList			=1;//排名列表
+}
+
+message	p_firecracker_rank[id=13110]{
+	required	int8				rank				=1;//排名
+	required	string				name				=2;//名称
+	required	int32				count				=3;//玩家燃放总数量
+	repeated	p_reward_info		rewardInfo			=4;//奖励信息
+    required    int16               level               =5;//等级
+}
+
+//领取爆竹排行奖励
+message cs_firecracker_get_reward[id=13111]{
+}
+
+message	sc_firecracker_get_reward[id=13112]{
+	required	int8				result				=1;//领取结果
+	// 1=> 成功
+	// 2=> 失败，不在活动时间内
+	// 3=> 失败，不在领奖排行榜内
+	// 4=> 失败，已经领取了奖励
+	// 5=> 失败，未知原因
+	repeated	p_reward_info		reward				=2;//奖励信息
+}
+
+message cs_firecracker_rewardList[id=13113]{
+	
+}
+
+message	sc_firecracker_rewardList[id=13114]{
+	required	p_reward_info			allrewards			=1;//全部奖励信息
+}
+

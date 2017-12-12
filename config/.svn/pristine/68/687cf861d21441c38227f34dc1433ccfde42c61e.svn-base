@@ -1,0 +1,34 @@
+%%训练师职业配置文件
+
+{prof_max_level,5}.
+
+%-define(FIGHT_TRAINER_TYPE,1).      %% 战斗训练师
+%-define(REAR_TRAINER_TYPE,2).       %% 饲育训练师
+%-define(COORDINATE_TRAINER_TYPE,3). %% 调整者
+%-define(ROLE_LEVEL_N,5).
+%-define(BATTLE_FINISH,8).
+%-define(ACTIVATE_TALENT,15).
+%-define(FIGHTPOWER,19).
+%-define(GER_OWN_STAR_N_QUALITY_N_ISMEGA_TN,33).                  %%将会统计上阵(包括小伙伴)以及背包中的精灵
+
+
+%%职业进阶需要的条件以及材料
+%{{data_trainerProf_uplevel,type,Level},{Condition,Cost}}.
+%{{data_trainerProf_uplevel,1,1},{[{5,10}],{sell_reward,316,0,0,0,[],0,[]}}}.
+%{{data_trainerProf_uplevel,1,1},{[{8,10}],{sell_reward,316,0,0,0,[],0,[]}}}.
+%{{data_trainerProf_uplevel,1,1},{[{15,10}],{sell_reward,316,0,0,0,[],0,[]}}}.
+%{{data_trainerProf_uplevel,1,1},{[{19,100000}],{sell_reward,316,0,0,0,[],0,[]}}}.
+%{{data_trainerProf_uplevel,1,1},{[{33,[2,3,4],2,ignore,2}],{sell_reward,316,0,0,0,[],0,[]}}}.
+
+
+{{data_trainerProf_uplevel,1,1},{[{5,80},{19,100000},{8,10031},{15,42000}],{sell_reward,0,0,0,0,[],0,[]}}}.
+{{data_trainerProf_uplevel,1,2},{[],{sell_reward,0,0,0,0,[{new_item,32058,50000,1,0},{new_item,32059,50000,1,0},{new_item,32060,50000,1,0},{new_item,32061,50000,1,0},{new_item,32062,50000,1,0},{new_item,32063,50000,1,0},{new_item,32064,50000,1,0},{new_item,32065,50000,1,0}],0,[]}}}.
+{{data_trainerProf_uplevel,1,3},{[],{sell_reward,0,0,0,0,[{new_item,32058,90000,1,0},{new_item,32059,90000,1,0},{new_item,32060,90000,1,0},{new_item,32061,90000,1,0},{new_item,32062,90000,1,0},{new_item,32063,90000,1,0},{new_item,32064,90000,1,0},{new_item,32065,90000,1,0}],0,[]}}}.
+{{data_trainerProf_uplevel,1,4},{[],{sell_reward,0,0,0,0,[{new_item,32058,140000,1,0},{new_item,32059,140000,1,0},{new_item,32060,140000,1,0},{new_item,32061,140000,1,0},{new_item,32062,140000,1,0},{new_item,32063,140000,1,0},{new_item,32064,140000,1,0},{new_item,32065,140000,1,0}],0,[]}}}.
+{{data_trainerProf_uplevel,1,5},{[],{sell_reward,0,0,0,0,[{new_item,32058,200000,1,0},{new_item,32059,200000,1,0},{new_item,32060,200000,1,0},{new_item,32061,200000,1,0},{new_item,32062,200000,1,0},{new_item,32063,200000,1,0},{new_item,32064,200000,1,0},{new_item,32065,200000,1,0}],0,[]}}}.
+
+{{data_trainerProf_uplevel,2,1},{[{33,[2],0,ignore,20},{33,[3],0,ignore,15},{33,[4],0,ignore,10},{33,[5],0,ignore,5}],{sell_reward,0,0,0,0,[],0,[]}}}.
+{{data_trainerProf_uplevel,2,2},{[],{sell_reward,0,0,0,0,[{new_item,32058,50000,1,0},{new_item,32059,50000,1,0},{new_item,32060,50000,1,0},{new_item,32061,50000,1,0},{new_item,32062,50000,1,0},{new_item,32063,50000,1,0},{new_item,32064,50000,1,0},{new_item,32065,50000,1,0}],0,[]}}}.
+{{data_trainerProf_uplevel,2,3},{[],{sell_reward,0,0,0,0,[{new_item,32058,90000,1,0},{new_item,32059,90000,1,0},{new_item,32060,90000,1,0},{new_item,32061,90000,1,0},{new_item,32062,90000,1,0},{new_item,32063,90000,1,0},{new_item,32064,90000,1,0},{new_item,32065,90000,1,0}],0,[]}}}.
+{{data_trainerProf_uplevel,2,4},{[],{sell_reward,0,0,0,0,[{new_item,32058,140000,1,0},{new_item,32059,140000,1,0},{new_item,32060,140000,1,0},{new_item,32061,140000,1,0},{new_item,32062,140000,1,0},{new_item,32063,140000,1,0},{new_item,32064,140000,1,0},{new_item,32065,140000,1,0}],0,[]}}}.
+{{data_trainerProf_uplevel,2,5},{[],{sell_reward,0,0,0,0,[{new_item,32058,200000,1,0},{new_item,32059,200000,1,0},{new_item,32060,200000,1,0},{new_item,32061,200000,1,0},{new_item,32062,200000,1,0},{new_item,32063,200000,1,0},{new_item,32064,200000,1,0},{new_item,32065,200000,1,0}],0,[]}}}.

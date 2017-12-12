@@ -1,0 +1,132 @@
+//模块=king
+//编号=12100
+
+
+//====================核心协议流程==================================
+//
+//      Client								Server
+
+//=================流程完成==================================
+
+
+// 打开界面时请求信息
+message		cs_king_enter[id=12101,route=king_server]{
+}
+
+message		sc_king_enter[id=12102]{
+	required		int32			beginTime		=1;//战斗开始时间
+	required		int8			state			=2;//状态
+	// 1=> 可以报名
+	// 2=> 报名人数已满
+	// 3=> 正在战斗,不能报名
+	required		int8			round			=3;//当前第几轮
+	required		int16			score			=4;//当前积分
+	required		int32			lastPeriodID	=5;//上届是第几届，0=上届不存在
+	required		string			lastChampion	=6;//上届冠军的名字
+	required		int16			myLastRank		=7;//我的上届排名
+	required		int8			buffLevel		=8;//我的当前buff层数
+	required		bool			isSigned		=9;//是否已经报名
+	required		int16			myCurRank		=10;//我的当前排名
+}
+
+message		sc_king_enter_wait_first_session[id=12103]{
+	required		int32			firstSignTime		=1;//第一次可以报名的时间
+}
+
+
+// 告诉服务器，你关闭了该界面
+message 	cs_king_quit[id=12106,route=king_server]{
+}
+
+// 请求报名
+message		cs_king_sign[id=12110]{
+}
+
+message		sc_king_sign[id=12111]{
+	required		int8			result			=1;//请求结果
+	// 1=> 成功
+	// 2=> 失败-报名人数已满
+	// 3=> 失败-报名时间已过
+	// 4=> 失败-vip等级不够
+	// 5=> 失败-现在不能报名
+	// 6=> 失败-已经报名了
+}
+
+
+// 请求激励
+message		cs_king_buff[id=12120,route=king_server]{
+	required		int8			type			=1;//类型
+	// 1=>声望
+	// 2=>元宝
+}
+
+message		sc_king_buff[id=12121]{
+	required		int8			result			=1;//请求结果
+	// 1=> 成功
+	// 2=> 失败-buff已满，不能再激励了
+	// 3=> 失败-货币不够
+	// 4=> 失败-你还未报名皇权
+	// 5=> 失败-现在不能激励
+	required		int8			type			=2;//类型
+	required		int8			newBuffLevel	=3;//激励成功时，新的buff层数
+}
+
+// 新的战斗
+message		sc_king_new_fight[id=12130]{
+	required		p_rec			newFight		=1;//新的战斗
+}
+
+message		p_rec[id=12131]{
+	required		string			attackerName	=1;//攻击方
+	required		string			defenderName	=2;//防守方
+	required		int8			type			=3;//类型
+	// type的最高位=A,type的后7位=N
+	// A=1,攻击方胜利;A=0,防守方胜利
+	// N表示=本次战斗是2的N次方进2的(N-1)次方 
+	required		int64			fightReplayUID	=4;//战斗录像UID
+}
+
+// 请求播放某场战斗
+message		cs_king_replay[id=12140,route=king_server]{
+	required		int64			fightReplayUID	=1;//战斗录像UID
+}
+
+message 	sc_king_replay[id=12141]{
+	required		sc_fight_request	fightInfo	=1;//战斗内容
+}
+
+// 请求战报
+message		cs_king_history[id=12150,route=king_server]{
+	required		int8				type		=1;//战报类型
+	// 1=> 上届战报
+	// 2=> 本届战报
+	required		int8				round		=2;//第几轮
+	required		int16				startPos	=3;//起始位置
+	required		int8				num			=4;//数量
+}
+
+message		sc_king_history[id=12151]{
+	repeated		p_rec			fightList		=1;//战斗列表
+}
+
+// 请求排名
+message		cs_king_rank[id=12160,route=king_server]{
+	required		int8			type			=1;//
+	// 1=> 上届排名
+	// 2=> 当前排名
+	required		int16			startPos		=2;//起始位置
+	required		int8			num				=3;//数量
+}
+
+message		sc_king_rank[id=12161]{
+	required		int8			type			=1;//
+	// 1=> 上届排名
+	// 2=> 当前排名
+	repeated		p_king_rank		rankList		=2;//本届排名
+}				
+
+message		p_king_rank[id=12162]{
+	required		int32			totalScore		=1;//总积分
+	repeated		int16			scoreList		=2;//列表第一个元素表是第一轮积分
+	required		string			name			=3;//玩家名字
+}		

@@ -1,0 +1,7 @@
+[
+{sasl, [	
+		{sasl_error_logger, {file,"/root/log"}},
+		{errlog_type, all}
+	   ]
+	}
+].

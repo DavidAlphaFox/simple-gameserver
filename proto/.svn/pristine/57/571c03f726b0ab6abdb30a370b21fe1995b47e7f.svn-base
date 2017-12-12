@@ -1,0 +1,147 @@
+//模块=familyBoss
+//编号=14300
+
+
+
+
+message cs_familyBoss_base_info[id=14301]{
+}
+
+message sc_familyBoss_base_info[id=14302]{
+	required			int8			result		=1;//
+	// 1 => 成功
+	// 2 => 失败,不在联盟		
+	repeated			p_family_boss_base_info	infoList	=2;
+}
+
+message p_family_boss_base_info[id=14303]{
+	required			int8			pos			=1;//位置
+	required			int8			lock		=2;//0未激活,1已激活
+	required			int8			attackTimes	=3;//攻击次数
+	required			int8			status		=4;//状态,0 egg,1 born,2 sleep,3 boss,4 dead
+	required			int16			level		=5;//等级
+	required			int16			baseID		=6;//gerTypeID
+	required			int32			activeTime	=7;//设置的激活时间
+	required			int64			hp			=8;//当前血量
+	required			int64			maxHp		=9;			
+	required			int8			maxAttackTimes	=10;//最多出手次数
+	required			int8			isKilled		=11;//是否是被击杀,1 => Killed 0 -> other
+	required			int32			bossDuration	=12;//boss可攻打时长
+	required			int32			bossDeadTime	=13;//boss死亡时间,procect time
+}
+
+message	cs_familyBoss_attack[id=14304]{
+	required			int8			pos			=1;//位置
+}
+
+message	sc_familyBoss_attack[id=14305]{
+	required			int8			result		=1;
+	// 1 => 成功
+	// 2 => 失败,不在这个联盟
+	// 3 => 失败,没有这个boss
+	// 4 => 失败,boss不在激活状态
+	// 5 => 失败,攻击次数超过上限
+	// 6 => 失败,当天加入联盟
+	repeated			sc_fight_request		fightInfo	=2;
+}
+
+message	cs_familyBoss_hatch_egg[id=14306]{
+	required			int8			pos			=1;
+}
+
+message	sc_familyBoss_hatch_egg[id=14307]{
+	required			int8			result		=1;
+	// 1 => 成功
+	// 2 => 失败,不在联盟
+	// 3 => 失败,没有这个boss
+	// 4 => 失败,boss尚未解锁
+	// 5 => 失败,boss已唤醒
+	// 6 => 失败,不满足条件,没有权限或者第一天加入
+	// 7 => 失败,系统错误
+	// 8 => 失败,军粮不足
+}
+
+message	cs_familyBoss_feed_boss[id=14308]{
+	required			int8			pos			=1;
+}
+
+message	sc_familyBoss_feed_boss[id=14309]{
+	required			int8			result		=1;
+	//1 => 成功
+	//2 => 失败,不在联盟
+	//3 => 失败,没有这个boss
+	//4 => 失败,boss尚未解锁
+	//5 => 失败,boss不在可喂养状态
+	//6 => 失败,boss已满级
+	//7 => 失败,不是联盟盟主
+	//8 => 失败,出错
+	//9 => 失败,消耗品不足
+}
+
+message	cs_familyBoss_set_boss_time[id=14310]{
+	required			int8			pos			=1;
+	required			int32			time		=2;
+}
+
+message	sc_familyBoss_set_boss_time[id=14311]{
+	required			int8			result		=1;
+	//1 => 成功
+	//2 => 失败,不在联盟
+	//3 => 失败,没有这个boss
+	//4 => 失败,boss尚未解锁
+	//5 => 失败,boss不在可设置攻击时间状态
+	//6	=> 失败,boss设置攻击时间刷新保护时间内
+	//7 => 失败,不是盟主
+	//8 => 失败,时间不合法
+	//9 => 失败,超过当天最大次数
+}
+
+message	sc_familyBoss_boss_be_boss[id=14312]{
+	required			int8			pos			=1;//广播pos位置boss可被攻打
+}
+
+message	sc_familyBoss_boss_born[id=14313]{
+	required			int8			pos			=1;
+	required			int64			hp			=2;
+	required			int64			maxHp		=3;
+}
+
+message	cs_familyBoss_get_rank[id=14314]{
+	required			int8			pos			=1;
+}
+
+message	sc_familyBoss_get_rank[id=14315]{
+	required			int8			result		=1;
+	//1 => 成功
+	//2 => 失败,不在联盟
+	//3 => 失败,没有这个boss
+	required			int8			pos			=2;
+	repeated			p_family_boss_ranker	rankList	=3;
+}
+
+message	p_family_boss_ranker[id=14316]{
+	required			int32			roleID		=1;
+	required			int8			rank		=2;
+	required			int64			harm		=3;
+	required			string			roleName		=4;
+}
+
+message	sc_familyBoss_bc_attack[id=14317]{
+	required			string			roleName	=1;
+	required			int64			harm		=2;
+	required			int8			pos			=3;
+}
+
+message	sc_familyBoss_boss_dead[id=14318]{
+	required			int8			pos			=1;
+	required			int8			reason	=2;//1 => killed  2 => 自杀了
+}
+
+message	sc_familyBoss_bc_set_boss_time[id=14319]{ //广播老大设置了时间
+	required			int8			pos			=1;
+	required			int32			activeTime	=2;
+}
+
+message sc_familyBoss_boss_unlock[id=14320]{
+	required		int8			pos			=1;
+}

@@ -1,0 +1,9 @@
+本次1.2.1的版本更新需要使用update/update_1_2_1.erl，来对游戏服下面的所有帐号ID进行扩展修改，
+由于logLogin表太大，此程序会删除宏Days_Limit定义天数之前的记录,目前定义的是七天，可以手动修改，再编译代码使用
+
+使用方法：
+1.停服后，更新所有代码完毕，请务必做一次当前游戏服gRole，logLogin，logCreateRole，gBanAccount四个表的备份,以防万一
+2.确认setting.config中配置的logger_file_dir，到时候跑更新程序的时候日志会输出到此目录下的名称为update_1_2_1的文件中，
+跑完更新程序后请查看此日志文件，确认是否更新成功，如有错误，告知程序
+3.进入到游戏服目录下的erlang shell控制台,依次执行make:all(). c:l(update_1_2_1). update_1_2_1:update().
+4.等待一会儿，执行完返回ok后查看日志文件，没问题就更新成功

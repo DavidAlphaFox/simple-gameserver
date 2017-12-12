@@ -1,0 +1,92 @@
+//模块=hist
+//编号=11500
+
+
+//====================核心协议流程==================================
+//
+//      Client								Server
+// 请求战报
+// #cs_hist_get_list  			===>>>>
+//					  			<<<<===		#sc_hist_get_list
+// 
+
+// 请求更多战报
+// #cs_hist_get_list  			===>>>>
+//					  			<<<<===		#sc_hist_get_list
+
+// 请求重播
+// #cs_hist_replay  			===>>>>
+//					  			<<<<===		#sc_hist_replay
+
+// 请求反击
+// #cs_pvp_fight				===>>>>
+//					  			<<<<===		#sc_pvp_fight
+// #cs_plunder_fight			===>>>>		
+//					  			<<<<==		#sc_plunder_fight
+//=================流程完成==================================
+
+
+// 请求战报
+message	cs_hist_get_list[id=11501,route=hist_server]{
+	required	int8			type				=1;//类型
+	// 4=> pvp争霸战报
+	// 5=> 夺宝战报
+	required	int64			topClientUID		=2;//客户端存的最近的战报UID
+}
+
+message	sc_hist_get_list[id=11502]{
+	required	int8			type				=1;//类型
+	required	bool			isDiscardData		=2;//true=更新的战报太多，客户端数据需要丢弃，以简化流程;false=更新的战报此次已全部同步完成
+	repeated	p_hist			historyList			=3;//历史战报，最近的在列表最前面
+	required	int16			unreadNum			=4;//未读战报数量
+}			
+
+message	p_hist[id=11503]{
+	required	int64			histUID				=1;//战报UID
+	required	int8			histType			=2;//战报组装类型
+	// 2#111000
+	// 第一位：1=别人发起的挑战，0=你发起的挑战
+	// 第二位：1=发起者战斗胜利，0=发起者战斗失败
+	// 第三位：1=成功夺宝，0=未成功夺宝
+	// 第四位：1=pvp战报，0=夺宝战报
+	required	string			name				=3;//对方的名字
+	required	int32			roleID				=4;//对方的玩家ID
+	required	int32			time				=5;//战斗发生的时间戳
+	required	int16			arg					=6;// 附带参数
+	// type=pvp战报时，此字段表示 战斗有一方胜利时，你的新排位
+	// type=夺宝战报时，此字段表示碎片类型ID	
+}
+
+//请求更多战报
+message cs_hist_more[id=11510,route=hist_server]{
+	required	int64			histUID				=1;//战报UID
+	required	int8			type				=2;//战报类型
+}
+
+message	sc_hist_more[id=11511]{
+	required	int8			type				=1;//战报类型
+	repeated	p_hist			historyList			=2;//更多的战报列表
+	required	int16			unreadNum			=3;//新的未读邮件数量
+}
+	
+	
+// 请求重播
+message	cs_hist_replay[id=11520,route=hist_server]{
+	required	int64			histUID				=1;//战报UID	
+	required	int8			type				=2;//类型
+	// 4=> pvp争霸战报
+	// 5=> 夺宝战报
+}
+
+message	sc_hist_replay[id=11521]{
+	required	int8				result			=1;//请求结果
+	// 1=> 请求成功
+	// 2=> 该战报已过期，需要刷新页面
+	repeated	sc_fight_request	fightInfo		=2;//战斗录像，列表长度最多为1个
+}
+
+// 通知客户端数量增加了
+message sc_hist_unreadNum[id=11531]{
+	required	int8				type			=1;//类型
+	required	int16				unreadNum		=2;//未读数量
+}

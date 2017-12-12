@@ -1,0 +1,17 @@
+{data_item_use,20009,energy,1,50}.
+{data_item_use,20010,energy,5,20}.
+{data_item_use,20011,energy,10,10}.
+{data_item_use,30011,energy,20,5}.
+{data_item_use,30012,energy,40,5}.
+{data_item_use,20012,dscv,5,50}.
+{data_item_use,20013,dscv,20,20}.
+{data_item_use,20014,dscv,40,10}.
+{data_item_use,20015,pvp,1,10}.
+{data_item_use,20016,pvp,5,2}.
+{data_item_use,20017,pvp,10,1}.
+{data_item_use,20080,time,30,-1}.
+{data_item_use,20081,time,60,-1}.
+{data_item_use,20082,time,120,-1}.
+{data_item_use,20083,time,180,-1}.
+{data_item_use,20084,time,360,-1}.
+

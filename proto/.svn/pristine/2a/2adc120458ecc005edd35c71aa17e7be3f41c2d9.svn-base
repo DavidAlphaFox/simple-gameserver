@@ -1,0 +1,622 @@
+// 模块=family
+// 编号=13300
+// 已使用协议编号
+// 01,02,03,04,05,06,07,08,09,10,
+// 11,12,13,14,15,16,17,18,19,20,
+// 21,22,23,24,25,26,27,28,29,30,
+// 31,32,33,34,35,36,37,38,39,40,
+// 41,42,43,44,45,46,47,48,49,50,
+// 51,52,53,54,55,56,57,58,59,60,
+// 61,62,63
+
+message p_family_info[id=13301]{ 
+    required            int32                   family_id           =1;//联盟ID
+    required            string                  family_name         =2;//联盟名称
+    required            int16                   level               =3;//联盟等级
+    required            int32                   create_role_id      =4;//创建者roleID
+    required            string                  create_role_name    =5;//创建者名称
+    required            int32                   owner_role_id       =6;//盟主roleID
+    required            string                  owner_role_name     =7;//盟主名称
+    required            int16                   cur_members         =8;//当前成员数量
+    required            int32                   active_points       =9;//联盟建设值
+    required            string                  notice              =10;//公告
+    repeated            p_family_member_info    members             =11;//联盟成员信息列表
+    required            int32                   rank                =12;//联盟排名
+    required            int32                   create_time         =13;//创建联盟的时间戳
+    required		int32			family_score		            =14;//联盟战总分
+    required		int32			world_rank		              =15;//世界排名
+    required            string                  slogan              =16;//口号
+    required            int64                   total_fight_power           =17;//公会总战斗力
+    required            int32                   cross_rank                  =18;//全服排名   
+    required		string			talkRoomID		=19;//语音房间id
+}
+
+message p_family_member_info[id=13302]{ 
+    required            int32                   role_id                     =1;//角色ID
+    required            string                  role_name                   =2;//角色名字
+    required            int32                   family_contribution         =3;//个人贡献
+    required            int32                   left_family_contribution    =4;//剩余贡献
+    required            int32                   use_gold_time               =5;//元宝贡献时间戳
+    required            int8                    title                       =6;//角色称号
+    required            bool                    is_male                     =7;//角色性别
+    required            bool                    online                      =8;//角色是否在线
+    required            int16                   role_level                  =9;//角色等级
+    required            int64                   fight_power                 =10;//战斗力
+    required            int8                    family_title                =11;//联盟官职
+    //1 => 盟主      2 => 副盟主     0 => 成员
+    required			int32					join_time					=12;//加入时间
+    required			int32					weekly_contributes			=13;//本周累计贡献
+    required            int8                    worship_times               =14;//每日膜拜次数
+    required            int32                   head                        =15;//自定义头像
+    required            int32                   offline_time                =16;//角色最后下线时间
+}
+
+
+message p_family_request[id=13303]{
+    required            int32                   role_id                     =1;//角色ID
+    required            string                  role_name                   =2;//角色名字
+    required            int16                   level                       =3;//角色等级
+    required            int64                   fight_power                 =4;//战斗力
+    required            int32                   timestamp                   =5;//申请时间戳
+    required            int32                   family_id                   =6;//申请的联盟ID
+    required            bool                    online                      =7;//角色是否在线
+    required            int32                   offline_time                =8;//角色最后下线时间
+    required            int32                   head                        =9;//自定义头像
+    required            int8                    title                       =10;//称号
+    required            bool                    is_male                     =11;//性别
+}
+
+message p_family_summary[id=13304]{ 
+    required            int32                   family_id                   =1;//联盟ID
+    required            string                  family_name                 =2;//联盟名字
+    required            string                  owner_role_name             =3;//盟主名字
+    required            int16                   cur_members                 =4;//当前人数
+    required            int16                   level                       =5;//联盟等级
+    required            int32                   rank                        =6;//联盟排名
+    required            string                  notice                      =7;//联盟公告
+    required            bool                    is_request                  =8;//是否申请加入
+    required            int32                   owner_role_id               =9;//盟主roleID
+    required		int32			world_rank		=10;//世界排名
+    required            string                  slogan              =11;//口号
+    required            int64                   total_fight_power           =12;//公会总战斗力
+    required            int32                   score                       =13;//公会积分
+    required            int32                   cross_rank                  =14;//全服排名   
+    required            int16                   serverID                    =15;//服务器区号
+}
+
+message cs_family_get_list[id=13305,route=family_manager_server]{
+    required            int8                    type                        =1;//类型
+    //0 -> 本服
+    //1 -> 全服
+    required            int16                   start                       =2;//起始位置
+    required            int16                   num                         =3;//获取多少个
+}
+
+message sc_family_get_list[id=13306]{
+    required            int8                    type                        =1;//类型
+    required            int8                    result                      =2;//返回结果，成功为0,参数start+1超过联盟总数返回1
+    repeated            p_family_summary        family_list                 =3;//返回的联盟信息列表
+}
+
+message cs_family_create[id=13307]{
+    required            string                  family_name                 =1;//联盟名称
+    required            bool                    is_gold_create              =2;//消耗元宝还是银两创建
+}
+
+message sc_family_create[id=13308]{
+    required            int8                    result                      =1;//返回结果，成功为0,1联盟名字有非法字符，2联盟名字超过长度，3有同名联盟，4等级不够，5已有联盟，6元宝不足，7银两不足，8系统错误,9保护时间内,10正在处理上一条请求
+    required            p_family_info           family_info                 =2;//联盟信息
+    required            int32                   timestamp                   =3;//保护结束时间
+}
+
+message cs_family_request_join[id=13309]{
+    required            int32                   family_id                   =1;//请求加入的联盟ID
+}
+
+message sc_family_request_join[id=13310]{
+    required            int8                    result                      =1; //成功返回0,1已有联盟，2等级不足，3没有此联盟，4联盟人数已满，5已经请求，6你的请求数量超过上限，7联盟的请求数量超过上限，8在保护时间内
+    required            bool                    is_self                     =2; //是否返回给自己。true:收到该消息的人是发送请求的，false：收到该消息的人是owner
+    required            int32                   timestamp                   =3; //保护结束时间
+    required			int32					family_id					=4; //联盟id
+}
+
+message cs_family_cancel_join[id=13311]{
+    required            int32                   family_id                   =1;//联盟ID
+}
+
+message sc_family_cancel_join[id=13312]{
+    required            int8                    result                      =1;//成功返回0,1没有请求
+    required            bool                    is_self                     =2;//是否返回给自己
+    required			int32					family_id					=3;//联盟ID
+}
+
+message cs_family_agree_join[id=13313]{
+    required            int32                   role_id                     =1;//角色ID
+}
+
+message sc_family_agree_join[id=13314]{
+    required            int8                    result                      =1;//成功返回0,1你没有联盟，2没有此玩家的请求，3你不是盟主，4超过人数上限，5此玩家已进入你的联盟，6系统错误，7此玩家已经加入其他联盟，8在保护时间内,9正在处理上一条请求,10处于联盟战期间
+    required            bool                    is_self                     =2;//是否返回给自己
+    required            p_family_info           family_info                 =3;//加入成员后新的family_info
+}
+
+message cs_family_refuse_join[id=13315]{
+    required            int32                   role_id                     =1;//角色ID,角色ID为0表示拒绝全部
+}
+
+message sc_family_refuse_join[id=13316]{
+    required            int8                    result                      =1;//成功返回0,1你没有联盟，2你不是盟主，3没有请求
+    required            bool                    is_self                     =2;//是否返回给自己
+}
+
+message cs_family_get_info[id=13317]{
+}
+
+message sc_family_get_info[id=13318]{
+    required            int8                    result                      =1;//返回结果成功0,1没有联盟
+    required            p_family_info           family_info                 =2;//联盟信息
+    required            int32                   timestamp                   =3;//保护结束时间
+}
+
+message cs_family_kick[id=13319]{
+    required            int32                   kick_role_id                =1;//踢掉角色ID
+}
+
+message sc_family_kick[id=13320]{
+    required            int8                    result                      =1;//返回提示结果成功为0,1你没有联盟，2不能踢自己，3你不是盟主，4没有此成员,5正在处理上一条请求,6已报名联盟战
+    required            bool                    is_self                     =2;//是否返回给自己
+    required            p_family_info           family_info                 =3;//踢掉成员后新的family_info
+}
+
+message cs_family_create_consume[id=13321]{
+
+}
+
+message sc_family_create_consume[id=13322]{
+    required            int32                   need_coin                   =1;//需要银两
+    required            int32                   need_gold                   =2;//需要元宝
+}
+
+message cs_family_leave[id=13323]{
+
+}
+
+message sc_family_leave[id=13324]{
+    required            int8                    result                      =1;//返回结构成功0,1你没有联盟，2盟主不能离开，4没有此成员,5正在处理上一条请求,6已报名联盟战
+    required            bool                    is_self                     =2;//是否返回给自己
+    required            p_family_info           family_info                 =3;//成员离开后新的family_info
+}
+
+message cs_family_change_notice[id=13325]{
+    required            string                  notice                      =1;//修改的公告
+}
+
+message sc_family_change_notice[id=13326]{
+    required            int8                    result                      =1;//返回结果成功0,1超过最大长度，2没有联盟，3你不是盟主
+    required            bool                    is_self                     =2;//是否返回给自己
+    required            string                  notice                      =3;//新的的公告
+}
+
+message cs_family_request_list[id=13327]{
+
+}
+
+message sc_family_request_list[id=13328]{
+    required            int8                    result                      =1;//返回提示，0成功,1没有联盟
+    repeated            p_family_request        request_list                =2;//申请列表
+}
+
+message sc_family_del_request[id=13329]{
+    required            int32                   role_id                     =1;//通知客户端删除指定角色的请求信息
+}
+
+message cs_family_get_log_list[id=13330]{
+}
+
+message sc_family_get_log_list[id=13331]{
+	required            int8                    result                      =1;//返回结果成功0,1没有联盟
+	repeated			p_family_log_dtl				logDataList					=2;//联盟日志动态列表
+}
+
+message cs_family_get_contribute_info[id=13332]{
+}
+
+message	sc_family_get_contribute_info[id=13333]{
+	required			int8					result						=1;//返回结果成功0,1没有联盟,2功能尚未开放
+	required			int32					lastCTDate		=2;//上次贡献日期
+	repeated			p_familyContributeType	ctTypeInfoList				=3;//贡献配置列表
+	repeated			p_familyContributeLog		ctLogList					=4;//贡献记录列表
+
+}
+
+message	p_familyContributeType[id=13334]{
+	required			int16					typeID						=1;//类型ID
+	required			int8					needType					=2;//消耗品类型 1=>银两,2=>元宝
+	required			int32					needValue					=3;//消耗数量
+	required			int32					getRice						=4;//获得军粮数量
+	required			int32					getContribute				=5;//获得建设度
+	required			p_reward_info			getReward					=6;//获得的奖励
+}
+
+message	p_familyContributeLog[id=13335]{
+	required			string					contributerName				=1;//建设者名字
+	required			int16					getTypeID					=2;//建设类型ID  //TypeID 为0,显示:联盟等级提升为 xx 级,xx为Name字段
+//	required			int32					contributeValue				=3;//贡献值 该字段改为有客户端自行解析														
+}
+
+message	cs_family_do_contribute[id=13336]{
+	required			int16					typeID						=1;//贡献类型ID
+}
+
+message	sc_family_do_contribute[id=13337]{
+	required			int8					result						=1;//贡献结果 
+	//0成功
+	//1没有联盟
+	//2功能尚未开放
+	//3消耗不足
+	//4成功,建设已满
+	//5没有这个配置项
+	//6今天已经建设过了
+	//7保护时间内,不能建设
+}
+
+message	sc_family_update_exp[id=13338]{
+	required			int32					expValue					=1;//更新后的建设值
+	required			int16					level						=2;//更新后的等级
+}
+
+message	cs_family_search_by_family_name[id=13339]{
+	required			string					searchName					=1;//查找的联盟名字
+}
+
+message	sc_family_search_by_family_name[id=13340]{
+	required			int8					result						=1;//查找结果
+	// 1 => 查找成功
+	// 2 => 失败,名称不合法
+	// 3 => 失败,没有这个名称的联盟
+	repeated			p_family_summary		infoList					=2;//查找结果
+}
+
+message	cs_family_change_member_power[id=13341]{
+	required			int32					changeRoleID				=1;//被修改权限的角色ID
+	required			int16					typeID						=2;//修改权限的类型
+	//1 => 转移盟主操作
+	//2 => 设置为副盟主操作
+	//3 => 设置为普通成员操作
+}
+
+message	sc_family_change_member_power[id=13342]{
+	required			int8					result						=1;//操作结果
+	// 1=>成功,协议返回后,会广播sc_family_request_list来同步成员信息列表
+	// 2=>失败,没有联盟
+	// 3=>失败,权限不足
+	// 4=>失败,不能操作自己
+	// 5=>失败,未知错误
+	// 6=>失败,被操作对象不在联盟
+	// 7=>失败,该类型成员数量已达上线
+	// 8=>失败,保护时间,不能修改
+}
+
+message	sc_family_update_family_info[id=13343]{
+	required			p_family_info				info					=1;//更新联盟信息
+}
+
+message	cs_family_send_role_energy[id=13344]{
+	required			int32						tarRoleID				=1;//被送体力的玩家角色ID
+}
+
+message	sc_family_send_role_energy[id=13345]{
+	required			int8						result					=1;//结果
+	// 1 => 成功
+	// 2 => 失败,已赠送过该盟友
+	// 3 => 失败,没有联盟
+	// 4 => 失败,该盟友不在本联盟
+}
+
+message	cs_family_get_role_energy[id=13346]{
+	required			string						roleName				=1;//领取体力
+}
+
+message	sc_family_get_role_energy[id=13347]{
+	required			int8						result					=1;//结果
+	// 1 => 成功
+	// 2 => 不在联盟
+	// 3 => 没有这个体力项目
+	//repeated			string						roleNameList			=2;//赠送体力的盟友列表
+}
+
+message	cs_family_get_role_send_energy_list[id=13348]{
+}
+
+message	sc_family_get_role_send_energy_list[id=13349]{
+	repeated			int32						roleIDList				=1;//赠送过体力的玩家列表
+}
+
+message	cs_family_get_member_power[id=13350]{
+}
+
+message	sc_family_get_member_power[id=13351]{
+	repeated			int8						memberPowerList				=1;//权限列表
+	// 0 => 无任何权限,1 =>成员申请列表权限 2 => 剔除成员权限
+	// 3 => 转移盟主权限 4 => 提升&降职权限 5 => 联盟战报名权限
+	// 6 => 解散联盟权限 7 => 修改公告权限 
+}
+
+message cs_family_get_send_role_energy_list[id=13352]{
+}
+
+message	sc_family_get_send_role_energy_list[id=13353]{
+	repeated			string						roleNameList				=1;//赠送体力的来源名字列表
+}
+
+message    p_family_log_dtl[id=13354]{
+    required            int32           roleid          =1;     //  角色ID
+    required            string          rolename        =2;     //  角色名字
+    required            int32           rolehead        =3;     //  角色头像
+    required            int32           rolelevel       =4;     //  角色等级
+    required            int32           timeStamp       =5;     //  时间戳
+    required            int32           type            =6;     //  所显示的文本类型
+    required            string          arg_1           =7;     //  所显示的文字中的参数，根据type类型不同，该字段内容不同。
+    required            int8            title           =8;//称号
+    required            bool            is_male         =9;//性别
+}
+
+message	sc_family_update_contribute_log[id=13355]{
+		repeated			p_familyContributeLog		ctLogList					=1;//贡献记录列表
+}
+
+message	p_family_storage[id=13356]{
+		required			int64						itemUID			=1;
+		required			int16						itemTypeID	=2;
+		required			int8						type				=3;//1 道具,2 武将
+		repeated			int32						reqRoleIDList			=4;
+}
+
+message	cs_family_storage_info[id=13357]{
+}
+
+message	sc_family_storage_info[id=13358]{
+		required			int8							result			=1;//1 -> 成功,2 -> 不在联盟
+		required			int8							level				=2;//仓库等级
+		required			int16							maxLen			=3;//仓库最大容量
+		required			int32							itemLen			=4;//道具数量
+		repeated			p_family_storage	itemList		=5;//道具列表
+}
+
+message	cs_family_storage_req[id=13359]{
+		required			int64							itemUID			=1;
+}
+
+message	sc_family_storage_req[id=13360]{
+		required			int8							result			=1;
+		//1 => 成功
+		//2 => 失败,不在联盟
+		//3 => 失败,没有这个道具
+		//4 => 失败,该道具申请人数过多
+		//5 => 失败,已经申请过该道具
+		//6 => 失败,加入联盟当天
+		//7 => 失败,当天已被分配
+}
+
+message	cs_family_storage_assign[id=13361]{
+		required			int64							itemUID			=1;
+		required			int32							roleID			=2;
+}
+
+message	sc_family_storage_assign[id=13362]{
+		required			int8							result			=1;
+		//1 => 成功
+		//2 => 失败,不在联盟
+		//3 => 失败,物品不存在
+		//4 => 失败,被分配的角色未申请
+		//5 => 失败,不是盟主
+}
+
+message	sc_family_storage_update[id=13363]{
+		required				int64							itemUID			=1;
+		required				int8							type				=2;
+		//1 => 新增道具
+		//2 => 删除道具
+		//3 => 请求列表,添加请求人员
+		//4 => 请求列表,删除请求人员
+		repeated				int32							reqRoleIDList	=3;//请求更新的人员 or ( 16 typeID + 16 type )
+}
+
+message	cs_family_owner_impeach[id=13364]{
+}
+
+message	sc_family_owner_impeach[id=13365]{
+	required					int8								result			=1;
+	//1 => 成功
+	//2 => 失败,不在联盟
+	//3 => 失败,不在弹劾列表中
+	//4 => 失败,异常错误
+    //5 => 失败,不满足弹劾条件
+}
+
+message	cs_family_wallet[id=13366]{
+}
+
+message	sc_family_wallet[id=13367]{
+	required				int64							rice				=1;
+}
+
+message cs_family_change_slogan[id=13368]{
+    required            string                  slogan                      =1;//修改的公告
+}
+
+message sc_family_change_slogan[id=13369]{
+    required            int8                    result                      =1;//返回结果成功0,1超过最大长度，2没有联盟，3你不是盟主
+    required            bool                    is_self                     =2;//是否返回给自己
+    required            string                  slogan                      =3;//新的的公告
+}
+
+//请求进行膜拜
+message cs_family_worship[id=13370]{
+    required            int8                    type                        =1;
+    //1 => 请求获得任务
+    //2 => 请求刷新任务
+}
+
+//请求膜拜结果
+message sc_family_worship[id=13371]{
+        required            int8                            type            =1;
+        //1 => 请求获得任务
+        //2 => 请求刷新任务
+        required            int8                            result          =1;
+        //1 => 成功
+        //2 => 失败,不在公会中
+        //3 => 失败,个人次数达到上限
+        //4 => 失败,公会总次数达到上限(废弃)
+        //(type=1)5 => 当前有正在进行的膜拜任务 (type=2)当前没有正在进行膜拜任务
+        //(type=2)6 => 失败,刷新所需的钻石不足
+        required            int32                           task_id         =2;     //任务ID
+}
+
+//挑战钻石兽
+message cs_family_worship_fight[id=13372]{
+}
+
+//挑战钻石兽结果
+message sc_family_worship_fight[id=13373]{
+        required            int8                            result          =1;     //结果
+        // 1 => 挑战成功,获胜
+        // 2 => 挑战成功,失败
+        // 3 => 挑战失败,不在公会内
+        // 4 => 未知错误
+        repeated            sc_fight_request                fightInfo       =2;     //战斗播放信息
+        required            int32                           reward          =3;     //奖励
+}
+
+//上线时主动请求一次数据
+message cs_family_worship_info[id=13374]{
+}
+
+//返回请求的数据
+message sc_family_worship_info[id=13375]{
+        required            int8                            self            =1;     //自己的膜拜次数
+        required            int8                            family          =2;     //公会膜拜的总次数
+        required            int32                           reward          =3;     //个人可获得的公会膜拜奖励
+}
+
+//膜拜的主动推送数据
+message sc_family_worship_self_push[id=13376]{
+        required            int8                            times           =1;     //次数
+}
+
+//通知刷新挑战钻石兽奖励数
+message sc_family_worship_refresh_fight_reward[id=13377]{
+        required            int32                           reward          =1;     //当前奖励数
+}
+
+//膜拜的主动推送数据
+message sc_family_worship_family_push[id=13378]{
+        required            int8                            times           =1;     //次数
+        required            int32                           reward          =2;     //奖励
+}
+
+//请求获得膜相关限制数据
+message cs_family_worship_limit[id=13379]{
+}
+
+//返回膜拜相关数据
+message sc_family_worship_limit[id=13380]{
+        required            int8                            member          =1;     //成员的膜拜次数
+        required            int8                            family          =2;     //公会总的膜拜次数
+        required            int16                           cost            =3;     //任务刷新所需钻石数
+}
+
+//查看公会成员列表
+message cs_family_get_member_list[id=13381,route=family_manager_server]{
+        required            int32                           family_id       =1;     //公会ID
+}
+
+// 返回公会成员列表
+message sc_family_get_member_list[id=13382]{
+        required            int32                           family_id       =1;     //公会ID
+        repeated            p_family_member_info            members         =2;     //成员列表 
+}
+
+message cs_family_get_donate_contribute_list[id=13383]{
+        required            int32                           roleID          =1;     //需要查看的玩家ID
+}
+
+message sc_family_get_donate_contribute_list[id=13384]{
+        required            int8                            result          =1;      //结果
+        //  1=> 成功
+        //  2=> 不在公会中
+        //  3=> 不在相同的公会中
+        //  4=> 系统错误
+        required            int32                           roleID          =2;      //查看的玩家ID
+        required            p_donate_info                   donateInfo      =3;      //捐献信息
+}
+
+message p_donate_info[id=13385]{
+        required            int64                           diamondNum          =1;      //钻石捐献数量
+        required            int64                           coinNum             =2;      //金币捐献数量
+        required            int64                           reputationNum       =3;      //徽章捐献数量
+        repeated            p_ger_donate_record_unit        gerdonateinfo       =4;      //精灵捐献
+        repeated            p_item_donate_record_unit       itemdonateinfo      =5;      //装备捐献
+}
+
+message p_ger_donate_record_unit[id=13386]{
+        required            int8                            star            =1;      //精灵星等
+        required            int64                           donateNum       =2;      //捐献数量
+}
+
+message p_item_donate_record_unit[id=13387]{
+        required            int8                            star            =1;      //道具星等
+        required            int64                           donateNum       =2;      //捐献数量
+}
+
+message cs_family_impeach_list[id=13388]{
+    
+}
+
+message sc_family_impeach_list[id=13389]{
+        required            int8                            result            = 1;   //结果
+        // 1=> 成功
+        // 2=> 不在公会中
+        repeated            int32                           impeachmemberlist = 2;   //具有弹劾权限的成员RoleID列表
+}
+
+message cs_family_donate_contribution_summary[id=13390]{
+    
+}
+
+message sc_family_donate_contribution_summary[id=13391]{
+        required            int8                                                           result            = 1;    //结果
+        // 1=> 成功
+        // 2=> 不在公会中 
+        repeated            p_family_memeber_donate_info_summary                           donate_summary    = 2;    //玩家捐献概要信息
+}
+
+message p_family_memeber_donate_info_summary[id=13392]{
+        required            int32                           roleID                    = 1;
+        required            int8                            family_title              = 2;//联盟官职
+        //1 => 盟主      2 => 副盟主     0 => 成员  
+        required            string                          role_name                 = 3;//角色名字 
+        required            bool                            is_male                   = 4;//角色性别
+        required            int16                           level                     = 5;//玩家等级        
+        required            int64                           donate_contribution       = 6;//捐献度
+        required            int32                           head                      = 7;//头像
+        required            int8                            title                     = 8;//角色称号           
+        required            int8                            vip                       = 9 ;
+}
+
+message cs_family_invite_request[id=13393]{
+        required    int32   roleID  = 1;
+}
+
+message sc_family_invite_request[id=13394]{
+        required    int8    result  = 1;    //结果
+        // 1=> 成功
+        // 2=> 已经邀请的公会中
+        // 3=> 该玩家已经申请加入工会
+        // 4=> 该玩家刚离开工会无法邀请 
+        // 5=> 你不在公会中，
+        // 6=> 没有权限
+        // 7=> 已经邀请过这个玩家了
+        // 8=> 已经在其他的公会中
+        // 9=> 对方等级不足
+}

@@ -1,0 +1,650 @@
+//模块=ger
+//编号=10400
+
+
+// 首次打开武将页面时的信息
+message		cs_ger_info[id=10401]{
+}
+
+message		sc_ger_info[id=10402]{
+	repeated		p_ger			gerList			=1;//所有的武将信息	
+}
+
+message	sc_ger_info2[id=10427]{
+	required		int8			seq					=1;//重复发送次数, 0 ~ seq,subSeq 在0~seq之间
+	required 		int8			subSeq			=2;//当前发送id
+	repeated		p_ger			gerList			=3;
+}
+
+// 武将属性信息
+message		p_ger[id=10403]{
+	required		int64			gerID			=1[default=0];//武将唯一ID
+	required		int16			gerTypeID		=2[default=0];//武将模版ID
+	required		int16			gerQuality		=3[default=0];//武将品阶
+	required		int16			gerLevel		=4[default=0];//武将等级
+	required		int32			gerAttack		=5[default=0];//武将攻击
+	required		int64			gerHpMax		=6[default=0];//武将生命上限
+	required		int64			gerFightPower 	=7[default=0];//武将战斗力
+	required		int64			gerExp			=8[default=0];//武将当前经验值
+    required        int64           gerProMean      =9[default=0];//武将开战前奥义值
+    repeated        p_awake_info    gerAwakeInfo    =10;//精灵觉醒信息
+    repeated        p_demage_rate_unit gerDemageRate =11;//精灵伤害系数增加
+    required        int8            gerBody         =12[default=0];//精灵身份
+    required        int16           gerSpeed        =13[default=0];//精灵速度
+    required        int8            gerHolyGrailLevel  =14[default=0];//精灵神器等级
+}
+
+
+// 武将位置信息
+message		p_ger_pos_info[id=10404]{
+    required    int64       gerID			=1;//武将唯一ID
+    required    int8        gerPos			=2;//武将所在位置
+    repeated    int64       itemUIDList		=3;//该武将的装备
+    repeated    p_diamond   diamondList     =4;//精灵技能宝石列表
+}
+
+// 武将属性修改
+message		sc_ger_update[id=10405]{
+	required		int64			gerID			=1;//武将唯一ID
+	required		int16			gerQuality		=2;//武将品阶
+	required		int16			gerLevel		=3;//武将等级
+	required		int32			gerAttack		=4;//武将攻击
+	required		int64			gerHpMax		=5;//武将生命上限
+	required		int64			gerFightPower	=6;//武将战斗力
+	required		int64			gerExp			=7;//武将当前经验值
+    required        int64           gerProMean      =8;//武将开战前奥义值
+    repeated        p_demage_rate_unit gerDemageRate=9;//精灵伤害系数增加
+    required        int16           gerSpeed        =10;//精灵速度
+}
+
+// 新增武将
+message		sc_ger_new[id=10406]{
+	required		p_ger			newGer			=1;//新的武将的信息
+}
+
+// 删除武将协议在别的功能中
+
+// 将武将上阵，如果原来位置有武将，自动替换原来的武将，并替换装备
+message		cs_ger_standup[id=10407]{
+	required		int8			gerPos			=1;//武将上阵的位置
+	required		int64			gerID			=2;//上阵的武将UID
+}
+
+message 	sc_ger_standup[id=10408]{
+	required		int8			result			=1;//结果
+	// 1=> 成功
+	// 2=> 失败，请求数据错误
+	// 3=> 失败，该武将不存在
+	// 4=> 失败，不能上阵相同的武将
+	// 5=> 失败，经验卡牌不能上阵
+    // 6=> 失败，魔镜不能上阵
+    // 7 => 失败,上阵精灵数大于等级要求上限
+	required		int8			gerPos			=2;//武将上阵的位置
+	required		int64			gerID			=3;//上阵的武将UID
+}
+
+// 武将在阵型中移动位置
+message 	cs_ger_move_pos[id=10409]{
+	required	int8				gerPos			=1;//移动的武将位置
+	required	int8				targetPos		=2;//移动的目标位置
+}
+
+message		sc_ger_move_pos[id=10410]{
+	required		int8			result			=1;//结果
+	// 1=> 成功
+	// 2=> 失败，请求数据错误
+	// 3=> 失败，移动武将不存在
+	required	int8				gerPos			=2;//移动的武将位置
+	required	int8				targetPos		=3;//移动的目标位置
+}
+
+// 获取出战信息
+message 	cs_ger_pos_list[id=10411]{
+}
+
+message		sc_ger_pos_list[id=10412]{
+	repeated		p_ger_pos_info		gerPosInfoList		=1;//武将位置列表	
+	required 		int8 				useTagID 			=2;
+	required 		int8 				maxTagID 			=3;
+	repeated 	p_ger_icon_unit 	iconList 		=4;
+}
+
+message		p_ger_pos[id=10413]{
+	required		int64			gerID			=1;//武将唯一ID
+	required		int8			gerPos			=2;//武将所在位置
+}
+
+// 售卖武将
+message 	cs_ger_sell[id=10414]{
+	repeated		int64			gerIDList			=1;//出售的武将唯一ID列表
+}
+
+message		sc_ger_sell[id=10415]{
+	required			int8			result			=1;//请求结果
+	// 1=> 成功
+	// 2=> 失败，某个武将不存在
+	// 3=> 失败，某个武将不能卖
+	// 4=> 失败，未知原因
+	repeated			p_reward_view3	reward			=2;//出售获得的道具
+}
+
+// 获取武将详细信息
+message cs_ger_detail[id=10416]{
+	required		int64			gerID			=1;//武将唯一ID
+}
+
+message sc_ger_detail[id=10417]{
+	required		int64			gerID					=1 ;//武将唯一ID
+	required        int16           gerSpInit		        =2 ;//怒气初始值              
+	required        int16           gerSpMax               =3 ;//怒气最大值
+	required        int16           gerCritic               =4 ;//暴击                 
+	required        int16           gerCriticReduce         =5 ;//暴击抵抗               
+	required        int16           gerDoom                 =6 ;//命中                 
+	required        int16           gerMiss                 =7 ;//闪避                 
+	required        int16           gerAbsorb               =8 ;//吸血                 
+	required        int16           gerDamageBack           =9 ;//反弹                 
+	required        int16           gerReel                 =10;//眩晕                 
+	required        int16           gerReelReduce           =11;//眩晕抵抗               
+	required        int16           gerPhyDefBite           =12;//破甲                 
+	required        int16           gerPhyDef               =13;//护甲                 
+	required        int16           gerMagDefBite           =14;//法穿                 
+	required        int16           gerMagDef               =15;//法抗
+	required        int16           gerSpeed                =16;//精灵速度   
+	required        int32           gerBaseSpeedGrow        =17;//速度初始成长值              
+}
+	
+// 别人的武将的信息结构
+message		p_ger_view[id=10418]{
+	required		int16			gerQuality		=1;//武将品阶
+	required		int16			gerLevel		=2;//武将等级
+	required		int16			gerTypeID		=3;//武将模版ID
+}
+
+//查看对方阵容
+message		cs_ger_view_other[id=10419]{
+	required	int32				tarRoleID		=1;//要查看阵容的目标玩家
+	required    int16               serverID        =2;//目标玩家的服务器ID，查看本服的填零
+}
+
+message		sc_ger_view_other[id=10420]{
+	required	int32				tarRoleID		=1;//目标玩家ID
+	required	string				roleName		=2;//玩家名字
+	required	int16				roleLevel		=3;//玩家等级
+	required	int64				fightPower		=4;//玩家总战斗力
+	repeated	p_ger 			    gerList			=5;//武将列表
+}
+
+message		cs_ger_view_other_dtl[id=10442]{
+	required	int32				tarRoleID		=1;//目标玩家ID
+	required    int16               serverID        =2;//目标玩家的服务器ID，查看本服的填零
+}
+
+message		sc_ger_view_other_dtl[id=10443]{
+	required	int32				tarRoleID		=1;//目标玩家ID
+	required	string				roleName		=2;//玩家名字
+    required    bool                isMale          =3;//性别
+	required	int16				roleLevel		=4;//玩家等级
+	required	int64				fightPower		=5;//玩家总战斗力
+	repeated	p_ger				gerList			=6;//出战武将列表
+	repeated	p_equip				equipList		=7;//出战武将装备列表
+	repeated	p_ger_pos			gerPosList		=8;//武将位置列表
+	//required	int16				atkAdd			=9;//副将的全部攻击加成
+	//required	int16				hpAdd			=10;//副将的全部血量加成
+	repeated	p_lieu_view			lieuViewList	=11;//副将的专属激活列表
+    required    int32               head            =12;//仅用于训练师
+    required    int8                title           =13;//仅用于训练师
+    required	int32			    trID		    =14;
+    required	int32			    specialID	    =15;
+    required    p_skin_info         skinInfo        =16;//训练师皮肤信息     
+    repeated    ger_crystalinfo_brief gerCrystalList  =17;//上阵精灵对应的晶体信息          
+}
+
+message		p_lieu_view[id=10471]{
+	required	int16				lieuGerTypeID	=1;//副将的激活专属信息
+	required    int16               lieuGerQuality  =2;//副将品阶
+	required	int8				lieuPos			=3;//副将位置
+	required    int16               lieuLevel       =4;//小伙伴等级
+//	required	int16				lieuGerTypeID	=2;//副将的typeID
+//	required	int16				lieuInfoID1		=3;//第一个格子属性
+//	required	int16				lieuInfoID2		=4;//第二个格子属性
+//	required	int16				lieuInfoID3		=5;//第三个格子属性
+//	required	int64				lieuFightPower	=6;//副将战斗力
+}
+
+// 通知武将经验	
+message		sc_ger_update_exp[id=10421]{
+	required	int64				gerID			=1;//武将唯一ID
+	required	int64				gerExp			=2;//武将新的经验
+}
+
+// 精灵吃果实升级（v4.0）
+message		cs_ger_eat[id=10422]{
+	required	int64				gerID			=1;//精灵唯一ID
+	required    int32               itemTypeID      =2;
+	required    int32               itemNum         =3;
+}
+
+message		sc_ger_eat[id=10423]{
+	required	int8				result			=1;//请求结果
+	// 1=> 成功
+	// 2=> 失败,对应精灵不存在
+    // 3=> 失败,精灵等级大于或者等于训练师等级
+    // 4=> 失败,精灵经验已经达到当前最大
+    // 5=> 失败,对应精灵不能进行升级（主要针对以前的能量块）
+    // 6=> 失败,不能升级魔镜中的精灵
+    // 7=> 失败,对应道具不能喂养
+    // 8=> 失败,喂养材料不足
+	required	int64				gerID			=1;//精灵唯一ID
+}
+
+// 精灵升阶(4.1版本修改成吞噬精灵)
+//message		cs_ger_up_rank[id=10424]{
+//	required	int64				gerID		    =1;//选择提升品阶的武将ID
+//	required	int8				upRankNum		=2;//品阶提升的数量1->升1阶0->尽最大品阶提升
+//}
+
+//message		sc_ger_up_rank[id=10425]{
+//	required	int8				result			=1;//请求是否成功
+	//0->功能未开放
+	//1->成功
+	//2->精灵不存在
+	//3->能量块精灵不能进阶
+	//4->精灵品阶达到当前最大
+	//5->精灵升阶材料不足
+//	required	int64				gerID		    =2[default=0];//选择提升品阶的精灵ID
+//	required	int16               upRankNum       =3[default=0];//升阶品阶数
+//}
+//精灵进阶(v4.1.0版本还原成消耗精灵)
+message		cs_ger_up_rank[id=10424]{
+	required	int64				srcGerID		=1;//选择提升品阶的武将ID
+	required	int64				foodGerID		=2;//材料武将ID
+}
+
+message		sc_ger_up_rank[id=10425]{
+	required	int8				result			=1;//请求是否成功
+	// 1=> 升品成功
+	// 2=> 升品失败-武将已达最高品阶
+	// 3=> 升品失败-主武将不存在
+	// 4=> 升品失败-材料武将不存在
+	// 5=> 升品失败-不是同一种武将，不能吞噬
+	// 6=> 升品失败-银两不足
+	// 7=> 升品失败-未知错误
+	// 8=> 升品失败-材料不足
+	// 9=> 升品失败-跨阶升品
+	// 10=> 升品失败-经验卡不能升品
+	// 11=> 升品失败-经验卡不能被升品
+	// 12=> 升品失败-家园守护神不能作为材料
+	// 13=> 升品失败-参数错误
+    // 14=> 升品失败-魔镜不能作为材料
+	required	int64				srcGerID		=2;//选择提升品阶的武将ID
+	required	int64				foodGerID		=3;//材料武将ID
+} % 进行突破时，物品消耗单独发送物品更新协议，材料武将id填0
+
+// 更新武将出站列表,(如升品导致的上阵武将替换)
+message		sc_ger_update_standlist[id=10426]{
+	repeated	p_ger_pos			posList			=1;//出站列表
+}
+
+
+message 	sc_ger_del[id=10430]{
+	repeated	int64				gerIDList		=1;//删除武将ID
+}
+
+// 刷新武将的战斗力
+message		sc_ger_refresh_power[id=10440]{
+	repeated	p_ger_power			gerPowerList	=1;//战斗力列表
+}
+
+message		p_ger_power[id=10441]{
+	required	int8				pos				=1;//站位
+	required	int64				fightPower		=2;//战斗力
+}
+message p_ger_save_item[id=10444]{
+	required 	int8 				pos 			=1;
+	required 	int64 				itemUID 		=2;
+}
+message p_ger_save_dtl[id=10445]{
+	required 	int8 				pos 			=1;
+	required 	int64 				gerUID			=2;
+	repeated 	p_ger_save_item		itemList		=3; // 小伙伴为空
+	repeated	p_ger_save_item		diamondList 	=4;
+}
+message p_ger_tag_dtl[id=10446]{
+	required 	int8 				tag 			=1;
+	repeated 	p_ger_save_dtl 		gerList 		=2;
+	repeated 	p_ger_save_dtl 		lieuList 		=3;
+}
+message cs_ger_saved_tag[id=10447]{
+	required 	int8 				tagID 			=1;
+}
+message sc_ger_saved_tag[id=10448]{
+	repeated 	p_ger_tag_dtl 		saveList 		=1;
+}
+message p_ger_icon_unit[id=10431]{
+	required 	int8 				pos 			=1;
+	required 	int8 				icon 			=2;
+}
+message cs_ger_set_icon[id=10432]{
+	repeated 	p_ger_icon_unit 	iconList 		=1;
+}
+message sc_ger_set_icon[id=10433]{
+}
+message cs_ger_buy_tag[id=10434]{
+	required 	int8 				tagID 			=1;
+}
+message sc_ger_buy_tag[id=10435]{
+	required 	int8 				result 			=1; // 1成功 2错误的tagID 3已开启的tagID 4消耗品不足
+}
+message cs_ger_set_tag_data[id=10436]{
+	required 	int8 				tagID 			=1;
+	repeated 	p_ger_save_dtl		gerList 		=2;
+	repeated 	p_ger_save_dtl		lieuList 		=3;
+}
+message sc_ger_set_tag_data[id=10437]{
+	required 	int8 				result 			=1;//1 => 成功  2 => 没有阵型数据
+}
+message cs_ger_change_tag[id=10438]{
+	required 	int8 				tagID 			=1;
+}
+message sc_ger_change_tag[id=10439]{ 
+	required 	int8 				result 			=1;//1:成功 2:切换了错误的tagID 3:没开启该tagID
+	repeated		p_ger_pos_info		gerPosInfoList =2;
+	repeated		p_ger_pos_info		lieuPosInfoList		=3; //小伙伴（副将）位置列表
+}
+
+message		cs_ger_lieu_pos_list[id=10450]{
+}
+
+message		sc_ger_lieu_pos_list[id=10451]{
+	repeated		p_ger_pos_info		gerPosInfoList		=1; //小伙伴（副将）位置列表
+	required		int8				isStart				=2;	//小伙伴功能是否开启
+	// 0 =>  未开启
+	// 1 =>  开启
+}
+
+message		cs_ger_lieu_standup[id=10452]{
+	required		int8			gerPos			=1;//武将上阵的位置
+	required		int64			gerID			=2;//上阵的武将UID
+}
+
+message 	sc_ger_lieu_standup[id=10453]{
+	required		int8			result			=1;//结果
+	// 1=> 成功
+	// 2=> 失败，请求数据错误
+	// 3=> 失败，该武将不存在
+	// 4=> 失败，不能上阵相同的武将
+	// 5=> 失败，副将未开启
+	// 6=> 失败，经验卡牌不能上阵
+    // 7=> 失败，魔镜中的不能上阵
+	required		int8			gerPos			=2;//武将上阵的位置
+	required		int64			gerID			=3;//上阵的武将UID
+}
+
+message		cs_ger_lieu_dequeue[id=10454]{
+	required		int8			gerPos			=1;//武将上阵的位置
+	required		int64			gerID			=2;//卸载的武将UID
+}
+
+message 	sc_ger_lieu_dequeue[id=10455]{
+	required		int8			result			=1;//结果
+	// 1=> 成功
+	// 2=> 失败，请求数据错误
+	// 3=> 失败，武将不存在于小伙伴队列中
+	// 4=> 失败，预留
+	// 5=> 失败，位置参数错误
+	required		int8			gerPos			=2;//武将上阵的位置
+	required		int64			gerID			=3;//卸载的武将UID
+}
+
+message		cs_ger_lieu_untie[id=10456]{
+	required		int8			gerPos			=1;//希望解锁的副将格子位置
+}
+
+message		sc_ger_lieu_untie[id=10457]{
+	required		int8			result			=1;//解锁结果
+	// 1=> 成功
+	// 2=> 等级不足
+	// 3=> 消耗品不足
+	// 4=> 该格子已解锁
+	repeated		p_ger_lieu_info	info			=2;//解锁的初始化结果
+}
+
+message		p_ger_lieu_info[id=10458]{
+	required		int8			gerPos			=1;//格子位置
+	required		int16			specialID		=2;//专属id
+	required		int8			isLock1			=3;//专属格子是否锁定
+	//0 =>未锁定
+	//1 =>锁定
+	required		int16			attAddID		=4;//攻击增加ID
+	required		int8			isLock2			=5;//攻击增加格子是否锁定
+	required		int16			hpAddID			=6;//血量增加ID
+	required		int8			isLock3			=7;//血量增加格子是否锁定
+}
+
+message		cs_ger_lieu_info_list[id=10459]{
+}
+
+message		sc_ger_lieu_info_list[id=10460]{
+	repeated		p_ger_lieu_info	info			=1;//副将格子描述列表
+}
+
+message 	cs_ger_lieu_move_pos[id=10461]{
+	required	int8				gerPos			=1;//移动的武将位置
+	required	int8				targetPos		=2;//移动的目标位置
+}
+
+message		sc_ger_lieu_move_pos[id=10462]{
+	required		int8			result			=1;//结果
+	// 1=> 成功
+	// 2=> 失败，请求数据错误
+	// 3=> 失败，移动武将不存在
+	required	int8				gerPos			=2;//移动的武将位置
+	required	int8				targetPos		=3;//移动的目标位置
+}
+
+message		cs_ger_lieu_lock_clo[id=10463]{
+	required		int8			gerPos			=1;//锁定格子的副将位置
+	required		int8			num				=2;//格子位置
+	//1 => 专属格子
+	//2 => 攻击增加格子
+	//3 => 血量增加格子
+}
+
+message		sc_ger_lieu_lock_clo[id=10464]{
+	required		int8			result			=1;
+	// 1 => 成功
+	// 2 => 该格子已锁定
+	// 3 => 该格子未解锁
+	// 4 => 消耗品不足,无法锁定
+	// 5 => 不能锁定更多的格子
+}
+
+message		cs_ger_lieu_unlock_clo[id=10465]{
+	required		int8			gerPos			=1;//格子所属武将的位置
+	required		int8			num				=2;//格子位置
+}
+
+message		sc_ger_lieu_unlock_clo[id=10466]{
+	required		int8			result			=1;//
+	// 1 => 成功
+	// 2 => 该格子未锁定
+	// 3 => 该格子未解锁
+	// 4 => 未知错误
+}
+
+message		cs_ger_lieu_refresh_clo[id=10467]{
+	required		int8			gerPos			=1;//刷新的副将位置
+}
+
+message		sc_ger_lieu_refresh_clo[id=10468]{
+	required		int8			result			=1;
+	//1 => 成功
+	//2 => 未解锁该副将
+	//3 => 消耗品不足
+	required		p_ger_lieu_info	info			=2;//实际属性信息
+}
+
+message cs_ger_lieu_tie_info[id=10469]{
+}
+
+message sc_ger_lieu_tie_info[id=10470]{
+	repeated		int8			posList		=1;//已解锁的副将列表
+}
+
+message	cs_ger_lieu_refresh_freeTimes[id=10472]{
+}
+
+message	sc_ger_lieu_refresh_freeTimes[id=10473]{
+	required		int16			times		=1;//副将免费刷新次数
+}
+
+// 新增武将
+message		sc_ger_new_list[id=10474]{
+	repeated		p_ger			newGerList			=1;//新的武将的信息
+}
+
+// 武将降品
+message     cs_ger_down_rank[id=10475]{
+    required    int64               srcGerID        =1;//选择降低品阶的武将ID
+}
+
+message     sc_ger_down_rank[id=10476]{
+    required    int8                result           =1;//0表示成功,1卡牌不存在，2经验卡牌不能退化，3品阶为0，无法退化，4砖石不足,5魔镜精灵不能退化
+    repeated    p_reward_view       add_item_list    =2;//退化得到的卡牌
+    required    int64               gerID            =3;//降级的精灵ID
+}
+
+message cs_ger_unload[id=10477]{
+    required    int8                gerPos          =1;//精灵位置
+}
+
+message sc_ger_unload[id=10478]{
+    required    int8                result          =1;//结果
+	// 1=> 成功
+	// 2=> 失败，请求数据错误
+	// 3=> 失败，该位置没有精灵
+    // 4=> 失败，至少需要一个精灵
+    required    int8                gerPos          =2;//精灵的位置
+}
+
+
+
+
+message     cs_ger_mirror_info[id=10479]{
+}
+message     sc_ger_mirror_info[id=10480]{
+    required    int64   srcGerTypeID   =1;//转化前的ger模板id，0的话表示没有进行魔镜转化
+    required    int16   newGerTypeID   =2;//转化后的ger模板id
+    repeated    int32   need_gold      =3;//转化需要的钻石,类型是list，分别表示5星，6星，7星
+}
+
+message     cs_ger_mirror_convert[id=10481]{
+    required    int64   gerID   =1;//转化前的ger模板id，0的话表示没有进行魔镜转化
+}
+message     sc_ger_mirror_convert[id=10482]{
+    required    int8    result          =1;//1表示成功,2钻石不足,3已经处于置换确认阶段,4gerid不存在,5品阶不足
+    required    int16   newGerTypeID    =2;//转化后的ger模板id
+}
+
+message     cs_ger_mirror_commit[id=10483]{
+    required    int8    operation_type          =1;//1表示替换，2表示成功
+}
+message     sc_ger_mirror_commit[id=10484]{
+    required    int8    result          =1; //1表示成功
+    required    int64   newGerUID       =2; //转化后的ger uid
+}
+
+message     p_demage_rate_unit[id=10485]{
+	required    int8    type            =1;
+	//1->觉醒
+	//2->专精
+	required    int32   normalRate      =2; //普通加成
+	required    int32   uniqueRate      =3; //必杀加成
+}
+
+message     cs_ger_set_body[id=10486]{
+    required    int64   gerID       =1; // ger uid
+    required    int8   gerBody     =2; //  ger body
+}
+message     sc_ger_set_body[id=10487]{
+    required    int8    result          =1; //1表示成功
+}
+
+
+//精灵20-30进化协议
+message     cs_ger_second_uprank[id=10488]{
+	required    int64   srcGerID           =1;  // 进化精灵ID
+	repeated    int64   foodGerIDList      =2;  //被吞噬精灵ID列表
+}
+
+message     sc_ger_second_uprank[id=10489]{
+	required    int8    result             =1;   
+	//1->成功
+	//2->目标精灵不存在
+	//3->目标精灵不能够进化
+	//4->目标精灵已经达到最大等级
+	//5->目标精灵需要先转生
+	//6->目标精灵未达到进化最低等级
+	//7->被吞噬精灵数量不够
+	//8->被吞噬精灵不存在
+	//9->被吞噬精灵已经进化过
+	//10->进化所需道具不足
+	//11->家园守护不能被吞噬
+	//12->魔镜精灵不能吞噬
+	//13->被吞噬精灵星等不符合
+	//14->转生需要的道具不足
+	//15->被进化精灵处于魔镜中
+	required    int64   srcGerID           =2;   //进化精灵ID	
+}
+
+message     cs_ger_batch_uprank[id=10490]{
+	required    int64   srcGerID           =1;   //进化精灵
+	repeated    int64   foodGerIDList      =2;   //被吞噬的精灵ID列表
+}
+
+message     sc_ger_batch_uprank[id=10491]{
+	required    int8      result          =1;
+	//1->成功
+	//2->目标精灵不存在
+	//3->目标精灵已经达到最大等级
+	//4->目标精灵需要先转生
+	//5->被吞噬精灵不存在
+	//6->被吞噬精灵星等不符合
+	//7->进化所需金币不足
+	//8->家园守护不能被吞噬
+	//9->魔镜精灵不能吞噬
+	//10->被吞噬精灵空
+	required   int64     srcGerID         =2;
+}
+
+message   cs_ger_second_transmigration[id=10492]{
+	required    int64    srcGerID         =1;     //转生精灵ID
+}
+
+message   sc_ger_second_transmigration[id=10493]{
+	required    int8     result           =1;     
+	//1->成功
+	//2->目标精灵不存在
+	//3->目标精灵品阶不满足转生条件
+	//4->目标精灵不能够转生
+	//5->转生所需要的材料不足
+}
+
+message cs_ger_transform_blink[id=10494]{
+	required    int64    devourID                  =1; //吞噬者ID
+	required    int64    devouredID                =2; //被吞噬者ID  
+}
+
+message sc_ger_transform_blink[id=10495]{
+	required    int8     result                    =1;
+	//1->成功
+	//2->失败,被吞噬者处于家园中
+	//3->失败,被吞噬者处于魔藤中
+	//4->失败,被吞噬者处于魔镜中
+	//5->失败,被吞噬者不存在
+	//6->失败,被吞噬者不属于非闪光精灵
+	//7->失败,吞噬者不存在
+	//8->失败,吞噬者不属于闪光精灵
+	//9->失败,吞噬者和被吞噬者不属于同种类型精灵
+	required    p_ger    newblinkger               =2;
+}

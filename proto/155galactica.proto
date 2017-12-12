@@ -1,0 +1,311 @@
+//模块=galactica
+//编号=15500
+
+message	cs_galactica_info[id=15501]{
+}
+
+message sc_galactica_info[id=15502]{
+    required    int16   times       = 1;      // 剩余的可挑战次数
+    required    int16   cur_times   = 2;  // 当前的购买次数 
+    required    int16   buy_left    = 3; //剩余的可购买次数
+    required	int16	plane_level	= 4;
+    repeated    int32   golds       = 5;      // 购买次数需要的钻石列表
+    required	int32	winGas      = 6;//胜利需要的资源数
+    required    int8    afk_punish  = 7; // 0 无惩罚， 1挂机一次警告 2挂机两次无法报名
+    required    int32   punish_timestamp    = 8; // 惩罚结束时间点的时间戳，无挂机惩罚的话传0
+}
+
+// 报名
+message cs_galactica_sign[id=15503]{
+}
+
+// 报名返回
+message sc_galactica_sign[id=15504]{
+    required int8 result = 1; //返回码
+    // 0 成功
+    // 1 不是队长
+    // 2 钻石不够
+    // 4 重复报名
+    // 5 队伍中有人次数不够
+    // 6 队伍中有人正在战场
+    // 7 队伍中有人等级不够
+    // 8 网络异常
+    // 9 操作繁忙
+    required int32 times = 2; //剩余可挑战次数
+}
+
+// 购买
+message cs_galactica_buy[id=15505]{
+}
+
+// 购买返回
+message sc_galactica_buy[id=15506]{
+    required    int8    result = 1;        // 结果
+    // 0 -> 成功
+    // 1 -> 钻石不够
+    // 2 -> 达到了购买上限
+    required    int16  cur_times = 2;       // 当前是第几次购买
+    required    int16  times = 3;           // 剩余购买次数
+}
+
+
+// 次数更新
+message sc_galactica_times_update[id=15507]{
+    required    int16   times = 1;      // 剩余可挑战次数
+}
+
+message p_galactica_p_s[id=15508]{
+	required	int32		roleID		=1;
+	required	int16		serverID	=2;
+}
+message	p_galactica_pos[id=15509]{
+	required	int16	x =1 ;
+	required	int16	y =2 ;
+}
+
+message p_galactica_mine[id=15510]{
+	required	int8			mineID		=1;
+	required	int8			movTarget	=2;
+	required	int8			maxNum		=3;//各方可容纳数量
+	required	p_galactica_pos		pos		=4;
+	repeated	p_galactica_p_s		attackers	=5;
+	repeated	p_galactica_p_s		defenders	=6;
+	required	int32			value		=7;//资源
+	required	int32			startSec	=8;
+	repeated	p_galactica_p_s		attackersW	=9;
+	repeated	p_galactica_p_s		defendersW	=9;
+}
+
+message p_galactica_mine_s[id=15511]{
+	required	int8			mineID		=1;
+	required	int8			movTarget	=2;
+	required	p_galactica_pos		pos		=3;
+	repeated	p_galactica_p_s		attackers	=4;
+	repeated	p_galactica_p_s		defenders	=5;
+	required	int32			startSec	=6;
+	repeated	p_galactica_p_s		attackersW	=7;
+	repeated	p_galactica_p_s		defendersW	=8;
+//	required	int32			rebornSec	=7;
+}
+
+message	p_galactica_player[id=15512]{
+	required	int32			roleID		=1;
+	required	int16			serverID	=2;
+	required	int8			fly		=3;//飞机类型
+	required	int8			type		=4;//阵营1 attacker, 2 defender
+	required	int8			blood		=5;//剩余血量  X%
+	required	int8			mineID		=6;//目标,startSec=0表示当前在这个矿上
+	required	int32			rebornSec	=7;
+	required	string			name		=8;
+	required	int64			fightPower	=9;
+	required	int16			roleLevel	=10;
+	required	p_galactica_pos		startPos	=11;
+	required	int32			startSec	=12;//开始移动的时间戳
+	required 	int16 			speed 		=13;
+}
+
+message	p_galactica_player_s[id=15513]{
+	required	int32			roleID		=1;
+	required	int16			serverID	=2;
+	required	int8			mineID		=3;//目标资源ID
+	required	int8			blood		=4;//剩余血量  X%
+	required	p_galactica_pos		startPos	=5;
+	required	int32			rebornSec	=6;
+	required	int32			startSec	=7;//开始移动的时间戳
+}
+
+message	p_galactica_fairy[id=15514]{
+	required	int32			typeID		=1;
+	required	int32			maxHp		=2;
+	required	int32			nowHp		=3;
+	required	int8			rank		=4;
+}
+
+message	p_galactica_home[id=15515]{
+	required	int8			homeID		=1;
+	required	int8			type		=2;//阵营1 attacker, 2 defender
+	repeated	int8			mineIDs		=3;
+	required	p_galactica_pos		pos		=4;
+}
+
+message	sc_galactica_gas[id=15516]{
+	required	int32			attackerGas	=1;
+	required	int32			defenderGas	=2;
+}
+
+message cs_galactica_war_base_info[id=15518]{
+}
+
+message sc_galactica_war_base_info[id=15519]{
+	required	int8			result		=1;
+	//1 => 成功
+	//2 => 没有战场数据
+	required	int32			endTimeStamp	=2[default=0];
+	required	p_galactica_pos		attackerPos	=3;//复活点
+	required	p_galactica_pos		defenderPos	=4;//复活点
+	repeated	p_galactica_mine	mines		=5;
+	repeated	p_galactica_player	players		=6;
+	repeated	p_galactica_home	homes		=7;
+	required	int32			attackerGas	=8;
+	required	int32			defenderGas	=9;
+}
+
+
+message	cs_galactica_self[id=15520]{
+}
+
+message	sc_galactica_self[id=15521]{
+	required	p_galactica_player_s		self		=1;
+}
+
+message	cs_galactica_mov[id=15522]{
+	required	int8			mineID		=1;
+}
+
+message	sc_galactica_mov[id=15523]{
+	required	int8			result		=1;
+	// 1 => 成功
+	// 2 => 正在移动中
+	//3 => 没有该资源信息
+}
+
+message cs_galactica_attack[id=15524]{
+	required	int32			tarRoleID	=1;
+	required	int32			tarServerID	=2;
+	required	int8			mineID		=3;
+}
+
+message	sc_galactica_attack[id=15525]{
+	required	int8			result		=1;
+	//1 => 成功,赢了
+	//2 => 成功,输了
+	//3 => 不在这个矿坑
+	//4 => 攻击的队友
+	//5 => 异常
+	repeated	sc_fight_request	fightInfo	=2;
+}
+
+message	sc_galactica_home_s[id=15526]{
+	repeated	p_galactica_home_s	homeInfo	=1;
+}
+
+message	p_galactica_home_s[id=15527]{
+	required	int8			homeID		=1;
+	repeated	int8			mineIDs		=2;
+}
+
+//地图刷新
+message	sc_galactica_update[id=15528] {
+	repeated	p_galactica_player_s		player		=1;
+	repeated	p_galactica_mine_s		mine		=2;
+}
+
+
+message	cs_galactica_role_dtl[id=15529]{
+	required	int32			roleID		=1;
+	required	int32			serverID	=2;
+}
+
+message	sc_galactica_role_dtl[id=15530]{
+	repeated	p_galactica_fairy		target		=1;
+	repeated	p_galactica_replay_dtl	replayDtl	=2;
+	required	int16			grade		=3;
+}
+
+message	cs_galactica_replay[id=15531]{
+	required	int64			replayUID	=1;
+}
+
+message	sc_galactica_replay[id=15532]{
+	required	int8			result		=1;
+	repeated	sc_fight_request	fightInfo	=2;
+}
+
+message	cs_galactica_mov_stop[id=15533]{
+}
+
+message	sc_galactica_mov_stop[id=15534]{
+	required	int8			result		=1;
+}
+
+message	p_galactica_replay_dtl[id=15535]{
+	required	int8			isRole1Win	=1;//role1是不是赢了
+	required	int64			replayUID	=2;
+	required	string			role1Name	=3;
+	required	string			role2Name	=4;
+}
+
+message p_galactica_rank_dtl[id=15536]{
+	required	int32			roleID		=1;
+	required	int32			serverID	=2;
+	required	int16			level		=3;
+	required	int16			score		=4;//荣誉
+	required	int16			kill		=5;
+	required	string			name		=6;
+	required	int8			type		=7[default=0];//0=>正常 1 => 挂机
+}
+
+message	p_galactica_talk[id=15537]{
+	required	int32			roleID		=1; // roleID or mineID mineID <-[1,2,3,4,5,6,7]
+	required	string			roleName	=2;
+	required	string			data		=3;
+	required	int8			ext		=4[default=0];//1 => self 2 -> enermy
+}
+
+message cs_galactica_talk[id=15538]{
+	required	string			data		=1;
+}
+
+message	cs_galactica_get_talk[id=15539]{
+}
+
+message	sc_galactica_get_talk[id=15540]{
+	repeated	p_galactica_talk		data		=1;
+}
+
+message	cs_galactica_get_rank[id=15541]{
+}
+
+message	sc_galactica_get_rank[id=15542]{
+	repeated	p_galactica_rank_dtl	rank		=1;
+}
+
+message sc_galactica_talk[id=15543]{
+	required	p_galactica_talk		data		=1;
+}
+
+message	sc_galactica_end_war[id=15544]{
+	required	int8			type		=1;
+	// 1 => 资源抢夺结束
+	// 2 => 时间到了结束
+	required	int8			winner		=2;//获胜方 1:attacker,2defender,0平局
+	repeated	p_galactica_rank_dtl	data		=3;
+}
+
+message	cs_galactica_reborn[id=15545]{
+}
+
+message	sc_galactica_reborn[id=15546]{
+	required    int8			result		=1;
+}
+
+// 取消匹配
+message cs_galactica_unrequest[id=15547]{
+}
+
+// 取消匹配结果
+message sc_galactica_unrequest[id=15548]{
+    required    int8            result      =1;
+    // 0 => 成功取消
+    // 1 => 没有报名
+    // 2 => 不是队长
+}
+
+message cs_galactica_mov_in[id=15549]{
+	required	int8		mineID	=1;
+}
+
+message	sc_galactica_mov_in[id=15550]{
+	required	int8		result	=1;//1=> succ 2 => 失败,没在公共点
+}
+

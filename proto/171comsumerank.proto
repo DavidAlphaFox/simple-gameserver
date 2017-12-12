@@ -1,0 +1,36 @@
+%%新服消费充值消费排行榜
+
+message cs_consumerank_info[id=17101]{
+
+}
+
+message sc_consumerank_info[id=17102]{
+	required                   int8                     status             =1;
+	//0->关闭
+	//1->开启阶段
+	//2->结算阶段
+	required                   int32                    finishtime         =2; //当前阶段结束时间	 在关闭状态下会是0
+}
+
+message cs_consumerank_list[id=17103]{
+	required                   int8                     type               =1; //1-> 充值排行榜，2->消费排行榜
+}
+
+message sc_consumerank_list[id=17104]{
+	required                   int8                     type               =1;
+	repeated                   p_consumerank_unit       list               =2;
+	required                   p_consumerank_unit       role_unit          =3;//玩家自身数据
+}
+
+message p_consumerank_unit[id=17105]{
+	required	               int32	               	roleID			   =1[default=0];//玩家ID
+	required	               bool		                isMale			   =2;//是否是男的
+	required	               int16	               	level			   =3[default=0];//等级
+	required	               int8		                title			   =4[default=0];//官爵
+	required	               string                   roleName		   =5;//玩家名称
+	required	               int64	               	fightPower		   =6[default=0];//总战斗力
+	required	               int16	               	rank			   =7[default=0];//排名
+	required	               int32	               	head		       =8[default=0];//头像 0:默认
+    required                   int8                     vip                =9[default=0]; // vip or 0x80 band svip   
+    required                   int32                    value              =10[default=0];         
+}

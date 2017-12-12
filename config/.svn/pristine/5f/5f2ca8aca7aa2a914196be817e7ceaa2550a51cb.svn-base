@@ -1,0 +1,108 @@
+%%附魔类型：1->水,2->火,3->草,4->电,5->飞行,6->格斗,7->超能,8->岩石
+
+{{specialID,1001},{1,5}}.
+{{specialID,1002},{2,7}}.
+{{specialID,1003},{3,8}}.
+{{specialID,1004},{4,6}}.
+
+% 训练师上阵等级
+{trainer_on_level, 1}.
+
+%
+{clear_ID_cost, {sell_reward,0,0,0,1000,[],0,[]}}.
+
+% IsMale
+{{defaultTrID,true},2}. % 默认男
+{{defaultTrID,1},4}. % 小次郎
+{{defaultTrID,2},6}. % 小智
+{{defaultTrID,3},8}. % 精灵王男
+{{defaultTrID,false},1}. % 默认女
+{{defaultTrID,4},3}. % 舞藏
+{{defaultTrID,5},5}. % 小霞
+{{defaultTrID,6},7}. % 精灵王女
+
+
+%{{skillX, 专精ID},技能ID}
+{{skill1,1001},1}.
+{{skill1,1002},2}.
+{{skill1,1003},3}.
+{{skill1,1004},4}.
+
+{{skill2,1001},5}.
+{{skill2,1002},5}.
+{{skill2,1003},5}.
+{{skill2,1004},5}.
+
+{{skill3,1001},6}.
+{{skill3,1002},7}.
+{{skill3,1003},8}.
+{{skill3,1004},9}.
+
+{{skill4,1001},10}.
+{{skill4,1002},11}.
+{{skill4,1003},12}.
+{{skill4,1004},13}.
+
+{{skill5,1001},14}.
+{{skill5,1002},15}.
+{{skill5,1003},16}.
+{{skill5,1004},17}.
+
+
+
+%{trBuff,Type,Buff,ModulusBase,ModulusCo,TarGet,duration,Special}
+%Modulus = MpdulusBase + Level * ModulusCo
+%Target 1,己方,2,敌方
+%RoundCount 0 => 永久
+%Special 1 => 需要专精相同才有效，2=>无论专精是否相同都有效,3 =>专精相同则加倍
+%Target  敌方:random_one, random_two, all     己方:own_all,own_random_one
+
+%type=1,统治技能1，治疗效果提升N%
+{{skill,1},{trBuff,1,0,300,1,own_all,0,3}}.
+%type=2,统治技能2，精灵造成伤害提高N%
+{{skill,2},{trBuff,2,0,100,2,own_all,0,3}}.
+%type=3,统治技能3，精灵受到伤害降低N%
+{{skill,3},{trBuff,3,0,100,2,own_all,0,3}}.
+%type=4,统治技能4，精灵造成暴击伤害提高N%
+{{skill,4},{trBuff,4,0,5,6,own_all,0,3}}.
+
+%type=5，普通技能，破绽，随机选择N名地方目标,使其收到伤害提高M%
+{{skill,5},{trBuff,5,0,2500,10,random_one,4,3}}.
+
+%type=6，普通技能，冷静，随机让己方X只精灵恢复100点能量并恢复血量上线N%
+{{skill,6},{trBuff,6,100,100,1,own_random_one,1,2}}.
+%type=7，普通技能，陨石，随机让己方X只精灵造成伤害提高N%
+{{skill,7},{trBuff,7,0,200,5,own_random_one,1,2}}.
+%type=8，普通技能，石化，随机让己方X只精灵受到伤害降低N%
+{{skill,8},{trBuff,8,0,200,5,own_random_one,1,2}}.
+%type=9，普通技能，会心，随机让己方X只精灵进入会心状态，下次攻击必定命中且暴击
+{{skill,9},{trBuff,9,0,0,0,own_random_one,1,2}}.
+
+%type=10，无双技能，群体冷静，己方全部精灵恢复100点能量并恢复血量上线N%
+{{skill,10},{trBuff,6,100,100,2,own_all,1,2}}.
+%type=11，无双技能，群体嗜血，己方全部精灵伤害提高N%
+{{skill,11},{trBuff,7,0,400,10,own_all,1,2}}.
+%type=12，无双技能，群体石化，己方受到伤害降低N%
+{{skill,12},{trBuff,8,0,400,10,own_all,1,2}}.
+%type=13，无双技能，群体会心，下次攻击必定命中且暴击
+{{skill,13},{trBuff,9,0,0,0,own_all,1,2}}.
+
+%type=14，无双技能，暴风雪，敌方所有单位造成N点伤害
+{{skill,14},{trBuff,14,0,1,0,all,1,2}}.
+%type=15，无双技能，陨石，敌方所有单位总计造成N点伤害
+{{skill,15},{trBuff,15,0,4,0,all,1,2}}.
+%type=16，无双技能，斩杀，对敌方血量最低的两个单位造成N的伤害
+{{skill,16},{trBuff,16,0,1.6,0,{weakest,2},1,2}}.
+%type=17，无双技能，重伤，对敌方所有单位2回合累积造成N的伤害
+{{skill,17},{trBuff,17,0,1.2,0,all,2,2}}.
+
+%破绽技能ID列表
+{data_mark_skillIDList,[5]}.
+
+{{damage_ratio,200},{18,1}}.
+{{damage_ratio,100},{12,6}}.
+{{damage_ratio,0},12}.
+
+
+
+

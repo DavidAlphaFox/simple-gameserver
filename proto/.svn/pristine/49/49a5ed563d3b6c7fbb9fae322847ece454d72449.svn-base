@@ -1,0 +1,258 @@
+//模块=nanm
+//编号=12400
+
+
+
+//====================协议流程==================================
+//
+//      Client								Server
+// 打开界面
+// #cs_nanm_open  			===>>>>
+//					  		<<<<===		#sc_nanm_open
+//					  		<<<<===		#sc_nanm_init_state
+
+// 离开界面
+// #cs_nanm_close 			===>>>>		无返回
+
+// 请求擂鼓
+// #cs_nanm_buff  			===>>>>
+//					  		<<<<===		#sc_nanm_buff
+
+// 状态同步
+//					  		<<<<==		#sc_nanm_hp_sync
+//					  		<<<<==		#sc_nanm_harm_broadcast
+//					  		<<<<==		#sc_nanm_rank_sync
+//					  		<<<<==		#sc_nanm_buff_sync
+//							<<<<==		#sc_nanm_stop
+
+// 请求战斗
+// #cs_nanm_fight			===>>>>
+//					  		<<<<===		#sc_nanm_fight
+
+// 请求复活
+// #cs_nanm_reborn 			===>>>>
+//					  		<<<<===		#sc_nanm_reborn
+
+// 请求前回战报
+// #cs_nanm_last_info 			
+//					  		<<<<==		#sc_nanm_last_info_ignore
+//					  		<<<<==		#sc_nanm_last_info_win
+//					  		<<<<==		#sc_nanm_last_info_fail
+
+// 请求当前战报
+// #cs_nanm_cur_info 			
+//					  		<<<<==		#sc_nanm_cur_info
+//					  		<<<<==		#sc_nanm_cur_info_ignore
+
+// 请求离线参加
+// #cs_nanm_offline_play			
+//							<<<<==		#sc_nanm_offline_play
+	
+// 请求活动开始时间
+// #cs_nanm_open_time
+//							<<<<==		#sc_nanm_open_time
+//====================流程完成==================================
+
+// 打开虎牢关界面，查看信息
+message cs_nanm_open[id=12401,route=nanm_server]{
+}
+
+message sc_nanm_open[id=12402]{
+	required	int8		isOpen			=1;//活动是否开始
+	//1-> 活动结束阶段
+	//2-> 攻打前2小时阶段
+	//3-> 攻打中阶段
+	//4-> 领取宝箱阶段
+	required    int32       gerTypeID       =2;//BOSS模板ID
+	required	int64		maxHp			=3;//BOSS最大血量
+	required	int16		bossQuality		=4;//BOSS品阶
+	required	bool		isBuffed		=5;//是否已经擂鼓
+	required	int16		buffNum			=6;//擂鼓层数
+	required	bool		isOfflinePlay	=7;//是否已经设置离线参与
+	required	int32		beginTime		=8;//距离下一个阶段的时间
+	required    int8        is_get_reward   =9;//是否领取奖励
+	//1->已经领取
+	//2->没有领取
+	//3->不能领取(未参加)
+	//4->BOSS没打死
+}		
+
+// 请求cs_nanm_open后，如果当前活动正在进行，则返回下面一条协议
+message	sc_nanm_init_state[id=12403]{
+	required	int64		curHp			=1;//BOSS当前血量
+	required	int64		curHarm			=2;//当前累积伤害
+	required	int32		curRank			=3;//当前排名
+	required	int32		rebornTime		=4;//复活时间，当前非倒计时状态，则此值为0
+}
+
+// 通知服务器关闭了虎牢关界面,无对应返回协议	
+message cs_nanm_close[id=12404,route=nanm_server]{
+}
+
+// 请求擂鼓
+message cs_nanm_buff[id=12405]{
+	required	int8		type			=1;//擂鼓类型,对应三个选项,1 or 2 or 3
+}
+	
+message sc_nanm_buff[id=12406]{
+	required	int8		type			=1;//擂鼓类型
+	required	int8		result			=2;//请求结果
+	// 1=> 成功
+	// 2=> 失败，资源不足
+	// 3=> 失败，已经擂过鼓了
+}
+
+// 请求前回战报
+message cs_nanm_last_info[id=12411,route=nanm_server]{
+	required	int32		curSavedInfoID	=1;//客户端保存的前回战报ID，没有则填0，用做多次登录时的前回战报的缓存
+}
+
+// 告诉客户端，当前保存的前回战报是最新的，可以直接用
+message sc_nanm_last_info_ignore[id=12412]{
+}
+
+// 告诉客户端，前回战报胜利，和具体信息
+message sc_nanm_last_info_win[id=12413]{
+	required	int16		bossQuality		=1;//BOSS品阶
+	required	int32		intervalSec		=2;//总共消耗的秒数
+	required	int64		bossMaxHp		=3;//BOSS总血量
+	repeated	p_nanm_info	nanmInfolist	=4;//依次对应最后一击玩家、贡献第一玩家、贡献第二玩家、贡献第三玩家的信息
+	repeated	string		luckyRoleList	=5;//获得幸运奖励的玩家
+	required    int32       gerTypeID       =6;//前回bossTypeID
+}
+
+// 告诉客户端，前回战报，未能攻陷虎牢关
+message	sc_nanm_last_info_fail[id=12414]{
+	required	int16		bossQuality		=1;//BOSS品阶
+	required	int32		intervalSec		=2;//总共消耗的秒数
+	required    int32       gerTypeID       =3;//前回bossTypeID
+}
+
+// 前回战报的玩家信息
+message	p_nanm_info[id=12415]{
+	required	string		roleName		=1;//玩家名字
+	required	int64		harmValue		=2;//造成的伤害数值
+}
+
+// 请求当前战报(前10名)
+message cs_nanm_cur_info[id=12416,route=nanm_server]{
+}		
+
+message sc_nanm_cur_info_ignore[id=12417]{
+}
+
+message sc_nanm_cur_info[id=12418]{
+	repeated	p_nanm_info	nanmInfoList	=1;//排行榜的玩家信息
+}
+
+// 同步怪物血量
+message	sc_nanm_hp_sync[id=12420]{
+	required	int64		bossHp			=1;//BOSS当前HP
+}
+
+// 广播玩家造成的伤害
+message	sc_nanm_harm_broadcast[id=12421]{
+	repeated	p_nanm_harm	harmList		=1;//玩家造成的伤害列表，为时间逆序发送到客户端，列表第一个为最近的一次伤害
+}
+
+// 玩家造成的伤害
+message	p_nanm_harm[id=12422]{
+	required	string		name			=1;//玩家名字
+	required	int64		harm			=2;//玩家造成的伤害
+}
+
+
+
+// 同步擂鼓层数
+message sc_nanm_buff_sync[id=12424]{
+	required	int16		buffNum				=1;//新的擂鼓层数
+}
+
+// 通知玩家活动结束
+message	sc_nanm_stop[id=12425]{
+	required	int8		type				=1;//活动结束类型
+	// 1=> 吕布被活活打死了
+	// 2=> 吕布苟幸活下来了
+	required	p_role_stastic	roleSta			=2;
+}	
+
+// 同步玩家的排名变化
+message cs_nanm_rank_sync[id=12426,route=nanm_server]{
+}
+
+message	sc_nanm_rank_sync[id=12427]{
+	required	int16		curRank			=1;//当前排名
+}
+
+// 请求挑战
+message	cs_nanm_fight[id=12431]{
+}
+
+message	sc_nanm_fight[id=12432]{
+	required	int8		result			=1;//请求结果
+	// 1=> 请求成功
+	// 2=> 请求失败， 等待复活中
+	// 3=> 请求失败，boss已死亡
+	// 4=> 请求失败，活动已经结束
+	// 5=> 请求失败，你当前处于离线参与中
+	// 6=> 请求失败，未知错误
+	repeated	sc_fight_request	fightInfo	=2;//战斗播放信息
+	required	int32				rebornTime 	=3;//复活时间，unixTime
+	required	int32				rewardCoin	=4;//获得的银两
+	required	int32				rewardReputation=5;//获得的声望
+	
+}
+
+// 请求复活,连续多次请求时，在服务器会扣多余的元宝
+message	cs_nanm_reborn[id=12441]{
+}
+
+message	sc_nanm_reborn[id=12442]{
+	required	int8		result			=1;//请求结果
+	// 1=> 请求成功
+	// 2=> 请求失败-资源不足
+	// 3=> 请求失败-boss已经死亡
+}
+
+// 设置是否离线参与虎牢关，钱是在活动开始时扣的
+message	cs_nanm_offline_play[id=12443]{
+	required	bool		openFlag		=1;//true=离线参与，false=否
+}
+
+message	sc_nanm_offline_play[id=12444]{
+	required	int8		result			=1;//结果
+	// 1=> 成功-成功设置
+	// 2=> 失败-设置以后将不能关闭
+	// 3=> 失败-vip等级不足
+	// 4=> 失败-元宝不足
+	required	bool		newOpenFlag		=2;//新的是否离线参与标识
+}
+				
+				
+// 请求活动开启时间
+message cs_nanm_open_time[id=12450, route=nanm_server]{
+}
+
+message	sc_nanm_open_time[id=12451]{
+	required	int32				beginTime			=1;//0=正在开启，非0表示开启的unixTime
+}
+
+// 玩家造成的伤害总和和玩家获得的银两，声望 总和
+//message p_role_stastic[id=12455]{
+//	required	int64		harm			=1;
+//	required	int32		coin			=2;
+//	required	int32		repu			=3;
+//}
+
+message cs_nanm_reward[id=12452]{
+	
+}
+message sc_nanm_reward[id=12453]{
+	required    int8                result          =1;
+	//1-> 领取成功
+	//2-> 不在领取时间内
+	//3-> 没有参与攻打BOSS
+	//4-> BOSS没有被打死
+	//5-> 已经领取
+	repeated    p_reward_view       rewardlist      =2;
+}

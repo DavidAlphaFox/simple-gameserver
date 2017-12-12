@@ -1,0 +1,205 @@
+
+
+//家园日志
+message p_homestead_log[id=20201]{
+	required	string				roleName		=1;//操作玩家名称
+	required	int8					type					=2;//操作类型1：充能 2：交配
+	required	int8					machine			=3[default=0];//充能机器
+	required	string				gerName			=4;//交配宠物
+	required	int8					add					=5;//产量增加
+	required	int32				second			=6;//发生时间
+}
+//机器项
+//机器是否能播种判断：endsecond==0  and harvest==0
+message p_homestead_machine[id=20202]{
+	required	int8					num					=1;//机器编号
+	required	int16				seedItemID		=2[default=0];//种子物品模版id
+	required	int32				endSecond		=3[default=0];//播种成熟结束时间 0:表示没有播种
+	required	int32				harvest			=4[default=0];//产量					
+	required	int32				add4Energy	=5[default=0];//充能加成
+	required	int32				addEnergyEndS=6[default=0];//充能结束时间
+	required	int8					get_count		=7[default=0];//领取产出次数
+	required	int32				startSecond			=8[default=1];
+}
+//家园信息
+message p_homestead[id=20203]{
+	required	string									roleName					=1;//角色名称
+	required	int8										energyTimes			=2;//充能次数
+	required	int8										matingTimes				=3;//交配剩余次数
+	required	int32									matingCoolSecond	=4[default=0];//交配冷却结束时间 0：没有冷却
+	required	int8										add4mating				=5[default=0];//交配加成
+	required	int16									gerTypeID					=6[default=0];//守护宠物类型  0：没有
+	required	int64									gerID							=7[default=0];//守护宠物uid 0：没有
+	required	int16									quality							=8[default=0];//守护宠物品阶
+	required	int16									level								=9[default=0];//守护宠物等级
+	required	int32									refreshMatingSecond=10[default=0];//上一次刷新交配次数时间
+}
+//通用错误提示
+message sc_homestead_error[id=20204]{
+	required int8				reason_code					=1;
+	//2:家园没有开启 
+	//3:只能请求好友的家园
+	//4:好友家园没有开启
+	//5:机器已经开启
+	//6:该机器前面还有未开始的机器，不能开启
+}
+
+//请求自己家园的信息
+message cs_homestead_get_info[id=20205]{
+}
+message sc_homestead_get_info[id=20206]{
+	required	p_homestead						baseinfo				=1;
+	repeated	p_homestead_machine		machineList		=2;
+}
+//请求好友家园的信息
+message cs_homestead_get_friend_info[id=20207,route=friend_server]{
+	required	int32									roleID = 1;
+}
+message sc_homestead_get_friend_info[id=20208]{
+	required	int32									roleID 					= 1;
+	required	p_homestead						baseinfo				=2;
+	repeated	p_homestead_machine		machineList		=3;
+}
+//机器解锁
+message cs_homestead_unlock_machine[id=20209]{
+	required	int8										num			=1;//机器编号
+}
+message sc_homestead_unlock_machine[id=20210]{
+	required	p_homestead_machine		machine	=1;//新开启的机器
+}
+
+//铲除
+message cs_homestead_uproot_seed[id=20211]{
+	required	int8										num			=1;
+}
+message sc_homestead_uproot_seed[id=20212]{
+	required	int8										num			=1;
+}
+
+//收成
+message cs_homestead_harvest[id=20213]{
+	required	int8										num			=1;
+}
+message sc_homestead_harvest[id=20214]{
+	required	p_homestead_machine		updata_machine	=1;//机器数据更新
+	required		p_reward_view	reward			=2;//奖励信息
+}
+//播种
+message cs_homestead_seeding[id=20215]{
+	required		int8						num						=1;//机器编号
+	required		int16					seedItemID			=2;//种子
+}
+message sc_homestead_seeding[id=20216]{
+	required	p_homestead_machine		updata_machine	=1;//机器数据更新
+}
+
+//通用机器数据更新
+message sc_homestead_update_machine[id=20217]{
+	required	p_homestead_machine		updata_machine	=1;//机器数据更新
+}
+
+//换守护神
+message cs_homestead_change_ger[id=20218]{
+	required	int64									gerID			=1;//0：不用守护神
+}
+message sc_homestead_change_ger[id=20219]{
+	required	int64									gerID			=1;
+}
+
+//交配
+message cs_homestead_mating[id=20220,route=friend_server]{
+	required	int32									roleID	=1;
+}
+message sc_homestead_mating[id=20221]{
+	required		int8							matingTimes				=1;//自己交配剩余次数
+	repeated		p_reward_view		rewardList					=2;//奖励
+	required		int32						fRoleID						=3;//好友roleid
+	required		int32						matingCoolSecond	=4;//好友交配冷却结束时间
+	required		int8							add4mating				=5;//好友交配加成
+}
+message sc_homestead_mating_to_friend[id=20222]{
+	required	p_homestead_log									log								=1;//
+	required	int32														matingCoolSecond	=2;//自己交配冷却结束时间
+	required	int8															add4mating				=3;//自己交配加成
+}
+
+//充能
+message cs_homestead_addenergy[id=20223,route=friend_server]{
+	required	int32														roleID			=1;
+	required	int8															num				=2;//机器编号
+}
+message sc_homestead_addenergy[id=20224]{
+	required	int32						roleID						=1;
+	required	int8							num							=2;//机器编号
+	required	int8							energyTimes			=3;//自己充能次数
+	required	int32						add4Energy			=4;//好友充能加成
+	required	int32						addEnergyEndS		=5;//好友充能结束时间
+	repeated		p_reward_view		rewardList					=6;//奖励
+}
+message sc_homestead_addenergy_to_friend[id=20225]{
+	required	int8															num								=1;
+	required	p_homestead_log									log								=2;//
+	required	int32														addEnergyEndS			=3;//自己交配冷却结束时间
+	required	int32														add4Energy				=4;//自己充能加成
+}
+message cs_homestead_get_log[id=20226]{
+}
+message sc_homestead_get_log[id=20227]{
+	repeated	p_homestead_log			list			=1;
+}
+
+message cs_homestead_get_friend_log[id=20228,route=friend_server]{
+	required	int32								roleID		=1;
+}
+message sc_homestead_get_friend_log[id=20229]{
+	required	int32								roleID		=1;
+	repeated	p_homestead_log			list			=2;
+}
+%%交配冷却时间好友通知
+message sc_homestead_sync_mating_cool_second[id=20230]{
+	required		int32			roleID							=1;
+	required		int32			matingCoolSecond	=2;//交配冷却结束时间
+}
+%%守护神变化好友通知
+message sc_homestead_sync_ger[id=20231]{
+	required		int32			roleID							=1;
+	required		int32			gerTypeID					=2;//守护武将类型
+	required		int16			gerQuality					=3;//守护武将品质
+}
+%%充能状态好友通知
+message sc_homestead_sync_add_enagy[id=20232]{
+	required		int32				roleID						=1;
+	required		int32				beginGold				=2[default=0];//充能(金币)开始时间
+	required		int32				endGold					=3[default=0];//充能(金币)结束时间
+	required		int32				beginBadge			=4[default=0];//充能(徽章)开始时间
+	required		int32				endBadge				=5[default=0];//充能(徽章)结束时间
+}
+
+%% 种子合成
+message cs_homestead_compose[id=20233]{
+    required        int16               itemTypeID                  =1; //所消耗的材料模板ID
+    required        int16               num                         =2; //合成的个数
+}
+
+message sc_homestead_compose[id=20234]{
+    required        int8                result                      =1;
+    // 结果
+    // 0 -> 成功
+    // 1 -> 物品不足
+    // 2 -> 未知异常
+}
+
+%% 获得合成配方列表
+message cs_homestead_compose_list[id=20235]{
+}
+
+message sc_homestead_compose_list[id=20236]{
+    repeated        p_compose_info      infolist                    =1; //合成配方列表
+}
+
+message  p_compose_info[id=20237]{
+    required        int16               costTypeID                  =1; //所消耗的材料模板ID
+    required        int16               needNum                     =2; //需要的数量
+    required        int16               getNum                      =3; //获得的数量
+    required        int16               targetID                    =4; //合成的物品ID 
+}

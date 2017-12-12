@@ -1,0 +1,90 @@
+【工程目录介绍】
+	--config（策划配置、application配置）
+		--app
+			PushChatCert.pem	苹果IAP的验证密钥
+	--data（之前用来放mnesia表文件）
+	
+	--deps（工程依赖的第三方包）
+	
+	--ebin（根据根目录下Emakefile文件编译出来的beam文件）
+	
+	--include（头文件目录）
+	
+	--proto（客户端、服务器的交互协议定义文件，protobuffer格式）
+	
+	--script（服务器脚本文件）
+	
+	--setting（服务器启动配置文件）
+	
+	--src（源文件）
+		--db（数据库application）
+		--gateway（网关application）
+		--logger（日志application）
+		--role（玩家逻辑application）
+			--ger （武将相关的功能）
+				ger_attr.erl	武将属性相关接口
+				ger_lib.erl		武将操作相关接口
+								
+			--item	（道具相关的功能）
+				item_lib.erl	道具操作相关接口
+								
+			role_server.erl	玩家逻辑进程核心模块
+			role_data.erl 玩家数据操作接口
+			role_lib.erl 常用的玩家逻辑接口
+			role_item.erl 处理道具相关的逻辑模块，下同
+			role_*.erl文件， *对应proto文件的模块名。用于处理各模块功能的逻辑
+			
+		--tool（工具application）
+		
+		--world（世界application，包括各种服务进程）
+			activity_server.erl		全局活动逻辑处理进程
+			broadcast_server.erl	全局协议广播处理进程
+			friend_server.erl		全局好友逻辑处理进程
+			hist_server.erl			战报
+			hron_server.erl			华容道
+			hula_server.erl			虎牢关
+			invite_server.erl		邀请码相关逻辑的处理进程
+			mail_server.erl			邮件
+			pay_server.erl			充值
+			plunder_server.erl		夺宝
+			push_server.erl			推送
+			pvp_server.erl			争霸
+			state_sync_server.erl	与帐号服务器的服务器状态同步进程			
+			
+		proto_struct.erl 协议文件生成的协议属性代码
+		proto_route.erl	  协议路由信息
+		all_proto.hrl	   每条协议对应的record定义
+		user_default.erl 控制台简写命令接口
+			简写命令示例：
+				pg().		重新解析proto文件夹下的所有*.proto文件，并生成相关代码(proto_struct.erl,all_proto.hrl,proto_route.erl)
+				z().		重新编译有改动的模块，并加载。
+				lc().		重新加载所有配置
+				lc(Config). 重新加载Config对应的配置
+				ri(RoleID). 在线玩家RoleID对应的roleInfo信息
+				emu(RoleID,Msg). 模拟RoleID对应的客户端给服务器发送一条协议
+				id().		随机获取一个在线玩家的id，如果只有一个人在线，则为此玩家id
+				n().		当前在线玩家数量
+				a().		随机获取几个玩家名字和对应的玩家ID
+				
+	--test（测试代码）
+	
+	Emakefile（工程编译使用的makefile）
+	start.sh（服务器启动命令，如无法执行，请先修改权限，chmod +x start.sh）
+	
+【服务器配置相关】
+	流程：	读取data_*.config	, 生成data_*.erl,并编译生成beam文件，直接调用
+	相关模块：	preload_config.hrl		预加载的配置的定义文件
+			config2erl.erl			解析配置、生成erl文件
+			dynamic_compile.erl		从字符串编译beam文件
+			
+【服务器启动逻辑】
+	tk.erl		服务器总开关模块
+	从tk.erl中代码可以看到，服务器启动时，依次启动了,	[sasl,	%erlang自带的生产级 错误日志等功能
+										logger, %可控日志等级的html日志
+										tool,	%加载配置
+										db,		%数据库层
+										role,	%玩家的逻辑进程
+										world,	%世界逻辑服务
+										]
+	当服务器关闭时，按反方向关闭各个application
+								

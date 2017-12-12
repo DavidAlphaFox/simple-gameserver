@@ -1,0 +1,218 @@
+//模块=mail
+//编号=11400
+
+
+//====================核心协议流程==================================
+//
+//      Client								Server
+// 请求邮件
+// #cs_hron_info  			===>>>>
+//					  		<<<<===		#sc_hron_info_stop
+// 
+//=================流程完成==================================
+		
+// 请求打开邮件列表
+message cs_mail_info[id=11401,route=mail_server]{
+	required		int8		type				=1;//请求打开的类型
+	// 1=> 系统邮件
+	// 2=> 私人邮件
+	// 3=> 好友邮件
+	required		int64		clientTopMailUID	=2;//客户端保存的最新的邮件UID,初始化时发0
+}
+
+message sc_mail_info[id=11402]{
+	required		int8		result			=1;//请求操作结果
+	// 1=> 请求成功
+	// 2=> 请求失败-type非法
+	// 3=> 请求失败-最上面的邮件是最新的
+	required		int8		type			=2;//请求打开的类型
+	required		bool		isFuckData		=3;//Name For Joy!
+	// true = 客户端的该类型邮件数据可以抛弃，
+	// false = 已经将最新的邮件全部同步到客户端
+	repeated		p_mail		mailList		=4;//邮件列表
+	repeated		int8		newMailNum		=5;//新的四种类型邮件未读数量，[系统邮件未读数量、私人邮件未读数量、联盟邮件未读数量、好友请求邮件未读数量]
+}
+
+message	p_id_num[id=11403]{
+	required		int16		typeID			=1;//类型ID
+	required		int32		num				=2;//数量
+}
+
+message	p_mail_reward[id=11404]{
+	repeated		p_id_num	itemList		=1;//道具列表
+	repeated		p_id_num	gerList			=2;//武将列表		
+}
+
+message	p_mail[id=11405]{
+	required		int64		mailUID			=1;//邮件唯一ID
+	required		int8		mailType		=2;//邮件类型
+	// 1=> 系统消息
+	// 2=> 系统奖励
+	// 3=> 加好友申请
+	// 4=> 加联盟申请
+	// 5=> 私人邮件
+	// 6=> 联盟邮件
+	required		int32		senderID		=3;//邮件发送者的UID，0=系统发送的
+	required		string		senderName		=4;//发送者名字,如果本邮件是系统邮件，则此字段为空
+	required		string		content			=5;//内容
+	required		int32		time			=6;//发送时间(Unix时间戳)
+	required		int16		mailTemplateID	=7;//邮件模版ID
+	repeated		any			paramList		=8;//动态类型参数列表
+	repeated		p_mail_reward	mailReward	=9;//可领取奖励
+	required        int32       head            =10;//发件人头像
+	required        bool		isMale			=11;//性别					
+}
+
+// 领取邮件奖励
+message	cs_mail_draw_reward[id=11406,route=mail_server]{
+	required		int64		mailUID			=1;//邮件唯一ID
+}
+
+message	sc_mail_draw_reward[id=11407]{
+	required		int8		result			=1;//结果
+	// 1=> 领取成功
+	// 2=> 领取失败-该邮件不存在、或者已被领过了
+    // 3=> 领取失败-符文碎片太多了，消耗一下再领取
+}
+
+// 删除邮件
+message	cs_mail_delete[id=11408,route=mail_server]{
+	required		int64		mailUID			=1;//邮件唯一ID
+	required		int8		type			=2;//邮件的大类，1=系统，2=私人，3=联盟
+}
+
+message	sc_mail_delete[id=11409]{
+	required		int8		result			=1;//结果
+	// 1=> 删除成功
+	// 2=> 删除失败-该邮件不存在
+	// 3=> 删除失败-该邮件不能删除
+}
+
+// 新写一封邮件，请求发送
+message	cs_mail_new[id=11410]{
+	required		int32		targetRoleID	=1;//目标玩家ID，如果玩家ID为0，则服务器根据玩家名字发送
+	required		string		targetRoleName	=2;//目标玩家名字，如果targetRoleID非0，则此字段服务器不使用
+	required		string		content			=3;//内容（包括了标题）
+}
+
+message	sc_mail_new[id=11411]{
+	required		int8		result			=1;//请求结果
+	// 1=> 发送成功
+	// 2=> 发送失败-邮件太长了
+	// 3=> 发送失败-你发送邮件频率太快了
+	// 4=> 发送失败-该玩家不存在
+	// 5=> 发送失败-邮件内容违反相关法律、法规
+	// 6=> 对方已经将你屏蔽
+    // 7=> 您今天对陌生人发送邮件的数量已耗尽！
+}
+
+// 请求未读邮件个数
+message	cs_mail_unread_num[id=11420,route=mail_server]{
+}
+
+message	sc_mail_unread_num[id=11421]{
+	repeated		int8		newMailNum		=1;//新的四种类型邮件未读数量，[系统邮件未读数量、私人邮件未读数量、联盟邮件未读数量、好友请求邮件未读数量]
+}
+
+// 请求更多邮件
+message	cs_mail_more[id=11430,route=mail_server]{
+	required		int8		type				=1;//请求打开的类型
+	// 1=> 系统邮件
+	// 2=> 私人邮件
+	// 3=> 联盟邮件
+	required		int64		startMailUID		=2;//哪条邮件之后的更多邮件
+}
+
+message	sc_mail_more[id=11431]{
+	required		int8		result				=1;//请求结果
+	// 1=> 请求成功
+	// 2=> 请求失败-没有更多了，已经是最后一条了
+	// 3=> 请求失败-未知原因
+	required		int8		type				=2;//请求打开的类型
+	repeated		p_mail		mailList			=3;//邮件列表
+	repeated		int8		newMailNum			=4;//新的四种类型邮件未读数量，[系统邮件未读数量、私人邮件未读数量、联盟邮件未读数量、好友请求邮件未读数量]
+}
+
+// 同意好友申请
+message	cs_mail_agree_friend[id=11440, route=mail_server]{
+	required		int64			mailUID			=1;//邮件UID
+	// 1=> 好友申请邮件的UID	
+}
+
+message	sc_mail_agree_friend[id=11441]{
+	required		int8			result			=1;//请求结果
+	// 1=> 成功
+	// 2=> 失败-对方好友已满
+	// 3=> 失败-你的好友已满
+	// 4=> 失败-你没有这封好友申请邮件
+	// 5=> 失败-对方已经是你的好友
+	required		int64			mailUID			=2;//邮件UID
+}
+
+message cs_mail_del_spec_mail[id=11442, route=mail_server]{
+    required        int32           senderID        =1;//发送者的ID
+}
+
+message sc_mail_del_spec_mail[id=11443]{
+    repeated        int64           mailUIDList     =1;//邮件UIDList
+}
+
+message cs_mail_invite_operate[id=11444, route=mail_server]{
+        required    int64   mail_uid        = 1;
+        required    int8    operate_type    = 2;
+        // 1=> 接受
+        // 2=> 拒绝
+}
+
+message sc_mail_invite_operate[id=11445]{
+        required    int8    result  = 1;    //结果
+        // 1=> 成功接受邀请
+        // 2=> 成功拒绝邀请
+        // 3=> 邀请者不是盟主
+        // 4超过人数上限
+        // 5此玩家已进入该联盟
+        // 6系统错误
+        // 7此玩家已经加入其他联盟
+        // 10=>处于联盟战期间
+}
+
+
+//，3你不是盟主，4超过人数上限，5此玩家已进入你的联盟，6系统错误，7此玩家已经加入其他联盟，8在保护时间内,9正在处理上一条请求,10处于联盟战期间
+
+// 领取邮件奖励,一次领取70封
+message cs_mail_draw_reward_all[id=11446,route=mail_server]{
+}
+
+message sc_mail_draw_reward_all[id=11447]{
+    repeated    p_reward_info   reward      =1;//奖励信息
+    required    int8            result      =2;// 1 成功 2 失败无邮件
+}
+
+//------------ 调查数据相关--------------
+message cs_mail_canvass_info[id=11448]{
+}
+message sc_mail_canvass_info[id=11449]{
+    required    int32       state       =1;             // 1未开启2开启未填写3开启已经填写过了
+    required    int32       end_time    =2;             // 结束时间，活动未开启的话，就是0
+    required    int32       all_num     =3;             // 问题总数，未开启就是0
+    required    int32       current_index   =4;         // 如果上次没答完就关闭游戏了，支持继续答题，返回最后一道未答的题序号
+    required    int32       reward_num      =5;         //奖励信息
+}
+
+message cs_mail_get_question[id=11450]{
+    required    int32       index       =1;         // 第一题的需要为1
+}
+message sc_mail_get_question[id=11451]{
+    required    int32       index       =1;         // 如果获取不存在的题号，此处返回为0
+    required    string      describe    =2;
+    repeated    string      option_list     =3;     // 选项描述
+}
+
+message cs_mail_do_select[id=11452]{
+    required    int32       index           =1;         // 第一题的需要为1
+    required    int32       selected_num    =2;         // 第一个选项1，第二个2
+}
+message sc_mail_do_select[id=11453]{
+    required    int8        result      =1;             // 1 成功 2 失败
+    required    int32       state       =2;             // 1未开启2开启未填写3开启已经填写过了
+}

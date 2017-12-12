@@ -1,0 +1,106 @@
+//模块=跑环任务
+//编号=16100
+
+// 获得跑环基本数据，不包括进度
+message cs_tasklink_get_info[id=16101]{
+}
+message sc_tasklink_get_info[id=16102]{
+    required    int32       sign_status         =1;
+    required    int32       diffcult_level      =2;
+    required    int32       sign_time           =3;
+    required    int32       pay_count           =4;
+    repeated    p_level_info    level_info_list      =5; //** 未开始的话list长度为0
+    required    int32       self_force_value    =6;
+    required    int32       buy_need_gold       =7;
+    required    int32       sign_open_level     =8;     // 等级要求
+}
+
+// 获得跑环进度
+message cs_tasklink_get_progress[id=16103]{
+}
+// 该消息可主动请求，也可能主动推送
+message sc_tasklink_get_progress[id=16104]{
+    required    int32       current_timestamp   =1; // 当前时间，current_timestamp加上remaining_time等于到达下一点的时间戳
+    required    int32       next_point          =2; // 最初启示为1，如果是0表示已经达到终点
+    required    int32       remaining_time      =3; // 单位秒
+    required    int32       remaining_percent   =4; // 单位是百分之一
+    repeated    p_point_info    point_info_list      =5; // 未开始的话list长度为0
+    required    int32       end_timestamp       =6; // 单位秒
+    repeated    p_member_info   members         =7;
+    required    int32       all_need_time       =8; // 单位秒
+}
+
+message cs_tasklink_get_reward_log[id=16105]{
+}
+// 该消息可主动请求，也可能主动推送
+message sc_tasklink_get_reward_log[id=16106]{
+    repeated    p_reward_log    reward_log_list      =1; // 未开始的话list长度为0
+}
+
+message cs_tasklink_sign[id=16107]{
+    required    int32       level   =1;     // **
+}
+// 该消息可主动请求，也可能主动推送
+message sc_tasklink_sign[id=16108]{
+    required    int32       result          =1; // 1成功2战斗中3不是队长4原力值不足5有人奖励没领取完6有人准备中7次数不够8队长次数不够9等级不足
+    required    string      error_name      =2;
+}
+
+message cs_tasklink_buy_time[id=16109]{
+}
+// 该消息可主动请求，也可能主动推送
+message sc_tasklink_buy_time[id=16110]{
+    required    int32       result   =1;        // 1成功2购买达到上限3钱不够
+    required    int32       new_time   =2;   // **
+}
+
+message cs_tasklink_ready_notice[id=16111]{
+}
+
+// close_timestamp如果是大于0，表示确认框的倒计时，倒计时到达，客户端可以认为是确认失败。如果数值为0，则表示有玩家取消，需要客户端让对话消失
+// #sc_tasklink_ready_notice{members=[],close_timestamp=0}) %% 有人取消了准备
+message sc_tasklink_ready_notice[id=16112]{
+    repeated    p_member_info members = 1;
+    required    int32   close_timestamp =2; 
+    required    int32   diffcult_level  =3;      // 难度
+}
+
+message cs_tasklink_ready_opt[id=16113]{
+    required    int32   opt_type       =1;      // 1确认2取消
+}
+// 考虑下，这个消息可以不发，直接发sc_tasklink_ready_notice
+message sc_tasklink_ready_opt[id=16114]{
+    required    int32       result   =1;        // 1成功，4不在准备中
+}
+
+// 领取奖励
+message cs_tasklink_get_reward[id=16115]{
+    required    int32   index       =1;      // 领取奖励的序号,0的话表示全部领取
+}
+message sc_tasklink_get_reward[id=16116]{
+    required    int32       result   =1;    // 1成功2未到达3没奖励4不在战斗中
+    repeated    p_reward_view   reward_view     =2;
+}
+
+//-----------子结构
+message p_point_info[id=16131]{
+    required    int32   point_index     =1;
+    required    int32   point_type      =2; // 11~30是不同的宝箱，31~99是不同的事件
+    required    int32   point_status    =3; // 0未到达1到达未领取奖励2领取了奖励
+    repeated    int32   point_args      =4; // 仅服务器保存数据用，传递给客户端需要赋值为空
+}
+
+message p_reward_log[id=16132]{
+    required    int32   timestamp       =1;
+    repeated    string  args_name       =2;
+    required    int32   log_type        =3;     
+    repeated    p_reward_view   reward_view     =4; //0未到达1到达未领取奖励2领取了奖励
+}
+
+// 描述不同难度的数据**
+message p_level_info[id=16133]{
+    required    int32   diffcult_level          =1;
+    required    int32   need_force_value        =2;
+    repeated    p_reward_view   reward_view     =3;
+}
+

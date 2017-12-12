@@ -1,0 +1,163 @@
+% 新版家园协议
+% c = construction
+
+message cs_home_info[id=20801]{
+}
+
+message sc_home_info[id=20802]{
+    required    int8    stage    =1;         // 当前家园的发展阶段，
+    repeated    c_info  constr_list = 2;   //家园建筑物
+    required    int32   dounty_need_win_rate   =3;     // 接取悬赏时需要的成功率
+}
+
+message cs_home_build[id=20803]{
+    required    int32   type   =1;     // 该建筑物的类型
+}
+
+message sc_home_build[id=20804]{
+    required    int8    result    =1;       // 操作结果 1成功2前置条件不足3资源不足
+    repeated    c_info  constr_list = 2;    // 新建筑物状态
+}
+
+message cs_home_up_stage[id=20805]{
+}
+//升级成功会主动发sc_home_info更新数据
+message sc_home_up_stage[id=20806]{
+    required    int8    result    =1;       // 整体进阶
+}
+
+//描述家园当前某个建筑物的状态，包括升级条件
+message c_info[id=20807]{
+    required    int32   type   =1;     // 该建筑物的类型，相当于配置ID
+    required    int32   cur_level  =2;     // 该建筑物的当前等级
+    required    int32   max_level  =3;     // 该建筑物的最高等级
+//    required    p_reward_info   up_item_need    =4;     // 升级需求的道具
+//    repeated    c_need          up_constr_need    =5;     // 升级所需要的建筑物等级
+//    repeated    int32   buff_arg_list           =6;     // 建筑物buff加成，客户端需要根据不同类型，显示为不同buff加成说明。单位是1%
+}
+
+//描述家园整体进阶的建筑物条件
+message c_need[id=20808]{
+    required    int32   type   =1;     // 该建筑物的类型
+    required    int32   level  =2;     // 该建筑物的等级
+}
+
+message cs_home_get_friend[id=20809]{
+    required    int32   role_id     =1;     // 好友家园ID
+}
+//升级成功会主动发sc_home_info更新数据
+message sc_home_get_friend[id=20810]{
+    required    int8    stage    =1;        // 当前家园的发展阶段，
+    repeated    c_info  constr_list = 2;    //家园建筑物
+    required    int32   level   =3;     // 该建筑物的等级
+}
+
+// 任务都在一个列表中，通过task_id和role_id两个字段进行区分
+// 非悬赏任务role_id为0
+message cs_home_task_info[id=20811]{
+}
+//升级成功会主动发sc_home_info更新数据
+message sc_home_task_info[id=20812]{
+    repeated    home_task  task_list = 1;           //客户端自行区分，是否领取，已经是否是悬赏任务
+}
+
+message cs_home_task_operate[id=20813]{
+    required    int8    operate_type    =1;     // 1领取 2设置悬赏 3撤销非悬赏任务 
+    required    int32   task_id         =2;     // 任务ID
+    repeated    int64   ger_id          =3;     //
+    required    int32   role_id         =4;     // 任务所属玩家的RoleID，如果是自己的任务则ID为0
+}
+//升级成功会主动发sc_task_operate更新数据
+message sc_home_task_operate[id=20814]{
+    required    int8    result    =1;       // 操作结果 1成功2精灵状态3任务状态4材料不足5成功率不足7今日悬赏领取已达上限8操作过频繁
+}
+
+message home_task[id=20815]{
+    required    int32   id          =1;     // 任务模板ID
+    required    int8    quality     =2;     // 品质
+    required    int32   level       =3;     // 等级
+    repeated    int32   tgt_ger_type    =4;     // 目标类型
+    required    int32   timtout_ts      =5;     // 完成任务或过期的时间戳
+    required    int32   finish_time     =6;         // 完成需要消耗的时间
+    required    int32   base_reward_num     =7;         // 完成任务的基础奖励
+    required    p_reward_info   box_reward  =8;         // 完成任务的宝箱奖励
+    required    int8    status      =9;      // 1非悬赏未领取2非悬赏进行中3悬赏未领取4悬赏进行中
+    required    int32   role_id     =10;     // 执行任务的玩家
+    repeated    int64   ger_id      =11;     // 执行任务的精灵ID,执行中才有效
+    repeated    int32   ger_type    =12;     // 执行任务的精灵ID,执行中才有效
+    repeated    int8    ger_quality =13;     // 
+    repeated    int32   ger_level   =14;     // 
+    required    int32   onwer_role_id  =15;     //
+    required    int32   task_type   =16;     //
+    required    int32   role_level  =17;     //
+    required    string  owner_name  =18;     //
+    required    string  atk_name    =19;     //
+}
+
+
+message cs_home_bounty_task_info[id=20816]{
+}
+message sc_home_bounty_task_info[id=20817]{
+    repeated    home_task  task_list    = 1;    //客户端自行区分，是否领取，已经是否是悬赏任务
+    required    int32   accept_num      = 2;     //今日领取的悬赏任务
+    required    int32   accept_max      = 3;     //每日领取悬赏任务的上限
+}
+
+
+message cs_home_cirrus_info[id=20818]{
+    required    int32   role_id         = 1;    // 魔藤所属玩家的RoleID，如果是自己的魔藤则ID为0
+}
+message sc_home_cirrus_info[id=20819]{
+    required    int32   role_id         = 1;    // 魔藤所属玩家的RoleID，如果是自己的魔藤则ID为0
+    repeated    cirrus_node  cirrus_node_list = 2;  //客户端自行区分，是否领取，已经是否是悬赏任务
+}
+
+message cs_home_cirrus_fight[id=20820]{
+    required    int32   cirrus_index  = 1;  //操作的资源点序号
+}
+message sc_home_cirrus_fight[id=20821]{
+    required    int8    result    =1;   //0失败1胜利，10魔藤选择错误11已经挑战胜利了
+    repeated    sc_fight_request    fightInfo   =2;//战斗的结果
+}
+
+message cs_home_cirrus_operate[id=20822]{
+    required    int32   operate_type  = 1;  //1体力挂机2钻石挂机3停止挂机收获奖励
+    required    int32   cirrus_index  = 2;  //操作的资源点序号
+    required    int64   ger_id  = 3;    //仅在设置挂机的时候使用
+}
+message sc_home_cirrus_operate[id=20823]{
+    required    int8    result    =1;   //1成功2不符合条件3没钱
+}
+
+message cirrus_node[id=20824]{
+    required    int32   cirrus_index  = 1;
+    required    int32   need_role_lvl  = 2;
+    required    int32   need_cirrus_lvl  = 3;
+    required    int8    is_win  = 4;            //0可以打，还没打赢1已经打赢了2不可以打
+    required    int32   doing_timestamp  = 5;  //0表示未挂机
+    required    int64   doing_ger_id  = 6;     //挂机用的ger精灵ID，0表示未挂机
+    required    int8    cost_type  = 7;         // 挂机是选择的消费类型，1体力，2钻石，0表示未挂机
+    required    p_reward_info   cirrus_reward  =8;         // 完成任务的宝箱奖励
+    required    int32   need_energy  = 9;         // 需求体力
+    required    int32   need_diamond  = 10;         // 需求钻石
+    required    int32   doing_ger_type  = 11;     // 挂机用的ger type
+    required    int32   doing_ger_quality  = 12;     // 挂机用的ger 品阶
+}
+
+message cs_home_exchange[id=20825]{
+    required    int32   wood_num        = 1;        //1木材
+    required    int32   stone_num       = 2;        //2石头
+}
+message sc_home_exchange[id=20826]{
+    required    int8    result    =1;
+}
+
+
+
+
+
+
+
+
+
+

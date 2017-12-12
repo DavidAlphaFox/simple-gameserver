@@ -1,0 +1,112 @@
+//模块=card
+//编号=11100
+
+
+
+//====================协议流程==================================
+//
+//      Client								Server
+// 界面信息
+// #cs_card_get_list  		===>>>>
+//					  		<<<<===		#sc_card_get_list
+// 抽取卡牌
+// #cs_card_draw 			===>>>>		
+//					  		<<<<==		#sc_card_draw
+//
+// 刷新卡牌、放弃卡牌、重置卡牌
+// #cs_card_refresh			===>>>>		
+//					  		<<<<==		#sc_card_refresh
+//
+//
+//====================流程完成==================================
+
+message		cs_card_get_list[id=11101]{
+}
+
+message		sc_card_get_list[id=11102]{
+	 repeated      p_opened_card       openedCardList  =1;//已抽取的卡牌列表
+	 repeated      p_card          cardList            =2;//等待抽取的卡牌列表
+	 required      int32           draw_cost_type           =3;//抽取下一张需要的徽章，如果只需要钻石，则此徽章值为0
+     required      int32           draw_cost_value           =4;//抽取下一张需要的钻石
+}
+
+message 	p_opened_card[id=11103]{
+	required		int8					pos					=1;//记录上次被翻出来时，卡片所在的位置,位置定义由客户端自行决定
+	required		int8					type				=2;//卡牌类型
+	required		int32					value				=3;//卡牌数值
+	// type=1 => 武将ID
+	// type=2 => 道具ID
+	// type=3 => 元宝数量
+	// type=4 => 银两数量
+	// type=5 => 声望数量
+}
+
+message		p_card[id=11104]{
+	required		int8					type				=1;//卡牌类型
+	required		int32					value				=2;//卡牌数值
+	// type=1 => 武将ID
+	// type=2 => 道具ID
+	// type=3 => 元宝数量
+	// type=4 => 银两数量
+	// type=5 => 声望数量
+}
+
+// 抽取卡牌
+message		cs_card_draw[id=11105]{
+	required		int8					pos					=1;//请求的卡片抽取的位置
+}
+
+message		sc_card_draw[id=11106]{
+	required		int8			result			=1;//抽取结果，如果抽取成功，前端自行删除点将令
+	// 1=> 抽取成功
+	// 2=> 抽取失败-声望或者元宝不足
+	// 3=> 抽取失败-卡牌已领完了，还领个毛啊
+	// 4=> 抽取失败-未知错误
+	// 5 => 抽取失败-不在活动时间内
+	required		int8			pos				=2;//请求的卡片抽取未知
+	repeated		p_card			card			=3;//如果抽到，则列表长度为1个，如果没抽到，则列表长度为0
+    required      int32           draw_cost_type         =4;//抽取卡片需要的消费类型，1、金币；2、徽章；3、钻石
+    required      int32           draw_cost_value         =5;//抽取下一张需要的消费的金额
+}
+
+
+// 刷新卡牌、重置卡牌、放弃卡牌
+message		cs_card_refresh[id=11107]{
+}
+
+message		sc_card_refresh[id=11108]{
+	required		int8			result			=1;//刷新结果
+	// 1=> 刷新成功
+	// 2=> 刷新失败-银两不足
+	// 3=> 刷新失败-你刷得太快了
+	// 4=> 刷新失败-未知错误
+	// 5 => 刷新失败-不在活动时间内
+	repeated		p_card			cardList		=2;//新的等待抽取的卡牌列表
+    required      int32           draw_cost_type         =3;//抽取卡片需要的消费类型，1、金币；2、徽章；3、钻石
+    required      int32           draw_cost_value         =4;//抽取下一张需要的消费的金额
+}
+
+// 一键翻牌
+message		cs_card_onekey[id=11120]{
+}
+	
+message		sc_card_onekey[id=11121]{
+	required		int8			result			=1;//抽取结果，如果抽取成功，前端自行删除点将令
+	// 1=> 抽取成功
+	// 2=> 抽取失败-点将令或者元宝不足
+	// 3=> 抽取失败-卡牌已领完了，还领个毛啊
+	// 4=> 抽取失败-未知错误
+	// 5 => 抽取失败-不在活动时间内
+	repeated		p_opened_card	card			=2;//开启的卡牌列表
+}
+
+message		cs_card_activity_info[id=11122]{
+}
+
+message		sc_card_activity_card[id=11123]{
+	required		int32			startTime	=1;
+	required		int32			stopTime	=2;
+    required        int16           level       =3;
+    required        int32           refresh_cost_type   =4;  //重置卡片需要的消费类型，1、金币；2、徽章；3、钻石
+    required        int32           refresh_cost_value  =5;  //重置卡牌需要的消费的金额
+}

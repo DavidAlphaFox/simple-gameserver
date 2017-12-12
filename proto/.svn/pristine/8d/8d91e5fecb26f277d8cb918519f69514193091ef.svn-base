@@ -1,0 +1,141 @@
+//模块=shop
+//编号=10700
+
+
+// =================商店协议系统说明==========================
+//
+// 购买道具之前，必须先请求购买次数限制
+// 
+// 由于前端预判的需要，不允许同时有两个商品在请求购买，所以sc_shop_bug返回协议中没有携带请求信息。
+// 
+// ==========================================================
+
+
+// 获取所有特殊商品已购买次数
+message cs_shop_buy_num[id=10701]{
+}
+
+message sc_shop_buy_num[id=10702]{
+	repeated	p_shop_num		shopNumList			=1;//已购买次数列表
+}
+
+// 已购买次数信息
+message p_shop_num[id=10703]{
+	required	int16			shopID				=1;//商店ID
+	required	int16			sellID				=2;//商品ID
+	required	int16			buyNum				=3;//已购买次数
+    required    int16           buyMax              =4;//最大购买次数
+    required    int8            refresh_type        =5;//商品的刷新方式,0不限次数，1天刷新，11~17周刷新
+}
+
+// 购买道具
+message cs_shop_buy[id=10704]{
+	required	int16			shopID				=1;//商店ID
+	required	int16			sellID				=2;//商品ID
+	required	int8			num					=3;//购买数量
+}
+
+message	sc_shop_buy[id=10705]{
+	required	int8			result     =1;//结果
+	// 1=> 成功
+	// 2=> 元宝不足
+	// 3=> 银两不足
+	// 4=> 声望不足
+	// 5=> 积分不足
+	// 6=> 其他货币不足
+	// 7=> vip等级不足
+	// 8=> 购买次数超过上限
+	// 9=> 你不拥有此奇遇商店
+    // 10=> 公会货币不够
+    // 11-> 奥义结晶不够
+    // 12-> 金蛋积分不够
+    repeated    p_reward_view   reward      =2;//奖励信息
+}
+
+
+// 获取奇遇商店信息
+message cs_shop_encounter[id=10710]{
+}
+
+message sc_shop_encounter[id=10711]{
+	repeated	p_shop_random	shopList            =1;//奇遇商店列表
+    required    int32           unioncoin_refresh   =2;//公会商店刷新的价格
+}
+
+message	p_shop_random[id=10712]{
+	required		int16				shopID			=1;//商店ID
+	required		int32				refreshSec		=2;//UnixTime，下次刷新的时间
+	repeated		int16				sellIDList		=2;//随机出来的商品列表
+}
+
+// 新增一个奇遇商店
+message sc_shop_new[id=10713]{
+	required		p_shop_random		newShop			=1;//新增的奇遇商店信息
+}
+
+// 请求刷新奇遇商店
+message	cs_shop_refresh[id=10720]{
+	required		int16				shopID			=1;//商店ID
+}
+
+message	sc_shop_refresh[id=10721]{
+	required		int8				result			=1;//请求结果
+	// 1=> 成功
+	// 2=> 失败-元宝不足
+	// 3=> 失败-未知错误	
+	repeated		p_shop_random		newShop			=2;//新的商店
+}
+
+// 通知前端，自动刷新了
+message	sc_shop_auto_refresh[id=10730]{
+	required		p_shop_random		updateShop		=1;//刷新了的商店
+}
+
+message	cs_shop_family_limit_info[id=10722]{
+}
+
+message	sc_shop_family_limit_info[id=10723]{
+	required	int8		result		=1;
+	//1 => 成功
+	//2 => 失败，没有加入工会
+	repeated	p_shop_family_limit	shop	=2;
+}
+message	p_shop_family_limit[id=10726]{
+	required	int8		shopID		=1;
+	required	int8		levelLimit	=2;
+	required	int16		buyTimesLimit	=3;
+	required	int16		usedTimes	=4;
+	required	int16		costUnionCoin	=5;
+	required	p_reward_info	reward		=6;
+}
+
+message	cs_shop_family_limit_buy[id=10724]{
+	required	int8		shopID		=1;
+}
+
+message	sc_shop_family_limit_buy[id=10725]{
+	required	int8		result		=1;
+	//1 => 成功
+	//2 => 购买次数上限
+	//3 => 没有这个道具
+	//4 => 未解锁
+	//5 => 消耗品不足
+	//6 => 没有工会
+}
+
+// 描述由客户端传递的商品信息，最初用于种子商店
+message cs_shop_seed_info[id=10727]{
+}
+
+message sc_shop_seed_info[id=10728]{
+    repeated    seed_sell_info   shop_ist    =2;
+}
+
+message seed_sell_info[id=10729]{
+    required    int16       type      =1;
+    required    int32       cost_num    =2;
+    required    int32       seed_item   =3;  
+    required    int32       harvest_num    =4;
+}
+
+

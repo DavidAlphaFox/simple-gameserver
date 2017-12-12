@@ -1,0 +1,9 @@
+
+CREATE  TABLE IF NOT EXISTS `gShopBoxCard` (
+  `roleID` INT UNSIGNED NOT NULL,
+  `cdInfo` VARBINARY(1000) NOT NULL,
+  `openedCardInfo` VARBINARY(5000) NOT NULL ,
+  PRIMARY KEY (`roleID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商店抽卡信息';
+
+

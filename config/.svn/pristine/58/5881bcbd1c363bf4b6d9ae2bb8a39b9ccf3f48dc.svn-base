@@ -1,0 +1,21 @@
+%% 训练师配置
+%% 保存训练师零散配置
+
+%天赋
+{talent_unlock_level, 30}.
+
+%每级获得的天赋点数
+{point_per_level, 20}.
+
+%天赋冷却费用每分钟
+{gold_per_min, 1}.
+
+%战斗力计算中，奥义转化为战斗力的比例，10表示，奥义值乘以10算作战斗力
+{promean_to_power, 10}.
+
+% 穿装等级
+{trainer_unlock_level, 1}.
+
+{transmigration_attr_buff, {add_attr,1000,10000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}.
+
+{xbattle_finish_chapter,10004}.

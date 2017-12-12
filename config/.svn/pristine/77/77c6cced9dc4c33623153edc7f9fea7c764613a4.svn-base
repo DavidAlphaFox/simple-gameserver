@@ -1,0 +1,246 @@
+%% 每天报名次数
+{times_limit, 1}.
+
+%% 每天购买次数和对应的钻石消耗
+{buy_limit, {3, [100, 200, 400]}}.
+
+%% 匹配的人数
+{match_need, 10}. 
+
+%% 等级要求
+{lv_limit, 60}.
+
+% 挂机最长时间
+{afk_check_time,300}.
+
+%% 合成人数的方式(用最大的数加起来的方式,比如10就是[[5,5]],8就是[[5,3]])
+{match_need_list, [[5,5]]}.
+
+%% 飞机的配置, {data_carlos_plane, 速度加成, 消耗列表(gold 钻石,coin 金币,reputation 声望)}
+%{{plane, 1}, {data_carlos_plane, 0, [{gold, 1000}, {coin, 5000000}]}}.
+%{{plane, 2}, {data_carlos_plane, 30, [{gold, 5000}, {coin, 25000000}]}}.
+%{{plane, 3}, {data_carlos_plane, 60, [{gold, 10000}, {coin, 50000000}]}}.
+%{{plane, 4}, {data_carlos_plane, 100, [{gold, 25000}, {coin, 100000000}]}}.
+%{{plane, 5}, {data_carlos_plane, 160, [{gold, 50000}, {coin, 200000000}]}}.
+%{{plane, 6}, {data_carlos_plane, 240, []}}.
+
+%% 飞机速度 {{speed, Type},Speed}
+{{speed, 1},60}.
+{{speed, 2},78}.
+{{speed, 3},96}.
+{{speed, 4},120}.
+{{speed, 5},156}.
+{{speed, 6},204}.
+{{speed, 7},216}.
+{{speed, 8},228}.
+{{speed, 9},210}.
+{{speed, 10},210}.
+{{speed, 11},240}.
+{{speed, 12},240}.
+{{speed, 13},240}.
+{{speed, 14},240}.
+{{speed, 15},240}.
+{{speed, 16},240}.
+{{speed, 17},240}.
+{{speed, 18},240}.
+
+% 默认飞机的最高等级
+{max_plane_level,6}.
+
+%% 道具获得临时飞机信息{{plane_item,ItemTypeID},{CostNum,PlaneLevel, ValidTime}}
+{{plane_item,21041},{1,7,2592000}}.
+{{plane_item,21040},{1,8,2592000}}.
+{{plane_item,20054},{1,9,2592000}}.
+{{plane_item,20055},{1,10,2592000}}.
+
+%大师,王者标识.
+{{planeTag, 10},4}.
+{{planeTag,9},3}.
+{{planeTag, 8},2}.
+{{planeTag,7},1}.
+
+%% 占有资源的倒计时
+{occupy_need_time, 60}.
+
+%% 最多保存战报数量
+{max_replay_num , 10}.
+
+%% 出生点1->attacker 2->defender
+{{born_pos, 1}, {2000, 1800}}.
+{{born_pos, 2}, {8680, 18200}}.
+
+%% 时长
+{war_interval, 1811}.
+
+%% 复活时长
+{reborn_interval, 30}.
+
+%%攻击boss死亡复活
+{attack_boss_reborn_interval,1}.
+
+%% 战场服务器列表
+{war_servers, {2,[10202,10202]}}.
+
+% 复活消耗
+{reborn_money, 20}.
+% 聊天内容长度
+{talk_len, 10}.
+
+%聊天系统填充
+{tuxi,"1003"}.
+{fangshou,"1004"}.
+{zhanling,"1005"}.
+
+%%是否开启赛季末清楚购买的战斗次数
+{is_clear_buy_time,true}.
+
+% 日志清除的时间点,和日志保留的天数
+{reply_del_info, {{1,0,0}, 1}}.
+
+% 匹配等待房间的超时时间(毫秒)
+{match_room_wait_time, 60000}.
+
+% 是否需要进入准备房间
+{need_in_room, false}.
+
+% 两次报名间隔时间
+{unrequest_inteval_second, 10}.
+
+% 日志功能开关
+{log_switch, true}.
+
+%%必须保证矿区ID和BossID不一致
+%%据点ID列表
+{centre_list,[1,2,3,4,5,6,7]}.
+%%{{centre,ID},{Pos,Bufftype,Value}}.1=>boss伤害加深，2->飞行加速，3->boss血量增加,4->暴击 5->boss伤害减免 6->中间重生，其中4的情况下value为2个值
+{{centre,1},{{1442,12250},1,10000}}.
+{{centre,2},{{5340,14500},2,3000}}.
+{{centre,3},{{9237,12250},3,2500}}.
+{{centre,4},{{1442,7750},4,2500}}.
+{{centre,5},{{5340,5500},2,3000}}.
+{{centre,6},{{9237,7750},5,5000}}.
+{{centre,7},{{5340,10000},6,1}}.
+
+%%{bosslist,[{bossID,pos}...]}.
+{bosslist,[{8,{5340,1800}},{9,{5340,18200}}]}.
+
+%%boss血量计算
+{role_level_boss_hp_map,[{{0,40},60000},{{41,80},120000},{{81,100},250000},{{101,120},500000},{{121,150},1000000},{{151,180},2000000},{{181,200},4000000},{{201,999},6000000}]}.
+
+%%对BOSS暴击伤害倍数
+{crit_mult,2}.
+
+%%中间出生点
+{centre_reborn_pos,{5340,10000}}.
+
+%%对boss战斗力计算相关
+
+%%星级转换系数
+{{data_ger_star,1},1}.
+{{data_ger_star,2},2}.
+{{data_ger_star,3},3}.
+{{data_ger_star,4},4}.
+{{data_ger_star,5},5}.
+{{data_ger_star,6},6}.
+{{data_ger_star,7},7}.
+
+%%等级转换系数
+{data_level_rate,10}.
+
+%%品阶转换系数
+{data_rank_rate,40}.
+
+%%觉醒转换系数
+{data_awake_rate,40}.
+
+%%晶体品质系数
+{crystal_quality_rate,200}.
+
+%%晶体等级base
+{{crystal_level_base,1},1}.
+{{crystal_level_base,2},1}.
+{{crystal_level_base,3},1}.
+{{crystal_level_base,4},2}.
+{{crystal_level_base,5},2}.
+{{crystal_level_base,6},2}.
+{{crystal_level_base,7},1}.
+{{crystal_level_base,8},2}.
+{{crystal_level_base,9},1}.
+{{crystal_level_base,10},1}.
+{{crystal_level_base,11},2}.
+{{crystal_level_base,12},2}.
+
+%%符文星级系数
+{{normal_stone_star,1},1}.
+{{normal_stone_star,2},1}.
+{{normal_stone_star,3},1.5}.
+{{normal_stone_star,4},2}.
+{{normal_stone_star,5},3}.
+{{normal_stone_star,6},5}.
+{{normal_stone_star,7},8}.
+
+
+{normal_base_value,0}.
+{normal_stone_level_rate,60}.
+{normal_stone_rank_rate,120}.
+%%精华符文星级系数
+{{essence_stone_star,1},1}.
+{{essence_stone_star,2},1}.
+{{essence_stone_star,3},1}.
+{{essence_stone_star,4},1}.
+{{essence_stone_star,5},3}.
+{{essence_stone_star,6},5}.
+{{essence_stone_star,7},8}.
+{essence_base_value,0}.
+{essence_stone_level_rate,60}.
+{essence_stone_rank_rate,120}.
+%%训练师装备系数
+{{trainer_equip_star,1},1}.
+{{trainer_equip_star,2},2}.
+{{trainer_equip_star,3},3}.
+{{trainer_equip_star,4},4}.
+{{trainer_equip_star,5},5}.
+{{trainer_equip_star,6},6}.
+{{trainer_equip_star,7},7}.
+{trainer_equip_level_rate,10}.
+{trainer_equip_rank_rate,120}.
+%%精灵装备系数
+{{ger_equip_star,1},1}.
+{{ger_equip_star,2},2}.
+{{ger_equip_star,3},3}.
+{{ger_equip_star,4},4}.
+{{ger_equip_star,5},5}.
+{{ger_equip_star,6},6}.
+{{ger_equip_star,7},7}.
+
+{ger_equip_level_rate,5}.
+{ger_equip_rank_rate,40}.
+{ger_equip_rank_rate_perf,80}.
+{ger_equip_enchant_rate,40}.
+{ger_legend_equip_rate,1.2}.
+{ger_normal_equip_rate,1}.
+%%
+{role_level_rate,600}.
+%%
+{talent_rate,4000}.
+%%奖励相关
+{occupy_rate,10}.
+{kill_rate,15}.
+{max_honor,500}.
+{boss_fight_time_rate,5}.
+{boss_demage_rate,0.005}.
+{boss_demage_time_rate,20}.
+%%
+{{fight_result,1},200}.
+{{fight_result,2},100}.
+{{fight_result,3},100}.
+{fight_max_honor,500}.
+
+{{fight_result_extra_reward,1},{sell_reward,0,0,0,0,[{new_item,20051,20,1,0}],0,[]}}.
+{{fight_result_extra_reward,2},{sell_reward,0,0,0,0,[{new_item,20051,10,1,0}],0,[]}}.
+{{fight_result_extra_reward,3},{sell_reward,0,0,0,0,[{new_item,20051,6,1,0}],0,[]}}.
+
+%%匹配分组标准界限
+{match_limit,100}.
+
+

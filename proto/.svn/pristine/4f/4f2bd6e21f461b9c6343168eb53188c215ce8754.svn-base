@@ -1,0 +1,45 @@
+//模块=changeName
+//编号=144
+
+// 角色改名
+message cs_changename[id=14400]{
+    required    int8                type                =1;//类型
+    // 1 => 自己
+    // 2 => 公会
+    required    string              name                =2;//名字
+}
+
+// 改名回调
+message sc_changename[id=14401]{
+    required    int8                type                =1;//类型
+    // 1 => 自己
+    // 2 => 公会
+    required    int8                result              =2;//结果
+    // 0 => 成功
+    // 1 => 失败
+    // 2 => 未知错误
+    // 3 => 角色名已经被使用
+    // 4 => 非法字符
+    // 5 => 角色名称长度为1~5个汉字
+    // 6 => 公会改名权限不足
+    // 7 => 道具不足
+}
+    
+// 获得剩余免费次数
+message cs_changename_freetimes[id=14402]{
+    required    int8                type                =1;//类型
+    // 1 => 自己
+    // 2 => 公会
+}
+
+// 免费次数
+message sc_changename_freetimes[id=14403]{
+    required    int8                type                =1;//类型
+    // 1 => 自己
+    // 2 => 公会
+    required    int8                times               =2;//剩余次数
+    // 为负数时表示异常
+    repeated    int16               extra               =3;
+    //剩余次数不足时,分别为:物品typeId,个数
+    //有剩余次数时,为空
+}

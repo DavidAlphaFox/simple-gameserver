@@ -1,0 +1,90 @@
+//模块=节日活动
+//编号=16000
+
+
+message cs_activityFestival_info[id=16001]{
+}
+
+message sc_activityFestival_info[id=16002]{
+	required	int32			startTime	=1;
+	required	int32			endTime		=2;
+	required	int16			displayID	=3;
+	required	int16			activityID	=4;
+	required	int8			pos		=5;//显示位置
+	repeated	p_activityFestival_data	data		=6;
+	repeated	p_activityFestival_box	box		=7;
+}
+
+message	p_activityFestival_data[id=16003]{
+	required	int8			day		=1;
+	required	p_reward_info		reward		=2;
+	required	int16			needGold	=3;
+}
+
+message	p_activityFestival_self[id=16004]{
+	required	int8			day		=1;
+	required	int8			isSign		=2;
+}
+
+message	p_activityFestival_box[id=16005]{
+	required	int8			id		=1;
+	required	int8			need		=2;
+	required	p_reward_info		reward		=3;
+}
+
+message	p_activityFestival_box_get[id=16006]{
+	required	int8			id		=1;
+	required	int8			isGet		=2;
+}
+
+message cs_activityFestival_self[id=16007]{
+}
+
+message	sc_activityFestival_self[id=16008]{
+	required	int16				activityID	=1;
+	repeated	p_activityFestival_self		self		=2;
+	repeated	p_activityFestival_box_get	box		=3;
+}
+
+message	cs_activityFestival_sign[id=16009]{
+}
+
+message	sc_activityFestival_sign[id=16010]{
+	required	int8			result		=1;
+	//1 => 成功
+	//2 => 活动已更新，需重新加载
+	//3 => 已领取过
+	//4 => 不在活动领取时间
+	repeated	p_reward_info		reward		=2;
+}
+
+message	cs_activityFestival_box_get[id=16011]{
+	required	int8			id		=1;
+}
+
+message	sc_activityFestival_box_get[id=16012]{
+	required	int8			result		=1;
+	//1 => 成功
+	//2 => 活动已更新，需重新加载
+	//3 => 已领取过
+	//4 => 不在活动领取时间
+	//5 => 不满足领取条件
+	repeated	p_reward_info		reward		=2;
+}
+
+message	cs_activityFestival_sign2[id=16013]{
+	required	int8			day		=1;
+}
+
+message	sc_activityFestival_sign2[id=16014]{
+	required	int8			result		=1;
+	//1 => 成功
+	//2 => 活动已更新，需重新加载
+	//3 => 已领取过
+	//4 => 不在活动领取时间
+	//5 => 消耗品不足
+	//6 => 没到签到日期
+	repeated	p_reward_info		reward		=2;
+}
+
+

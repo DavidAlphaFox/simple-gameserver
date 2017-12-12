@@ -1,0 +1,6 @@
+-define(TLLOG_TYPE_START,1).                %% 训练师%s进入地图
+-define(TLLOG_TYPE_ROLE_REWARD,2).          %% 训练师%s获得了%s。
+-define(TLLOG_TYPE_NOREWARD,3).             %% 训练师%s没有发现什么可拾取的，囊中羞涩。
+-define(TLLOG_TYPE_EVENT_ALLREWARS,4).           %% 触发事件，系统奖励队伍中每个训练师%s和%s。
+-define(TLLOG_TYPE_BOX_ALLREWARS, 5).          %% 队伍中每个训练师都获得了%s。
+-define(TLLOG_TYPE_END, 6).                 %% 队伍到达终点，每个训练师都获得了%s。就这样，愉快的旅程结束了。

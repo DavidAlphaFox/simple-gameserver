@@ -1,0 +1,124 @@
+//模块=magicBook
+//编号=15000
+
+// 吞噬精灵
+message cs_magicBook_swallow_ger[id=15001]{
+    required    int8    bookID  = 1;    //魔典id
+    required    int16   order   = 2;    //图鉴在魔典中的顺序位置 
+    required    int64   gerID   = 3;    //吞噬的精灵
+    required    int8    pos     = 4;    //要开启的图鉴位置
+}
+
+message sc_magicBook_swallow_ger[id=15002]{
+    required    int8    result  = 1;    //结果
+    // 0 => 成功
+    // 1 => 未到魔典功能开启等级
+    // 2 => 没有该图鉴
+    // 3 => 无效的图鉴位置
+    // 4 => 金币不够
+    // 5 => 钻石不够
+    // 6 => 声望不够
+    // 7 => 材料不够
+    // 8 => 只有背包里的精灵才能被吞噬
+    // 9 => 不是需要的精灵类型
+    // 10 => 精灵品质不够
+    // 11 => 该魔典未解锁
+    // 12 => 该魔典已收集满了
+    // 13 => 该图鉴已经收集满了
+    // 14 => 前一个位置未解锁
+    // 15 => 前一个魔典没有收集满
+}
+
+// 查看魔典概要信息(6个箱子的信息)
+message p_magicBook_summary[id=15003]{
+    required    int16    level   = 1;    //开启等级
+    required    int8    state   = 2;    //当前状态
+    required    int8    percent = 3;    //收集百分比
+    // 箱子的状态:
+    // 0  => 未解锁
+    // 1  => 解锁,但没收集
+    // 2  => 没收集满
+    // 3  => 收集满了,没领奖
+    // 9  => 领奖了
+}
+
+message cs_magicBook_summary[id=15004]{
+}
+
+message sc_magicBook_summary[id=15005]{
+    repeated    p_magicBook_summary  bookState   = 1;    //概要信息
+}
+
+// 领图鉴奖励
+message cs_magicBook_picture_reward[id=15006]{
+    required    int8    bookID  = 1;    //魔典ID
+    required    int8    order   = 2;    //图鉴位置
+}
+
+message sc_magicBook_picture_reward[id=15007]{
+    required    int8    result  = 1;    //结果 
+    // 0 => 领取成功
+    // 1 => 未到魔典功能开启等级
+    // 2 => 该魔典未解锁
+    // 3 => 图鉴还没有收集满
+    // 4 => 没有该图鉴  
+    // 5 => 已经领取过了
+    // 6 => 还没有收集满
+}
+
+// 领魔典奖励
+message cs_magicBook_book_reward[id=15008]{
+    required    int8    bookID  = 1;    //魔典ID
+}
+
+message sc_magicBook_book_reward[id=15009]{
+    required    int8    result  = 1;    //结果
+}
+
+// 查看某本魔典详情
+message p_magicBook_attr[id=15010]{
+    required    int32 			gerAttack   = 1;                           // 攻击力
+    required    int64 			gerHpMax    = 2;                           // 血量上限
+    required    int32 			gerSpInit   = 3;                           // 怒气初始值
+    required    int32 			gerSpMax    = 4;                           // 怒气最大值
+    required    int32 			gerCritic   = 5;                           // 暴击
+    required    int32 			gerCriticReduce = 6;                       // 暴击抵抗
+    required    int32 			gerDoom     = 7;                           // 命中
+    required    int32 			gerMiss     = 8;                           // 闪避
+    required    int32 			gerAbsorb   = 9;                           // 吸血
+    required    int32 			gerDamageBack   = 10;                      // 反弹
+    required    int32 			gerReel     = 11;                          // 眩晕
+    required    int32 			gerReelReduce   = 12;                      // 眩晕抵抗
+    required    int32 			gerPhyDefBite   = 13; 	         	   	   // 破甲
+    required    int32 			gerPhyDef   = 14;                 		   // 护甲
+    required    int32 			gerMagDefBite   = 15;                  	   // 法穿 
+    required    int32 			gerMagDef   = 16;                  		   // 法抗
+    required    int16 			gerAttackAddtion    = 17; 				   // 攻击增加万分比
+    required    int16 			gerHpMaxAddtion = 18; 					   // 血量增加万份比/复活时的血量万分比
+    required    int32 			gerProMean  = 19;                          // 精灵的奥义护盾
+    required    int32 			gerProMeanAddtion   = 20;                  // 奥义值增加百分比（用万分比表示）
+    required    int32 			gerAttckToProMean   = 21;                  // 攻击转化为奥义的百分比（用万分比表示）
+    required    int32 			gerHpToProMean  = 22;                      // 生命转化为奥义的百分比（用万分比表示）									  
+}
+
+message cs_magicBook_book_info[id=15011]{
+    required    int8            bookID      = 1; // 魔典ID
+}
+
+message sc_magicBook_book_info[id=15012]{
+    required    p_magicBook_attr    attr    = 1; //加成的属性
+    required    string              state   = 2; //每个图鉴的状态(如果没有解锁的话,是空字符串)
+    //第一个字节代表第一个图鉴,依次类推
+    // 0 => 未收集该图鉴
+    // 1 => 收集了位置1
+    // 2 => 收集了位置2
+    // 3 => 收集了位置3(收集满了)
+    // 9 => 领取奖品了 
+}
+
+message sc_magicBook_book_detial[id=15013]{
+    required    p_magicBook_attr    attr    = 1; //加成的属性
+    required    string              picture = 2; //每个图鉴的状态(如果没有解锁的话,是空字符串)
+    required    int8                state   = 3; //当前状态    
+    required    int8                percent = 4; //收集百分比
+}

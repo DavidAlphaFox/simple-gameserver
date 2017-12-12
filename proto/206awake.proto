@@ -1,0 +1,75 @@
+%%精灵觉醒系统协议
+message cs_awake_ger[id=20601]{
+	required              int64               gerID             =1;           //觉醒精灵唯一ID
+	required              int8                step              =2;           //觉醒阶段
+}
+message sc_awake_ger[id=20602]{
+	required              int8                result            =1;           //觉醒结果
+	//1->成功
+	//2->觉醒的精灵不存在
+	//3->精灵对应的阶段已经觉醒，只能进行洗练
+	//4->不能觉醒对应阶段
+	//5->觉醒阶段的前置条件不满足
+	//6->觉醒需要的材料不足
+	required              int32               skillID           =2;           //觉醒技能
+	required              int64               gerID             =3;           //精灵ID
+	required              int8                step              =4;           //请求觉醒的阶段
+}
+
+message cs_awake_recast_ger[id=20603]{
+	required              int64                gerID            =1;           //精灵ID
+	required              int8                 step             =2;           //洗练阶段
+	required              int8                 recasttimes      =3;           //洗练次数
+}
+
+message sc_awake_recast_ger[id=20604]{
+	required              int8                 result           =1;           //洗练结果
+	//1->成功
+	//2->洗练的精灵不存在
+	//3->精灵对应的阶段还没有觉醒，不能洗练
+	//4->洗练材料不足
+	repeated              int32                skillID          =2;           //洗练获得的技能列表
+	required              int64                gerID            =3;           //精灵ID
+	required              int8                 step             =4;           //请求洗练的阶段
+}
+
+message cs_awake_exchange_skill[id=20605]{
+	required              int64                gerID            =1;           //置换技能的精灵ID
+	required              int8                 step             =2;           //置换阶段
+	required              int32                skillID          =3;           //置换的技能ID
+}
+
+message sc_awake_exchange_skill[id=20606]{
+	required              int8                 result           =1;           //技能置换结果           
+	//1->置换成功
+	//2->置换的精灵不存在
+	//3->对应的阶段没有进行觉醒
+	//4->没有可置换的技能
+	//5->系统异常 
+	required              int64                gerID            =2;           //技能置换精灵的ID
+	required              int8                 step             =3;           //技能置换阶段
+	required              int32                skillID          =4;           //置换后的技能
+}
+
+message p_awake_info[id=20607]{
+	required              int8                  step                 =1;           //觉醒阶段
+	required              int32                 current_skillID      =2;           //当前技能
+	required              int8                  current_quality      =3;           //当前品质
+	repeated              int32                 recastskillIDlist    =4;           //洗练出来的技能ID
+}
+
+message cs_awake_cancel_skill[id=20608]{
+	required              int64                 gerID                =1;           //放弃洗练获得技能的精灵
+	required              int8                  step                 =2;           //放弃的觉醒阶段
+}
+
+message sc_awake_cancel_skill[id=20609]{
+	required              int8                  result               =1;           //放弃结果
+	//1->成功
+	//2->精灵不存在
+	//3->对应阶段没有觉醒
+	//4->没有可放弃的技能
+	//5->系统异常
+	required              int64                 gerID                =2;           //精灵ID
+	required              int8                  step                 =3;           //放弃阶段
+}

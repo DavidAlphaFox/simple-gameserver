@@ -1,0 +1,137 @@
+//模块=diamond
+//编号=21600
+
+message p_diamond[id=21601]
+{
+    required            int8                pos                =1;//技能宝石位置
+    required            int16               diamondID          =2;//技能宝石ID
+}
+
+message cs_diamond_combine[id=21602]
+{
+	required            int16               sourceDiamondID    =1;//源宝石ID
+	required            int16               desNum             =2;//需要合成个数
+}
+
+message sc_diamond_combine[id=21603]
+{
+	required            int8                result             =1;
+	//0->关闭
+	//1->成功
+	//2->失败，没有对应的技能宝石合成规则
+	//4->失败，异常
+	//3->失败，合成需要的技能宝石不足
+	//5->失败，消耗的金币不足
+}
+
+message cs_diamond_equip[id=21604]
+{
+	required            int64               gerUID             =1;//被穿戴精灵ID
+	required            int16               diamondID          =2;//穿戴的宝石ID
+	required            int8                pos                =3;//穿戴位置
+}
+
+message sc_diamond_equip[id=21605]
+{
+	required            int8                result             =1;
+	//0->关闭
+	//1->穿戴成功
+	//2->目标精灵不存在
+	//3->穿戴的宝石不存在
+	//4->穿戴位置不存在
+	//5->已经穿戴了相同类型的宝石
+	//6->专属宝石不能被穿戴
+	//7->失败，功能关闭
+	required            int64              gerUID              =2[default=0];
+	required            int8               gerPos              =3[default=0];
+	required            int16              diamondID           =4[default=0];
+	required            int8               diamondPos          =5[default=0];
+}
+
+message cs_diamond_demount[id=21606]
+{
+	required            int64               gerUID             =1;//被卸下宝石的精灵ID
+	required            int16               diamondID          =2;//被卸下的宝石ID
+	required            int8                pos                =3;//被卸下的宝石位置
+}
+
+message sc_diamond_demount[id=21607]
+{
+	required            int8                result             =1;
+	//0->关闭
+	//1->成功
+	//2->目标精灵不存在
+	//3->对应的穿戴位置不存在
+	//4->对应的穿戴位置穿戴的宝石ID不符
+	//5->失败，功能关闭
+	required            int64               gerUID             =2[default=0];
+	required            int8                gerPos             =3[default=0];
+	required            int16               diamondID          =4[default=0];
+	required            int8                diamondPos         =5[default=0];
+}
+
+message cs_diamond_demount_multi[id=21608]
+{
+	required           int16               diamondID           =1;	
+}
+
+message sc_diamond_demount_multi[id=21609]
+{
+	required           int8                result              =1;
+	//0->关闭
+	//1->成功
+	//2->不存在对应技能宝石
+	repeated           p_diamond_location  demountLocationList =2;
+}
+
+message p_diamond_location[id=21610]
+{
+	required          int64               gerUID                =1;
+	required          int8                gerPos                =2;
+	required          int8                diamondPos            =3;
+}
+
+message cs_diamond_holygrail_info[id=21611]{
+	required          int64               gerUID                =1;
+}
+
+message sc_diamond_holygrail_info[id=21612]{
+	required          int8                result                =1;
+	//0->关闭
+	//1->成功   
+	//2->对应精灵不存在
+	required          int8                holyGrailLevel        =2[default=0];
+	required          bool                isFinishSacrifice     =3[default=false];
+}
+
+message cs_diamond_holygrail_sacrifice[id=21613]{
+	required          int64               sourceGerUID          =1;//升级神器的精灵ID
+	required          int64               foodGerUID            =2;//将要被献祭的精灵ID
+}
+
+message sc_diamond_holygrail_sacrifice[id=21614]{
+	required          int8                result                =1;
+	//0->关闭
+	//1->成功
+	//2->升级的精灵不存在
+	//3->被献祭的精灵不存在
+	//4->被献祭的精灵献祭条件不满足
+	//5->当前阶段已经完成献祭
+	//6->当前神器等级不能献祭
+}
+
+message cs_diamond_holygrail_uplevel[id=21615]{
+	required          int64               gerUID                =1;//升级神器的精灵 
+}
+
+message sc_diamond_holygrail_uplevel[id=21616]{
+	required          int8                result                =1;
+	//0->关闭
+	//1->成功
+	//2->对应精灵不存在
+	//3->对应精灵已经打到最大神器等级
+	//4->对应精灵神器升级条件不满足
+	//5->消耗的材料不足
+	required          int64               gerUID                =2[default=0];
+	required          int8                holyGrailLevel        =3[default=0];
+}

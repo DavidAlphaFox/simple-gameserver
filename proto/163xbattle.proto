@@ -1,0 +1,133 @@
+
+
+message cs_xbattle_info[id=16301]{
+}
+
+message sc_xbattle_info[id=16302]{
+    required    int16           chapterID           =1;
+    required    int32           buyQuickCount       =2;
+    required    int32           quickFightSec       =3;
+    required    int8            buyQuickToday       =4;
+	required	int32 			coin		 		=5;
+	required 	int32 			exp 				=6;
+	required 	int16 			raidTimes 			=7;
+}
+
+message cs_xbattle_challenge[id=16303]{
+    required    int16           chapterID           =1;
+}
+
+message sc_xbattle_challenge[id=16304]{
+   required     int8            result              =1;
+   // 1 => success 2 => can't battle this chapter  3 => battle failed 4 => no energy  5 => reward no battle   6 => flash dungeon
+   repeated     p_reward_info   	reward              =2;
+   required     int16   dungeonID           =3;
+   repeated     sc_fight_request 	fightInfo         	=4;
+}
+
+message cs_xbattle_raid[id=16305]{
+    required    int16           chapterID           =1;
+	required 	int16 			tryTimes 			=2;
+}
+
+message sc_xbattle_raid[id=16306]{
+    required    int8            result              =1;
+    //1 => success 2 -> can't raid this chapter 3 => cost not enough 4 => use too many times 
+    repeated    p_xbattle_raid 	raidData 			=2;
+}
+	
+message p_xbattle_raid[id=16320]{
+	required 	int8 			result 				=1;//1 => succ 2 fail 3=> reward not battle 4 => flash dungeon
+	repeated 	p_reward_info 	reward 				=2;
+	required 	int16  			dungeonID 			=3;
+}
+
+message cs_xbattle_offline_reward[id=16307]{
+}
+
+message sc_xbattle_offline_reward[id=16308]{
+    required    int32           offlineSec          =1;
+    repeated    p_reward_info   reward              =2;
+    required    int16           triCount            =3;
+}
+
+message sc_xbattle_tri[id=16309]{
+    required    int16            triID               =1;
+    repeated    p_reward_info   reward              =2;
+}
+
+message cs_xbattle_use_elixir[id=16310]{
+    required    int64           itemUID             =1;
+    required    int8            useNum              =2;
+}
+
+message sc_xbattle_use_elixir[id=16311]{
+    required    int8            result              =1;//1=>succ 2=>no item 3=>max use times 
+    required    int16           triCount            =2;
+    repeated    p_reward_info   reward              =3;
+}
+
+message cs_xbattle_buy_quick[id=16312]{
+}
+
+message sc_xbattle_buy_quick[id=16313]{
+   required     int8            result           =1;
+   required     int32           quickFightSec    =2;//1=>succ 2=>last buy quick not end 3=>cost not enough 4=> max buy times 
+   required     int32           triCount         =3;
+   repeated     p_reward_info   reward           =4;
+}
+
+message cs_xbattle_get_pass_reward[id=16314]{    
+}
+
+message sc_xbattle_get_pass_reward[id=16315]{
+   required     int8            result          =1;//1 => success 2=> chapter not passed
+   repeated     p_reward_info   reward          =2;
+   required     int16           newChapterID    =3;
+}
+
+message cs_xbattle_chapter_info[id=16316]{
+    required    int16           chapterID       =1;
+    }
+
+message sc_xbattle_chapter_info[id=16317]{
+    required    int8            			isGetReward     	=1; // 0:不可领取 1: 未打死boss 2:可领取而没领取 3:已领取
+    repeated    p_xbattle_dungeon           passDungeons        =2;
+	required	int32 						coin		 		=5;
+	required 	int32 						exp 				=6;
+    }
+
+message cs_xbattle_set_reward_chapter[id=16318]{
+	required 	int16 			chapterID 			=1;
+	}
+	
+message sc_xbattle_set_reward_chapter[id=16319]{
+	required 	int8 			result 				=1;//1=> succ 2 => chapter not unlock
+	}
+
+	
+message cs_xbattle_start_reward[id=16321]{
+}
+message sc_xbattle_start_reward[id=16322]{
+	required 	int8 			result 				=1;
+}
+
+message p_xbattle_dungeon[id=16323]{
+	required 	int16 			dungeonID			=1;
+	required 	int8 			times 				=2;
+}
+
+message cs_xbattle_challenge_boss[id=16324]{
+}
+
+message sc_xbattle_challenge_boss[id=16325]{
+	required 	int8 			result 					=1;//1=> 成功 2=> boss没激活 3 => boss已打过 4 => boss未配置 5=> 挑战失败 6 => 体力不足
+	repeated    sc_fight_request 	fightInfo         	=2;
+}
+
+//背包满了
+message cs_xbattle_package_full[id=16398]{
+}
+//背包不满了
+message cs_xbattle_package_ok[id=16399]{
+}

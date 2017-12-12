@@ -1,0 +1,18 @@
+%% {train_reward, chapterID, coin, exp, boxid}. 
+
+{train_reward,10001,999,999, 101 }.
+
+%% {train_boss, chapterID, coin, exp,bossHP ,{sell_reward}}. 
+
+{train_reward,10001,1000,{sell_reward,100000, 0, 0, 0, [{new_item, 20043, 10, 1, 0}], 0, []} }.
+
+%%{{train_box,boxid},[{rate,{sellreward}]}.
+{train_box,101,[{10000,{sell_reward,400000,0,0,0,[{new_item,7807,1,1,0}],0,[]}}
+                   ,{4000,{sell_reward,0,0,0,0,[{new_item,7807,1,1,0}],0,[]}}
+                   ,{1000,{sell_reward,0,0,0,0,[{new_item,7807,1,1,0}],0,[]}}
+                   ,{10000,{sell_reward,0,0,0,0,[{new_item,7220,1,1,0}],0,[]}}
+                   ,{5000,{sell_reward,0,0,0,0,[{new_item,7220,1,1,0}],0,[]}}
+                   ,{3000,{sell_reward,0,0,0,0,[{new_item,7220,1,1,0}],0,[]}}
+                   ]}.
+
+

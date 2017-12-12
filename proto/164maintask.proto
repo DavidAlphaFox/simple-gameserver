@@ -1,0 +1,22 @@
+%%主线任务部分协议
+message cs_maintask_info[id=16401]{
+	
+}
+
+%%这个协议在领取奖励之后将会主动推送新的任务
+message sc_maintask_info[id=16402]{
+	required        p_task_unit     maintask    =1;
+}
+
+message cs_maintask_draw[id=16403]{
+	required        int32           taskID      =1;
+}
+
+message sc_maintask_draw[id=16404]{
+	required        int8            result      =1;
+	//1->成功
+	//2->失败，对应任务不是当前任务
+	//3->失败，对应任务没有完成
+	//4->失败，对应任务已经领取奖励
+	repeated       p_reward_view    reward      =2;
+}

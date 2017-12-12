@@ -1,0 +1,172 @@
+//模块=treaHouse
+//编号=13000
+
+
+// 汉帝宝库
+message		cs_treaHouse_get_list[id=13001]{
+}
+
+message		p_treaHouse_card[id=13002]{								//卡牌个数仅在卡牌为道具时有效,当卡牌为元宝等是，元宝数值由卡牌数值确定
+	required		int8					pos					=1;//卡牌位置
+	required		int8					posType				=2;//位置类型
+	// type=1 => 道具卡牌
+	// type=2 => 爆灯
+	// type=3 => 双倍
+	required		int8					cardType			=3;//卡牌类型
+	// type=1 => 武将ID
+	// type=2 => 道具ID
+	// type=3 => 元宝数量
+	// type=4 => 银两数量
+	// type=5 => 声望数量
+	// type=6 => 主公经验
+	required		int8					count				=4;//卡牌个数
+	required		int32					value				=5;//卡牌数值
+}
+
+message		sc_treaHouse_get_list[id=13003]{
+	required		int8						isOpen				=1;//活动是否开启
+	//1 => open
+	//2 => not open
+	//3 => 排行榜领奖阶段,不能玩儿
+	required		int8						freeTimes			=2;//免费探索次数
+	required		int8						boxProcess			=3;//保底宝箱可开启进度,可开启的数量,0表示没有
+	repeated		p_baseBoxOpenInfo			boxOpenProcess		=4;//保底宝箱实际开启进度
+	required		int32						endTime				=5;//结束时间
+	repeated		p_treaHouse_card			cardList			=6;//卡牌列表
+	required		int32						oneTimeNeedGold		=7;//探索一次消耗的元宝数
+	required		int32						refreshNeedCoin		=8;//刷新一次消耗的银两数
+	required		int32						stopTime			=9;//抽取的结束时间
+    required        int8                        valueinfo           =10;//当前的倍数
+}
+
+message		cs_treaHouse_is_open[id=13004]{
+}
+
+message		sc_treaHouse_is_open[id=13005]{
+	required		int8						type				=1;//活动状态
+	//1 => 开启
+	//2 => 未开启
+	required 		int8 						cost				=2; //%% 消耗类型 1 gold  2coin 3 reputation 4 ticket
+	required 		int16 						icon				=3;
+}
+
+message		cs_treaHouse_explore_one[id=13006]{
+}
+
+message		sc_treaHouse_explore_one[id=13007]{
+	required		int8						type				=1;//结果
+	//1 => 探索成功
+	//2 => 活动未开启(等级不足或者不在开启时间段)
+	//3 => 元宝不足或次数不足
+	//4 => 不是活动时间
+	required		int32						mark				=2;//探险值
+	required		int8						boxProcess			=3;//保底宝箱可开启进度
+	repeated		p_treaHouse_card_oneTime	info				=4;//探索结果数据
+}
+
+message		p_treaHouse_card_oneTime[id=13008]{
+	repeated		p_treaHouse_card			openCardList		=1;//开启卡牌信息
+	repeated		p_treaHouse_card			newCardList			=2;//替换原卡牌的新卡牌信息
+}
+
+message		cs_treaHouse_explore_ten[id=13009]{						
+}
+
+message		sc_treaHouse_explore_ten[id=13010]{
+	required		int8						type				=1;//结果
+	//1 => 成功
+	//2 => 活动未开启(等级不足或者不再开启时间段)
+	//3 => 元宝不足
+	//4 => 不是活动时间
+	required		int32						mark				=2;//探险值
+	required		int8						openTimes			=3;//实际开启的次数
+	required		int8						boxProcess			=4;//保底宝箱可开启进度
+	repeated		p_treaHouse_card_oneTime	infoList			=5;//实际探索结果数据列表		
+}
+
+message		cs_treaHouse_refresh[id=13011]{
+}
+
+message		sc_treaHouse_refresh[id=13012]{
+	required		int8						type				=1;//结果
+	//1 => 成功
+	//2 => 活动未开启(等级不足或者不在开启时间段)
+	//3 => 银两不足
+	//4 => 不是活动时间
+	repeated		p_treaHouse_card			cardList			=2;//卡牌列表
+}
+
+message		cs_treaHouse_open_base_box[id=13013]{
+	required		int8						pos					=1;//箱子的位置
+}
+
+message		sc_treaHouse_open_base_box[id=13014]{
+	required		int8						type				=1;//结果
+	//1 => 成功
+	//2 => 活动未开启
+	//3 => 不满足打开该箱子的条件
+	//4 => 该箱子已打开
+	repeated		p_baseBoxOpenInfo						boxOpenProcess		=1;//保底宝箱的打开进度
+	//数值表示打开到第几个箱子
+}
+
+message		p_treaHouse_ranker[id=13015]{
+	required		int8						type				=1;//是否进入排行榜
+	//1 => 参与排行
+	//2 => 积分不足,未参与排行
+	required		int16						rankNum				=2;//排行值
+	required		int32						mark				=3;//积分
+	required		string						roleName			=4;//玩家名字
+	required		p_reward_info					rewardInfo			=5;//奖励信息,协议号11930
+}
+
+message		cs_treaHouse_get_rankInfo[id=13016]{//, route=activityRank_server]{
+}
+
+message		sc_treaHouse_get_rankInfo[id=13017]{
+	required		int8						type				=1;//结果
+	//1 => 成功
+	//2 => 活动未开启
+	required		int8						isGetRankReward		=2;//是否已领取排行榜奖励
+	//1 => 已领取
+	//2 => 未领取
+	required		p_treaHouse_ranker			selfInfo			=3;//自己的排行信息
+	repeated		p_treaHouse_ranker			rankInfoList		=4;//前20的排行信息
+}
+
+message		cs_treaHouse_get_rank_Reward[id=13018, route=activityRank_server]{
+}
+
+message		sc_treaHouse_get_rank_Reward[id=13019]{
+	required		int8						type				=1;//结果
+	//1 => 成功
+	//2 => 未到领奖时间
+	//3 => 活动未开启
+	//4 => 不满足领奖条件
+	//5 => 奖励已领取
+	required		int8						rank				=2;//排名信息
+	required		p_reward_info				rewardInfo			=3;//奖励信息
+}
+
+message		cs_treaHouse_get_baseBoxRewardInfo[id=13020]{
+}
+
+message		sc_treaHouse_get_baseBoxRewardInfo[id=13021]{
+	repeated		p_treaHouse_BaseReward_Info		baseReaward_boxInfoList		=1;//保底宝箱数据信息
+}
+
+message		p_baseBoxOpenInfo[id=13022]{								// 默认只发送已打开的箱子,即isOpen=1的数据不会出现
+	required		int8						pos					=1;//箱子的位置
+	required		int8						isOpen				=2;//是否已打开
+	//1 => 未打开
+	//2 => 已打开
+}
+
+message		p_treaHouse_BaseReward_Info[id=13023]{
+	required		int8						pos				=1;//保底宝箱位置
+	required		int32						needMark			=2;//该宝箱需要的最低积分
+	required		p_reward_info				rewardInfo			=3;//奖励信息,如果该箱子未配置,则各项奖励信息内容为0
+}
+
+message		sc_treaHouse_change_state[id=13024]{
+}

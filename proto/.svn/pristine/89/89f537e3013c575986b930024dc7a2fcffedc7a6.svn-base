@@ -1,0 +1,40 @@
+%%全区抢购活动协议
+
+message cs_panicbuy_info[id=20401]{
+	
+}
+
+message sc_panicbuy_info[id=20402]{
+	required                 int8                                      result  =1;
+	//1->成功
+	//2->活动结束
+	//3->异常错误
+	repeated                 p_panic_buy_config                        panicbuyinfo  =2;
+	required                 string                                    title         =3;
+}
+
+message p_panic_buy_config[id=20403]{
+	required                 int32                                     id            =1;  //id 现在还没啥用
+    required                 p_sell_reward_unit                        needconfig    =2;  //需要的物品
+    required                 p_sell_reward_unit                        rewardconfig  =3;  //能够获得的物品
+    required                 int32                                     buytime       =4;  //玩家已经抢购的次数
+    required                 int32                                     personbuytime =5;  //每位玩家能够抢购的最大次数
+    required                 int32                                     totaltime     =5;  //全区目前剩余的抢购次数
+    required                 int64                                     begintime     =6;  //活动开启的时间
+    required                 int64                                     endtime       =7;  //活动结束的时间
+}
+
+message cs_panicbuy_once[id=20404]{
+	required                 int32                                     id            =1;  //抢购的id
+}
+
+message sc_panicbuy_once[id=20405]{
+	required                 int8                                      result        =1;  //抢购结果
+	//1->成功
+	//2->抢购需要的物品不足
+	//3->个人抢购次数已满
+	//4->全区抢购次数已满
+	//5->抢购活动已经结束
+	//6->系统出现错误
+	repeated                 p_reward_view                             rewardList    =2;  //抢购所获得的物品列表
+}

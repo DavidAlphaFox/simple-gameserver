@@ -1,0 +1,132 @@
+// 查看基本信息
+message cs_dojangrank_info[id=16701]{
+}
+message sc_dojangrank_info[id=16702]{
+    required    int32   challenge_time      = 1;
+    required    int32   buy_cost            = 2;
+    required    int32   already_buy_time    = 3;
+    required    int32   can_buy_time        = 4;
+}
+ 
+// 查看排行榜
+message cs_dojangrank_rank[id=16703]{
+    required    int32   index = 1;
+}
+message sc_dojangrank_rank[id=16704]{
+    required    int32               index = 1;
+    required    p_dojangrank_rank   p_dojangrank_rank_self = 2;     // 自己
+    repeated    p_dojangrank_rank   p_dojangrank_rank_list = 3;     // 可以挑战的对手，按照rank排序，不包含自己
+}
+
+// 购买挑战次数
+message cs_dojangrank_buy[id=16705]{
+    required    int32       buy_time            =1;
+}
+message sc_dojangrank_buy[id=16706]{
+    required    int32   result          = 1;    // 1成功2达到购买上限3钱不够
+    required    int32   new_buy_cost        = 2;
+    required    int32   already_buy_time    = 3;
+    required    int32   can_buy_time        = 4;
+}
+
+message p_dojangrank_rank[id=16707]{
+    required        int32           roleID              = 1;//角色ID
+    required        int64           fightPower          = 2;//战斗力
+    required        bool            isMale              = 3;//性别
+    required        int8            title               = 4;//称号
+    required        int32           head                = 5;//头像
+    required        int16           level               = 6;//等级
+    required        string          roleName            = 7;//名字         
+    required        int8            vip                 = 8;
+    required        int32           rank                = 9;
+    required        int32           selected_ger_type   = 10;// 展示的精灵模板ID
+    required        int32           battle_config       = 11;// 使用的哪套阵容
+}
+
+// 保存对战阵容
+message cs_dojangrank_save_pos[id=16708]{
+    required    int32   index           = 1;        // 排行榜序号
+    required    int32   battle_config   = 2;        // 阵容序号
+}
+message sc_dojangrank_save_pos[id=16709]{
+    required    int32   index = 1;
+    required    int32   battle_config   = 2;
+    required    int32   result          = 3;
+}
+
+// 选择代表精灵
+message cs_dojangrank_select_ger_type[id=16710]{
+    required    int32   index           = 1;            // 排行榜序号
+    required    int32   selected_ger_type   = 2;        // 精灵的模板ID
+}
+message sc_dojangrank_select_ger_type[id=16711]{
+    required    int32   index = 1;
+    required    int32   selected_ger_type   = 2;
+    required    int32   result          = 3;
+}
+
+// 挑战排行榜
+message cs_dojangrank_fight[id=16712]{
+    required    int32   index           = 1; // 排行榜序号
+    required    int32   enemy_role_id   = 2;
+    required    int32   rank            = 3;
+}
+message sc_dojangrank_fight[id=16713]{
+    required    int8        result                  =1;// 1执行挑战 2阵容不符合3对手错误4其他异常5次数不足
+    required    p_dojangrank_rank   p_dojangrank_rank_self  = 2;     // 自己
+    repeated    p_dojangrank_rank   p_dojangrank_rank_list  = 3;     // 按照rank排序，不包含自己
+    repeated    sc_fight_request    fightInfo       =4;
+    required    p_reward_info       reward                  = 5;
+}
+
+message     cs_dojangrank_replay_list[id=16714]{
+}
+
+message     sc_dojangrank_replay_list[id=16715]{
+    repeated    p_dojang_replay_info       infoList        =1;
+}
+
+// 请求播放某场战斗
+message     cs_dojangrank_replay_detail[id=16716]{
+    required        int64           replayUID   =1;//战斗录像UID
+}
+
+message     sc_dojangrank_replay_detail[id=16717]{
+    required    int8                result          =1;//请求结果
+    // 1=> 成功查询到战报
+    // 2=> 查询的战报不存在，比如过期已经被删除
+    repeated    sc_fight_request    fightInfo       =2;//战斗内容
+}
+
+message     p_dojang_replay_info[id=16718]{
+    required    string              attackerName        =1;
+    required    string              defenderName        =2;
+    required    int16               attackerNewRank     =3;//挑战者新排名（一定是上升~~打赢了才显示）
+    required    int16               defenderNewRank     =4;//被挑战者新排名
+    required    int64               replayUID           =5;
+    required    int32               time                =6;
+    required    int32               rank_type           =7;
+    required    int32               is_win              =8;
+}
+
+//查看对方阵容
+message     cs_dojangrank_ger_view_other[id=16719]{
+    required    int32               tarRoleID       =1;//要查看阵容的目标玩家
+    required    int32               rank            =2;//要查看阵容的目标玩家
+}
+
+message     sc_dojangrank_ger_view_other[id=16720]{
+    required    int32               tarRoleID       =1;//目标玩家ID
+    required    string              roleName        =2;//玩家名字
+    required    int16               roleLevel       =3;//玩家等级
+    required    int64               fightPower      =4;//玩家总战斗力
+    repeated    p_ger               gerList         =5;//武将列表
+}
+
+message     cs_dojangrank_self_rank[id=16721]{
+}
+message     sc_dojangrank_self_rank[id=16722]{
+    repeated    int32       rank_num_list       =1;
+}
+
+

@@ -1,0 +1,366 @@
+//模块=activity
+//编号=11900
+
+
+//====================核心协议流程==================================
+//
+//      Client								Server
+
+//=================流程完成==================================
+
+// 活动列表
+message	cs_activity_get_list[id=11901]{
+}
+
+message	sc_activity_get_list[id=11902]{
+	repeated	p_activity_icon		iconList			=1;//活动图标列表
+}
+
+message	p_activity_icon[id=11903]{
+	required	int16				activityID			=1;//活动ID
+	required	string				iconRrc				=2;//图标资源
+	required	string				activityName		=3;//活动名称
+    required    int16               activityType        =4;//活动类型
+}
+
+// 请求某个活动的信息
+message	cs_activity_info[id=11910]{
+	required	int16				activityID			=1;//活动ID
+}
+
+message sc_activity_info[id=11911]{
+	required	int16				activityID			=1;//活动ID
+	required	int8				type				=2;//活动类型
+	// 1=> 兑换活动
+	// 2=> 累计充值
+	// 3=> 定额充值
+	// 4=> 充值天数
+	// 5=> 兑换活动2
+	// 6=> 消费活动
+	// 10=> 连续定额充值
+	// 11=> 连续累积充值
+	// 12=> 兑换活动3
+	required	string				description			=3;//活动描述
+	repeated	p_activity_draw		drawList			=4;//领取列表
+	required	int32				startTime			=5;//开始时间
+	required	int32				stopTime			=6;//结束时间
+	repeated 	int32				typeValue			=7;
+	//type=2:已充值元宝数;type=4:已充值天数;其他:0
+	//type=7:已连续充值天数;type=8:[已连续充值天数,当日充值元宝]
+	required	int8				isForever			=8;//1 => 永久活动, 2 => 非永久活动
+	required	int8				isDailyRefresh		=9;//1 => 是每日刷新, 2=> 非每日刷新
+}
+
+message	p_activity_draw[id=11912]{
+	required	int16				drawID				=1;//可领取项ID
+	required	string				description			=2;//奖励描述
+	required	int16				maxDrawTimes		=3;//最大可领取次数
+	required	int16				alreadyDrawTimes	=4;//已领取次数
+	required	int16				canDrawTimes		=5;//可领取次数，0=不能领取	
+	required	p_reward_info		rewardInfo			=6;//奖励信息
+	repeated	p_reward_view		needMaterial		=7;//需要的材料
+	required	int8				getNum			    =8;// 0=> 兑换时全部领取  ,其他数字表示最多可以领取几个
+	required    int8                discountnum         =9;//对应项打折系数，只用于前端显示，不做其他使用 
+}
+
+
+// 领取活动奖励
+message	cs_activity_draw[id=11920]{
+	required	int16				activityID			=1;//活动ID
+	required	int16				drawID				=2;//可领取项ID
+	required	p_reward_info			choseReward				=3;//奖励道具id
+}
+
+message sc_activity_draw[id=11921]{
+	required	int8				result				=1;//领取结果
+	// 1=> 成功
+	// 2=> 失败
+	required	int16				activityID			=2;//活动ID
+	required	int16				drawID				=3;//可领取项ID
+	required	int16				alreadyDrawTimes	=4;//已领取次数
+	required	int16				canDrawTimes		=5;//可领取次数，0=不能领取	
+}
+
+// 奖励信息通用协议
+message	p_reward_info[id=11930]{
+	required		int32			coin		=1;//奖励的银两
+	required		int32			roleExp		=2;//奖励的玩家经验
+	required		int32			gerExp		=3;//奖励的武将经验
+	required 		int32			gold		=4;//奖励的元宝
+	required 		int32			reputation	=5;//奖励的声望
+	repeated		p_item_view		itemList	=6;//奖励的道具
+	repeated		p_ger_view		gerList		=7;//奖励的武将
+}
+
+// 通知客户端，可领取次数增加了
+message	sc_activity_update[id=11940]{
+	required	int16				activityID			=1;//活动ID
+	required	int16				drawID				=2;//可领取项ID
+	required	int16				canDrawTimes		=3;//可领取次数，0=不能领取	
+}
+
+//通知客户端充值天数和累计值变化了
+message sc_activity_record_update[id=11941]{
+	required	int16				activityID			=1;//活动ID
+	repeated	int32				typeValue			=2;////type=2:已充值元宝数;type=4:已充值天数;其他:0
+}
+
+//获取体力活动
+message p_energy_activity[id=11942]{
+	required	int32				startTime			=1;//开始时间戳
+	required	int32				endTime				=2;//结束时间戳
+	required	int8				energy				=3;//体力值
+	required	int8				isGet				=4;//是否领取过体力
+	// 1 =>未领取
+	// 2 =>已领取
+}
+
+message cs_activity_energy[id=11943,route=activity_server]{
+}
+
+message sc_activity_energy[id=11944]{
+	repeated	p_energy_activity	activityList		=1;
+}
+
+//获取签到状态信息
+message	cs_activity_sign_emperor_info[id=11945]{
+}
+
+message	sc_activity_sign_emperor_info[id=11946]{
+	required	int8				isSign				=1;//今天是否签到
+	//1 => 已签到
+	//2 => 未签到
+	required	int8				signDays			=2;//连续签到日期
+	required	int8				isGetBox			=3;//是否打开箱子
+	//1 => 已打开箱子
+	//2 => 未打开箱子
+	required	int8				isEmperor			=4;//是否是帝王
+	required	string				emperorName			=5;//帝王的名字
+}
+//领取宝箱奖励
+message	cs_activity_sign_get_reward[id=11947]{
+}
+
+message	sc_activity_sign_get_reward[id=11948]{
+	required	int8				result				=1;
+	//1=>领取成功
+	//2=>已领取
+	//3=>未达到领取条件
+	//4=>未知错误(宝箱id配置不对)
+	//required	int16				boxID				=2;//连续签到获得的宝箱ID
+	repeated		p_reward_view	reward				=2;//奖励信息
+}
+//每日签到
+message	cs_activity_sign_up[id=11949]{
+}
+
+message	sc_activity_sign_up[id=11950]{
+	required	int8				result				=1;
+	// 1=>签到成功
+	// 2=>已签到
+	// 3=>未达到签到条件
+	// 4=>未知错误(宝箱id配置不对)
+	//required	int16				boxID				=2;//签到获得宝箱ID
+	repeated		p_reward_view	reward				=2;//奖励信息
+}
+
+
+// 请求返利活动信息
+message	cs_activity_rebate_info[id=11951]{
+}
+
+message	sc_rebate_info[id=11952]{
+	required	int8				status				=1;
+	// 0=>没有返利活动
+	// 1=>返利活动开启中
+	required	string				name				=2;//活动名称
+	required	string				description			=3;//活动描述
+	required	string				icon				=4;//活动图标
+	required	int32				startTime			=5;
+	required	int32				closeTime			=6;
+	repeated	p_rebate_list		rebateList			=7;//返利列表
+}
+
+message	p_rebate_list[id=11953]{
+	required	int8				rebateID			=1;//活动ID
+	required	string				name				=2;//活动名称
+	required	int8				status				=3;//领取状态
+	//0=>未开始
+	//1=>进行中
+	//2=>等待领取
+	//3=>可领取
+	//4=>已领取
+	//5=>不满足领取条件
+	required	int32				startTime			=4;
+	required	int32				closeTime			=5;
+	required	int32				rewardTime			=6;
+	repeated	p_rebate_info		rebateInfo			=7;//活动信息
+}
+
+message	p_rebate_info[id=11954]{
+	required	int8				type				=1;//返利类型
+	//1=>银两
+	//2=>元宝
+	//3=>声望
+	required	int8				ratio				=2;//返利比例，0代表忽略此项
+	required	int32				amount				=3;//已经消费的数量
+}
+
+// 领取返利
+message	cs_activity_rebate_get_reward[id=11955]{
+	required	int8				rebateID			=1;//活动ID
+}
+
+message	sc_rebate_get_reward[id=11956]{
+	required	int8				result				=1;
+	//1=>成功
+	//2=>失败
+	//3=>奖励为空
+	repeated	p_rebate_reward		reward				=2;//奖励信息
+}
+
+message	p_rebate_reward[id=11957]{
+	required	int32				coin				=1;//银两
+	required	int32				gold				=2;//元宝
+	required	int32				reputation			=3;//声望
+}
+
+//通知客户端数据有更新
+message	sc_rebate_update[id=11958]{
+}
+
+message cs_activity_levelRank_open[id=11959]{
+}
+
+message	sc_activity_levelRank_open[id=11960]{
+	required		int32			stopTime		=1;//比赛结束时间，形式类似时间戳
+	required		int32			endTime			=2;//活动结束时间，形式类似时间戳
+	repeated		levelRank_rankerInfo		rankerInfoList	=3;//排行信息	
+	required		int32			rankLength		=4;//排行榜的最大长度
+	required		int32			myRank			=5;//自己的排名，未上榜的话数值为0
+}
+
+message	levelRank_rankerInfo[id=11961]{
+	required		int64			roleExp			=1;//玩家经验
+	required		int16			roleLevel		=2;//玩家等级
+	required		int8			rankNum			=3;//排名
+	required		int32			roleID			=4;//玩家ID
+	required		string			roleName		=5;//玩家名字
+	required		p_reward_info		rewardInfo		=6;//奖励信息
+	required		bool			is_male			=7;//性别
+	required		int8			title			=8;//称号
+	required		int32			head			=9;//自定义头像
+}
+
+message	cs_activity_levelRank_refresh[id=11962]{
+}
+
+message	sc_activity_levelRank_refresh[id=11963]{
+	repeated		levelRank_rankerInfo		rankerInfoList	=1;//排行信息
+}
+
+message	cs_activity_get_payExt_info[id=11964]{   //sc_role_update_pay_ext
+}
+
+message cs_activity_vip_shop[id=11965]{
+}
+
+message	sc_activity_vip_shop[id=11966]{
+	required		int32			endTime	=1;
+	repeated		p_activity_vip_shop	shop	=2;
+}
+
+message	p_activity_vip_shop[id=11967]{
+	required		int8			vip	=1;
+	required		int8			sell	=2;//第几条
+	required		int8			costType=3;//消耗类型 1钻石 2金币 3徽章
+	required		int32			total	=4;//次数
+	required		int32			used	=5;//已使用
+	required		int32			gold	=6;//消耗
+	required		int32			now	=7;//实际消耗
+	required		p_reward_info		reward	=8;
+	required		int16			boxIcon =9;
+	required		string			boxName	=10;//
+}
+
+message	cs_activity_vip_shop_buy[id=11968]{
+	required		int8			vip	=1;
+	required		int8			sell	=2;
+}
+
+message	sc_activity_vip_shop_buy[id=11969]{
+	required		int8			type	=1;
+	//1 => 成功
+	//2 => 消耗不足
+	//3 => 购买次数用尽
+	//4 => 没有这个商店信息
+	// 5 => vip等级不足
+}
+
+message p_activity_pay_reward[id=11970]{
+	required	int8			id	=1;
+	required	p_reward_info		reward	=2;
+	required	string			disc	=3;
+}
+
+message cs_activity_first_pay[id=11971]{
+}
+message sc_activity_first_pay[id=11972]{
+	required	int8			displayID	=1;
+	repeated	p_activity_pay_reward	rewardList	=2;
+}
+
+message	sc_activity_firstPay_update[id=11973]{
+	required	int8			newID		=1;
+	required	p_reward_info		reward		=2;
+}
+
+//消费返利相关协议
+message cs_activity_consume_reback[id=11974]{
+	
+}
+
+message sc_activity_consume_reback[id=11975]{
+	required    int8           result       =1;
+	//1->成功
+	//0->没有开启对应活动
+	required    int8           activitytype =2 [default=0];
+	repeated    p_consume_unit consumelist  =3;
+	required    int64          totalconsume =4 [default=0];
+	required    int64          totalreback  =5 [default=0];
+	required    int8           rebackrate   =6 [default=0];     //(百分比)
+	required    int8           entrancepos  =7 [default=0];
+	required    int32          begintime    =8 [default=0];
+	required    int32          endtime      =9 [default=0];
+	required    int8           rebacktype   =10[default=0];     //返还类型 0->钻石 1->金币 2->点券 
+}
+
+message p_consume_unit[id=11976]{
+	required    int32          unitid       =1 [default=0];
+	required    int64          consumenum   =2 [default=0];
+	required    int64          rebacknum    =3 [default=0];
+	required    int32          pictureid    =4 [default=0];//对应小图片ID
+	required    string         description  =5 ;//显示的节日名称
+}
+
+message cs_activity_consume_state[id=11977]{
+}
+
+message sc_activity_consume_state[id=11978]{
+	required    int8           state        =1 [default=0];//活动状态0->未开启 1->开启
+}
+
+message cs_activity_energy_pac_info[id=11979]{
+}
+
+message sc_activity_energy_pac_info[id=11980]{
+	required 	int16 			energyPac = 1[default=0];
+	required 	int16 			max 		=2[default=0];
+}
+
+message cs_activity_energy_pac_use[id=11981]{
+}
+
+message sc_activity_energy_pac_use[id=11982]{
+	required 	int8 			result 		=1;//1 success   2  no energy pac
+}

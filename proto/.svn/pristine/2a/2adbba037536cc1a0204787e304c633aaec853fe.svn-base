@@ -1,0 +1,151 @@
+//模块=cross
+//编号=12900
+
+// 新的战斗
+message     sc_cross_new_fight[id=12901]{
+    required        p_cross_rec           new_fight         =1;//新的战斗
+}
+
+message     p_cross_rec[id=12902]{
+    required        string          atk_name                =1;//攻击方名字
+    required        string          def_name                =2;//防守方名字
+    repeated        int64           replay_uid_list         =3;//战斗录像UID列表,按照战斗的先后排序
+    required        int32           atk_role_id             =4;//进攻者的role_id
+    required        int32           def_role_id             =5;//防守者的role_id
+    required        int64           atk_fight_power         =6;//进攻方的战斗力
+    required        int64           def_fight_power         =7;//防御方的战斗力
+    required        int8            round                   =8;//当前所在轮数
+    required        bool            atk_is_male             =9;
+    required        bool            def_is_male             =10;
+    required        int8            atk_title               =11;
+    required        int8            def_title               =12;
+    required        int16           atk_server_id           =13;
+    required        int16           def_server_id           =14;
+    repeated        bool            win_or_lose_list        =15;
+}
+
+//查看战报
+message cs_cross_history[id=12903,route=cross_server]{
+    required        int8            history_type            =1;//0预选赛，1天榜八强，2地榜八强
+    required        int16           start                   =2;//战报起始位置，从0开始
+    required        int16           num                     =3;//获取战报数量
+}
+
+message sc_cross_history[id=12904]{
+    required        int8            history_type            =1;//查看战报类型，同上
+    repeated        p_cross_rec     history_list            =2;//战报列表
+}
+
+//查看战斗回放
+message cs_cross_replay[id=12905,route=cross_server]{
+    required        int64           replay_id               =1;//回放的唯一ID
+    required        bool            is_pre                  =2;//是否为预选赛的回放
+}
+
+message sc_cross_replay[id=12906]{
+    required    int8                result          =1;//请求结果
+    // 1=> 成功查询到战报
+    // 2=> 查询的战报不存在，比如过期已经被删除
+    required    sc_fight_request    fight_info       =2;//战斗内容
+}
+
+message sc_cross_fight_list[id=12907]{
+    repeated    string              sky_name_list           = 1;//天榜名字列表
+    repeated    string              ground_name_list        = 2;//地榜名字列表
+}
+
+// 报名
+message cs_cross_sign[id=12910]{
+
+}
+
+message sc_cross_sign[id=12911]{
+    required        int8            reason_code             = 1;//错误提示码，0表示成功
+}
+
+// 打开界面
+message cs_cross_info[id=12920,route=cross_server]{
+    required        int8            channel                 = 1;//天榜0，地榜1
+}
+
+message sc_cross_info[id=12921]{
+    required        int8            status                  = 1;//活动的状态:0未开启，1等待报名，2报名，3等待预选赛，4预选赛，5等待正赛，6正赛八强赛，7等待四强赛，8四强赛，9等待两强赛，10两强赛，11等待决赛，12决赛
+    required        int32           timestamp               = 2;//当前状态结束的时间戳，为0表示永久等待
+    required        int16           session_id              = 3;//当前是第几届跨服战
+    required        bool            is_sign                 = 4;//是否报名
+    repeated        p_cross_rec     list                    = 5;//已出的八强对阵
+    required        string          support_role_name       = 6;//支持的主公
+    required        int32           support_price           = 7;//支持的金额
+    required        int32           support_server_id       = 8;//支持的主公服务器ID
+    required        int8            channel                 = 9;//天榜0，地榜1
+    required        bool            is_pre_over             = 10;//本服预选赛是否打完
+    required        bool            is_all_server_ok        = 11;//所有服务器是否连接正常，如果为false，则显示等待其他服务器结果
+    repeated        string          sky_name_list           = 12;//天榜名字列表
+    repeated        string          ground_name_list        = 13;//地榜名字列表
+}
+
+// 进入直播
+message cs_cross_enter[id=12922,route=cross_server]{
+    required        int8            channel                 = 1;//进入直播频道,预选赛阶段这个值没意义，但在正赛阶段分天榜地榜，天榜0，地榜1
+}
+
+// 离开直播
+message cs_cross_leave[id=12923,route=cross_server]{
+    
+}
+
+// 查看榜单
+message cs_cross_view_list[id=12924,route=cross_server]{
+    required        int8            list_type               = 1;//查看榜单的类型，0上届天榜，1上届地榜，2本届天榜，3本届地榜
+}
+
+message sc_cross_view_list[id=12925]{
+    required        int8            list_type               = 1;//榜单类型
+    repeated        p_view_data     list                    = 2;//榜单列表
+}
+
+message p_view_data[id=12926]{
+    required        string          name                    = 1;
+    required        int16           server_id               = 2;
+}
+
+// 进行支持
+message cs_cross_support[id=12930]{
+    required        int32           support_role_id         = 1;//支持角色ID
+    required        int8            support_type            = 2;//0支持天榜，1支持地榜
+}
+
+message sc_cross_support[id=12931]{
+    required        int8            reason_code             = 1;//错误提示码,0即成功
+    required        int32           support_role_id         = 2;//支持角色ID
+}
+
+// 查看身价列表
+message cs_cross_price_list[id=12932,route=cross_server]{
+    required        int16           start                   = 1;//起始位置
+    required        int16           num                     = 2;//查看多少个
+    required        int8            list_type               = 3;//0查看天榜，1查看地榜
+}
+
+message sc_cross_price_list[id=12933]{
+    repeated        p_price_info        price_info_list     = 1;//身价列表list
+    required        int32               support_role_id     = 2;//已支持的角色role_id,为0表示还未支持
+}
+
+message p_price_info[id=12934]{
+    required    int32       role_id                 =1;//角色ID
+    required    string      role_name               =2;//玩家名字
+    required    bool        is_male                 =3;//性别
+    required    int16       level                   =4;//等级
+    required    int64       total_fight_power       =5;//战斗力
+    required    int64       total_price             =6;//总身价
+    required    int8        title                   =7;//官爵
+    required    int16       server_id               =8;//服务器ID
+}
+
+
+
+
+
+
+

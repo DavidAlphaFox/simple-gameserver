@@ -1,0 +1,92 @@
+异星战场配置说明
+
+需要修改的配置在setting/setting.config和config/data_alien_distribute.config中
+
+%%------------------------------------------------------------------------------
+%%setting.config 配置
+%% 跨服连接需要设置的cookie， 这个不用修改
+{cookie, crimoon}.
+
+%% 服务器所属平台，比如混服就是zz,苹果就是game_app
+{platform, dev}.
+
+%%服务器类型:
+%%  从服务器:normal,
+%%  主服务器:master,
+%%  分配服务器:distribute,
+%%  公会战场:familyfight
+%%  异星决赛:finals
+{server_type, distribute}.
+
+%%------------------------------------------------------------------------------
+%%data_alien_distribute配置:
+
+%%异星战场主服务器列表
+%%格式
+%%{服务器ID,服务器平台,服务器IP}
+{master,
+[
+    {4,dev,"10.10.11.15"}
+]
+}.
+
+%%异星战场从服务器列表
+{slave,
+[
+    {14,dev,"10.10.10.253"}
+]
+}.
+
+%%异星战场决赛服
+%%用来给分配服取数据.决赛服的名称:"alien_finals_" + Platform +ID
+%%取决赛服名称的接口在alien_finals.erl模块中
+{finals, {114,dev,"10.10.11.15"}}.
+
+%%异星战场分配服
+%%取分配服名称的接口在alien_distribute.erl模块中
+%%分配服名称:"alien_distribute_"+Plaform+ID
+{distribute, {41,dev,"10.10.11.15"}}.
+
+
+%%------------------------------------------------------------------------------
+%%节点名称:
+
+关于服务器启动脚本start.sh 需要加启动参数
+主服务器：如果setting.config中配置为 {platform, dev}. {cross_master_id, 1}.
+则加上 -name dev_master_1@192.168.1.130
+
+从服务器：如果setting.config中配置为 {platform, dev}. {server_id, 4}.
+则加上 -name dev4@192.168.1.130
+
+分配服: setting.config和data_alien_distribute.config中的配置应该一致
+如{distribute, {41,dev,"10.10.11.15"}}.则为:-name dev_distribute_41@10.10.11.15 
+
+决赛服: setting.config和data_alien_distribute.config中的配置应该一致
+如{finals, {114,dev,"10.10.11.15"}}.则为:-name dev_finals_114@10.10.11.15
+
+%%------------------------------------------------------------------------------
+%%流程:
+分配服:
+    除决赛外,其他状态由分配服控制, 依次为结束、报名、决赛、结束
+    通过指令:alien_distribute:change_to_next_status(),可以进行状态切换
+    分配服能通知决赛服进行决赛,但之后的状态由决赛服进行控制
+决赛服:
+    决赛服的状态分别为:关闭、等待开启时间、小组赛、四强赛、半决赛、决赛1、2、3、4、5
+    其中:
+        1.关闭期间什么都不做, 直到分配服通知开启
+        2.等待开启时间中,会先从各个主服获得参赛名单,分组,然后等待小组赛开始
+        一旦开始倒计时,可以使用指令alien_finals:set_next_timestamp(unix时间戳)来设置
+        下个状态的开始时间
+        注意：如果要切换时间务必等小组赛打再切换
+        3.决出胜负后,决赛服会将控制全返回给分配服,这时分配服会通知异星结束
+
+%%更新步骤 
+1.先修改好各个配置。data_alien_distribute.config只需要给分配服和决赛服配置就可以了
+2.启动某个主服，获得当前状态和剩余时间。然后关闭主服.
+    状态:sys:get_status(alien_master_server),在返回的数据中的"state"元组中的第三个数据
+    剩余时间:proplist:get_value(alien_master_next_time_stamp, user_default:get_process_dictionary(alien_master_server)).
+3.启动分配服,设置状态,然后打开消息锁。
+    1.用alien_distribute:set_status_and_time_stamp(状态, 时间戳, false).
+    2.alien_distribute:set_message_block(false).
+4.之后就可以启动主服和分配服了。启动后核对下主服和分配服的状态司法一致。
+

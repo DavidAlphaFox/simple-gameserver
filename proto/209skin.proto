@@ -1,0 +1,82 @@
+//模块=skin
+//编号=20900
+
+//合成
+message cs_skin_compose[id=20901]{
+    required int32  itemTypeID  = 1;        // 皮肤id
+}
+
+message sc_skin_compose[id=20902]{
+    required int8   result      = 1;        // 结果
+    // 0 => 成功
+    // 1 => 材料不足
+    // 2 => 未知错误
+    // 3 => 没有对应的皮肤
+    // 4 => 性别不匹配，不能够合成对应的皮肤
+    required bool   is_first    = 2;        // 是否是第一次合成这个皮肤
+}
+
+// 激活
+message cs_skin_activate[id=20903]{
+    required int32  itemTypeID  = 1;        // 皮肤id
+    required int8   pos         = 2;        // 激活第几条
+}
+
+message sc_skin_activate[id=20904]{
+    required int8   result      = 1;        // 结果 
+    // 0 => 成功
+    // 1 => 材料不足
+    // 2 => 前一条属性未激活
+    // 3 => 没有该皮肤
+    // 4 => 未知错误
+    // 5 => 该属性已经激活了
+    // 6 => 没有该隐藏属性
+}
+
+// 装备皮肤
+message cs_skin_equip[id=20905]{
+    required int32  itemTypeID      = 1;     // 皮肤ID
+}
+
+message sc_skin_equip[id=20906]{
+    required int8   result      = 1;        // 结果
+    // 0 => 成功
+    // 1 => 没有该皮肤
+    // 2 => 其他未知错误
+}
+
+message cs_skin_demount[id=20907]{
+}
+
+message sc_skin_demount[id=20908]{
+    required int8   result      = 1;        //结果
+    // 0->成功
+    // 1->未穿戴皮肤
+    // 2->没有皮肤
+    // 3->装备的皮肤不存在
+}
+// 查看皮肤信息
+message p_skin[id=20910]{
+    required int32  itemTypeID  = 1;        // 皮肤ID
+    required int8   pos         = 2;        // 激活到第几条属性
+}
+
+message cs_skin_info[id=20911]{
+}
+
+message sc_skin_info[id=20912]{
+    repeated p_skin          skins       = 1;        // 拥有的皮肤
+    required int32           equip       = 2;        // 当前装备的皮肤
+    required p_skin_buff     totalAdd    = 3;        // 皮肤带来的总的加成
+}
+
+message p_skin_info[id=20913]{
+    required int32  equip       = 2;        //装备的皮肤ID
+}
+
+message p_skin_buff[id=20914]{
+    required int32  ger_attack_plus     =1[default=0];     //精灵伤害增加
+    required int32  ger_demage_sub      =2[default=0];     //精灵伤害减免
+    required int32  trainer_demage_plus =3[default=0];     //训练师伤害增加
+    required int8   trainer_mark_plus   =4[default=0];     //训练师标记增加
+}

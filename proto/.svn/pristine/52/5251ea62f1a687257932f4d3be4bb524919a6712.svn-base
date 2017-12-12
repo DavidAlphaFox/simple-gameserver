@@ -1,0 +1,91 @@
+//module explore boss
+//id 16200
+
+message cs_exBoss_get_info[id=16201]{
+}
+
+message sc_exBoss_get_info[id=16202]{
+	required	p_exBoss_dtl		boss		=1;
+	repeated	p_exBoss_hit_list	hit			=2;
+	required	p_exBoss_times_dtl	times		=3;
+	required	int16				nowHit		=4;
+	required	int16				maxHit		=5;
+	required	int64				oneHit		=6;//rewardBase every hit, exp=oneHit, coin=2*oneHit
+}
+
+message p_exBoss_times_dtl[id=16203]{
+	required	int16			haveTimes	=1;
+	required	int16			canBuyTimes =2;
+	required	int32			nextRefSec	=3;//next update times second
+    required    int8            freeRef     =4;//used free ref
+}
+
+message p_exBoss_dtl[id=16204]{
+	required	int16			bossID		=1;
+	required	int16			bossLevel	=2;
+	//required	int8			bossRank	=3;
+	required	int8			isGetReward	=3;
+	required	int64			bossMaxHp	=4;
+	required	int64			bossHp		=5;
+	required	p_reward_info	reward		=6;
+}
+
+message	p_exBoss_hit_list[id=16205]{
+	required	int16			hit			=1;//第几次攻击 bor (IsCrit << 15|RewardGold<<10)  rewardGold -> [0,30] hitNum -> [0,1000]
+	required	int64		    harm		=2;
+}
+
+
+message cs_exBoss_hit[id=16206]{
+}
+
+message sc_exBoss_hit[id=16207]{
+	required	int8			result		=1;// 1 => have no times 2 => boss dead
+}
+
+message cs_exBoss_buy_times[id=16208]{
+}
+
+message sc_exBoss_buy_times[id=16209]{
+	required	int8			result		=1;//1 => success 2 => no buy times 3 => no gold 
+	required	p_exBoss_times_dtl	times	=2;
+}
+
+message cs_exBoss_get_reward[id=16210]{
+}
+
+message sc_exBoss_get_reward[id=16211]{
+	required	int8				result		=1;//1 => success 2 => boss not killed
+	repeated	p_reward_info		reward		=2;
+	repeated	sc_exBoss_get_info	info		=3;
+}
+
+message	sc_exBoss_update_times[id=16212]{
+	required	int16				times		=1;
+}
+
+message cs_exBoss_refresh[id=16213]{
+}
+
+message sc_exBoss_refresh[id=16214]{
+	required	int8				result		=1;//1 => success 2 => no gold
+	repeated	sc_exBoss_get_info	info		=2;
+}
+
+message cs_exBoss_buy_cost[id=16215]{
+}
+
+message sc_exBoss_buy_cost[id=16216]{
+    required    int16               buyTimesCost =1;
+    required    int16               refreshCost  =2;
+    required    int16               sec          =3;
+    required    int16               freeRefTime  =4;
+}
+
+message cs_exBoss_oneKey[id=16217]{
+}
+
+message sc_exBoss_oneKey[id=16218]{
+	required	int8			result		=1;// 1 => have no times 2 => boss dead
+}
+	

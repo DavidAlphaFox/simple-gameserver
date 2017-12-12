@@ -1,0 +1,79 @@
+//模块=matchRoom
+//编号=21000
+
+// 房间成员信息
+message p_member_info[id=21001]{
+    required    int32   roleID  = 1;
+    required    int32   head    = 2;
+    required    int8    camp    = 3;    // 阵营
+    required    int8    status  = 4;    // 状态
+    required    bool    isMale  = 5;    
+    required    int8    title   =6;
+    // status   0 =>    未准备
+    //          1 =>    已准备
+    required    int32   level   =7;
+}
+
+// 初始化房间消息
+message sc_matchRoom_init[id=21002]{
+    required    int32   roomID  = 1;     
+    // roomID 最高4位代表房间类型
+    // 0    =>  卡洛斯
+    // 1    =>  巨龙
+    // 2    =>  galactica
+    // 3    =>  双子
+    repeated    p_member_info members = 2;
+    required    int32   close_timestamp =3; // 房间关闭时间
+}
+
+// 准备
+message sc_matchRoom_ready[id=21003]{
+    required    int32   roomID  = 1;
+    required    int32   roleID  = 2;
+}
+
+// 取消准备
+message sc_matchRoom_cancel[id=21004]{
+    required    int32   roomID  = 1;
+    required    int32   roleID  = 2;
+}
+
+// 被踢走
+message sc_matchRoom_kick[id=21005]{
+    required    int32   roomID  = 1;
+    required    int32   roleID  = 2;
+}
+
+// 退出
+message sc_matchRoom_exit[id=21006]{
+    required    int32   roomID  = 1;
+    repeated    int32   idlist  = 2;
+}
+
+// 有人加入
+message sc_matchRoom_new[id=21007]{
+    required    int32   roomID  = 1;
+    repeated    p_member_info   members = 2;
+}
+
+// 准备
+message cs_matchRoom_ready[id=21009]{
+    required    int32   roomID  = 1;
+}
+
+// 取消准备
+message cs_matchRoom_cancel[id=21010]{
+    required    int32   roomID  = 1;
+}
+
+// 退出
+message cs_matchRoom_exit[id=21011]{
+    required    int32   roomID  = 1;
+}
+
+// 房间关闭
+message sc_matchRoom_close[id=21012]{
+    required    int32   roomID  = 1;
+    required    int8    reason  = 2;
+    // reason 0 = > 超时
+}

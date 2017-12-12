@@ -1,0 +1,573 @@
+//模块=item
+//编号=10600
+
+
+// =================道具协议系统说明==========================
+//
+// 数据获取：
+//		玩家登录之后，当一次需要道具数据时，会请求所有道具信息(cs_item_bag,cs_item_equip)
+//
+// 数据同步：
+//		1、奖励发放带来的同步。(sc_item_new,sc_item_update)
+// 		2、其他协议隐含的同步。如强化、穿卸装备、卖装备、吞噬装备(注意：返回协议很简单，无请求信息)
+// 
+// ==========================================================
+
+
+// 获取主公基础信息
+message cs_item_bag[id=10601]{
+}
+
+message sc_item_bag[id=10602]{
+	repeated	p_item		allItem			=1;//背包中的所有道具的信息	
+}
+
+message	sc_item_bag2[id=10628]{
+	required		int8			seq					=1;//重复发送次数, 0 ~ seq,subSeq 在0~seq之间
+	required 		int8			subSeq			=2;//当前发送id
+	repeated		p_item		itemList			=3;
+}
+
+// 道具基础结构
+message	p_item[id=10603]{
+	required	int64		itemUID			=1;//道具UID
+	required	int16		itemTypeID		=2;//道具模版ID
+	required	int16		itemLevel		=3;//道具强化等级
+	required	int8		itemRank		=4;//道具品阶
+	required	int16		itemNum			=5;//道具堆叠数量
+	required	int32		itemDecay		=6;//道具下次品阶衰减时间，0表示不衰减
+	required 	int16		itemExp			=8;//宝物经验
+	required    int8        itemenchantType =9;//道具附魔类型
+	required    int8        itemenchantLevel=10;//道具附魔等级
+	required    int8        itemLegendRank  =11;//装备传奇锻造等级
+}
+
+
+// 获取所有装备信息
+message cs_item_equip[id=10604]{
+}
+
+message sc_item_equip[id=10605]{
+	repeated	p_equip		allEquip		=1;//所有的装备信息
+}
+
+// 装备基础结构
+message p_equip[id=10606]{
+	required	int64		itemUID			=1;//道具UID
+	required	int16		itemTypeID		=2;//道具模版ID
+	required	int16		itemLevel		=3;//道具强化等级
+	required	int8		itemRank		=4;//道具品阶
+	required	int64		itemGerID		=5;//道具所属武将的ID，训练师装备，此处gerid为1000
+	required	int8		itemPos			=6;//道具在武将身上的位置，针对训练师121~126，表示训练师装备，131~133表示训练师能量石
+	required	int32		itemDecay		=7;//道具下次品阶衰减时间，0表示不衰减
+	required 	int16	 	itemExp			=8;//宝物经验
+	required    int8        itemenchantType =9;//道具附魔类型
+	required    int8        itemenchantLevel=10;//道具附魔等级
+	required    int8        itemLegendRank  =11;//装备传奇锻造等级
+}
+
+// 道具售卖
+message	cs_item_sell[id=10607]{
+	repeated	int64		itemUIDList		=1;//出售的道具UID列表
+}
+
+message sc_item_sell[id=10608]{
+	required	int8		result			=1;//出售是否成功
+	// 1=> 成功
+	// 2=> 背包中无此道具
+	// 3=> 道具不可出售
+	// 4=> 出售列表不能为空
+	repeated	p_reward_view3	reward		=2;//出售获得的道具
+	required	int32	gold				=3;
+}
+
+// 装备卸下
+message cs_item_down_equip[id=10609]{
+	required	int64		gerID			=1;//卸下装备所属的武将ID
+	required	int8		itemPos			=2;//卸下装备在身上的位置
+}
+
+message sc_item_down_equip[id=10610]{
+	required	int8		result			=1;//请求是否成功
+	//1=> 成功
+	//2=> 该道具不存在
+	required	int64		gerID			=2;//卸下装备所属的武将ID
+	required	int8		itemPos			=3;//卸下装备在身上的位置
+}
+
+// 穿上装备，客户端请注意：如果该位置有其他装备，则自动脱下，如果其他位置有同类型装备，则自动脱下。
+message cs_item_up_equip[id=10611]{
+	required	int64		gerID			=1;//要穿上装备的武将ID
+	required	int8		itemPos			=2;//装备位置,11表示符文第一个，12、13依次表示第二第三
+	required	int64		itemUID			=3;//穿上的装备的UID
+	required	int64		itemGerID		=4;//这件装备所在的武将ID，0=在背包里面
+}
+
+message sc_item_up_equip[id=10612]{
+	required	int8		result			=1;//请求是否成功
+	//1=> 成功
+	//2=> 失败-装备穿的位置非法
+	//3=> 失败-装备不存在
+	//4=> 失败-不是装备
+	//5=> 失败-这件装备已经穿在这个武将身上了
+	//6=> 宝物冲突
+	//7=> 该武将未出战
+    //8=> 等级不足
+	required	int64		gerID			=2;//要穿上装备的武将ID
+	required	int8		itemPos			=3;//装备位置
+	required	int64		itemUID			=4;//穿上的装备的UID
+}
+
+// 新增道具
+message sc_item_new[id=10613]{
+	repeated	p_item		newItemList			=1;//背包中新增的装备
+}
+
+// 背包中的道具数量更新
+message sc_item_update[id=10614]{
+	repeated	p_item_num_update	updateList		=1;//更新列表
+}
+
+message p_item_num_update[id=10615]{
+	required	int64		itemUID			=1;//道具UID
+	required	int16		itemNum			=2;//道具堆叠数量
+}
+
+// 用来显示的道具
+message	p_item_view[id=10616]{
+	required	int16		itemTypeID		=1;//道具模版ID
+	required	int16		itemLevel		=2;//道具强化等级
+	required	int8		itemRank		=3;//道具品阶
+	required	int16		itemNum			=4;//道具堆叠数量
+}
+
+// 功能道具使用
+message cs_item_use[id=10617]{
+	required	int64		itemUID			=1;//道具UID
+	required	int8		itemNum			=2;//道具数量
+}
+
+message sc_item_use[id=10618]{
+	required	int8		result			=1;//请求结果
+	// 1=> 使用成功
+	// 2=> 使用失败-数量不足
+	// 3=> 使用失败-原因未知
+	// 4=> 今日使用次数已达上限，请明日再使用
+	// 5=> 体力值已满，使用失败
+	required	int64		itemUID			=2;//道具UID
+	required	int8		itemNum			=3;//道具数量
+}
+
+// 通知道具被删除
+message sc_item_delete_notify[id=10619]{
+	repeated	int64		itemUIDList		=1;//被删除的道具UID列表	
+}
+
+// 装备强化
+message	cs_item_reinforce[id=10620]{
+	required	int64		itemUID			=1;//道具UID
+	required	int64		gerID			=2;//装备所在的武将ID，如果在背包中，则填0
+}
+
+// 如果强化成功，前端会收到sc_item_update
+message	sc_item_reinforce[id=10621]{
+	required	int8		result			=1;//结果
+	// 1=> 强化成功
+	// 2=> 强化失败-银两不足
+	// 3=> 强化失败-装备等级大于等于主公等级
+	// 4=> 强化失败-该装备不存在
+	// 5=> 强化失败-未知错误
+	// 6=> 强化失败-该装备不能强化
+    // 9=> 强化失败-徽章不足
+    // 10=> 强化失败-已达到最高等级
+	required	int64		itemUID			=2;//道具UID
+	required	int16		newLevel		=3;//新的道具强化等级,客户端自行更新此道具信息
+}
+
+// 装备最大强化
+message	cs_item_max_reinforce[id=10622]{
+	required	int64		itemUID			=1;//道具UID
+	required	int64		gerID			=2;//装备所在的武将ID，如果在背包中，则填0
+}
+
+message sc_item_max_reinforce[id=10623]{
+	required	int8		result			=1;//结果
+	// 1=> 强化成功
+	// 2=> 强化失败-银两不足
+	// 3=> 强化失败-装备等级大于等于主公等级
+	// 4=> 强化失败-该装备不存在
+	// 5=> 强化失败-未知错误
+    // 9=> 强化失败-徽章不足
+    // 10=> 强化失败-已达到最高等级
+	required	int64		itemUID			=2;//道具UID
+	repeated	int16		tempLevelList	=3;//中间的强化等级，如从3级，经过三次强化，分别强化到5，10，12， 则此数组一次为5，10，12，客户端自行更新此道具信息
+}
+	
+// 通知前端某一个装备的品阶更新了（如：宝物品阶衰减了）
+message	sc_item_update_rank[id=10624]{
+	required	int64		itemUID			=1;//道具UID
+	required	int8		newItemRank		=2;//新的品阶
+	required	int32		newItemDecay	=3;//下次道具品阶衰减时间，0表示不衰减
+}
+
+// 道具升品
+message		cs_item_up_rank[id=10625]{
+	required	int64				srcItemUID		=1;//选择提升品阶的道具UID
+	required	int64				foodItemUID		=2;//材料道具UID
+	required	int64				srcItemGerID	=3;//主道具  在哪个武将身上穿着，如果在背包，则填0
+	required	int64				foodItemGerID	=4;//材料道具  在哪个武将身上穿着，如果在背包，则填0
+}
+
+message		sc_item_up_rank[id=10626]{
+	required	int8				result			=1;//请求是否成功
+	// 1=> 升品成功
+	// 2=> 升品失败-装备已达最高品阶
+	// 3=> 升品失败-主道具不存在
+	// 4=> 升品失败-材料道具不存在
+	// 5=> 升品失败-不是同一种道具，不能吞噬
+	// 6=> 升品失败-银两不足
+	// 7=> 升品失败-非装备不能升品
+	// 8=> 升品失败-未知错误
+    // 9=> 升品失败-徽章不足
+    // 10 => 失败-材料道具是完美精炼
+	required	int64				srcItemUID		=2;//选择提升品阶的道具UID
+	required	int64				foodItemUID		=3;//材料道具UID
+	required	int16				newItemLevel	=4;//强化成功时新的道具强化等级
+	required	int8				newItemRank		=5;//强化成功时新的道具品阶
+}
+
+// 道具碎片合成
+message		cs_item_compound[id=10631]{
+	required	int16				typeID			=1;//合成的TypeID
+}
+
+message		sc_item_compound[id=10632]{
+	required	int8				result			=1;//结果
+	// 1=> 成功
+	// 2=> 失败-材料不足
+	required	int16				typeID			=2;//合成的TypeID
+}
+
+// 宝物吃宝物
+message		cs_item_eat[id=10633]{
+	required	int64				itemID			=1;//宝物唯一ID
+	required 	int64				itemGerID		=2;//宝物所属武将ID
+	repeated	int64				foodItemIDList	=3;//被吞噬的宝物ID列表
+}
+
+message		sc_item_eat[id=10634]{
+	required	int8				result			=1;//请求结果
+	// 1=> 成功精炼
+	// 2=> 精炼失败-不是宝物
+	// 3=> 精炼失败-被精炼宝物超过4个
+	// 4=> 精炼失败-该宝物经验已满
+	// 5=> 精炼失败-主宝物不存在
+	// 6=> 精炼失败-材料宝物不存在
+	// 7=> 精炼失败-含有五星宝物，无法吞噬
+	required	int64				itemID			=1;//宝物唯一ID
+	required 	int8				newItemRank		=2;//宝物新品阶, 失败则为0
+	required 	int16				itemExp			=2;//宝物经验, 失败则为0
+}
+
+//套装信息
+message		sc_item_all_equipment[id=10635]{
+	repeated	int64						gerID								=1;
+	repeated p_all_equipment		all_equipment_info_list	=2;
+}
+
+message		p_all_equipment[id=10636]{
+	required	int32		all_equipment_id	=1;//激活的套装id
+	repeated	int32		all_equipment_list	=2;//激活的套装装备id列表
+}
+
+//体力恢复类道具可使用次数
+message cs_item_use_info[id=10637]{
+}
+
+message sc_item_use_info[id=10638]{
+    repeated    p_item_use_info             use_info_list   =1;//使用信息列表
+}
+
+message p_item_use_info[id=10639]{
+    required    int16                       type_id         =1;//道具模版ID
+    required    int8                        left_times      =2;//剩余使用次数
+}
+
+message cs_item_auto_up_equip[id=10640]{
+    required    int64       gerID       = 1;
+    required    int8        type        = 2; // 1:换装备 2:换符文
+}
+
+message sc_item_auto_up_equip[id=10641]{
+    required    int8        result      = 1;//0成功，1卡牌未上阵,2没有未穿装备的部位，3背包没有对应可穿戴装备
+}
+
+message cs_item_stone_eat[id=10642]{
+    required    int64   stoneID         =1;     //符文唯一ID
+    required    int64   gerID           =2;     //符文所在的武将ID，如果在背包中，则填0
+    repeated    int64   foodStoneIDList   =3;   //被吞噬的符文ID列表
+}
+
+message sc_item_stone_eat[id=10643]{
+    required    int8    result      =1; //请求结果
+    // 1=> 成功吞噬
+    // 2=> 吞噬失败-被吞噬符文中有已上阵符文
+    // 3=> 吞噬失败-被吞噬符文数量不正确
+    // 4=> 吞噬失败-被吞噬符文在背包里找不到
+    // 5=> 吞噬失败-该符文不存在
+    // 6=> 吞噬失败-该符文经验已满
+    // 7=> 吞噬失败-未知原因
+    // 8=> 吞噬失败-经验卡牌不能吞噬其他卡牌
+    required    p_item  stone_info  =2; //符文唯一ID    
+    required    int64   itemGerID   =3; //道具所属武将的ID
+    required    int8    itemPos     =4; //道具在武将身上的位置
+}
+
+message cs_item_decompose[id=10644]{
+	repeated	p_item_decompose_unit		itemUnitList		=1;//分解的道具UID列表
+}
+
+message sc_item_decompose[id=10645]{
+	required    int8                         result          =1;//分解结果
+	//1 => 分解成功
+	//2 => 有分解的物品不存在或者参数错误
+	required    int64                        decomposeID     =2;//此次分解的编号，在重新分解的时候需要使用这个编号
+	repeated    p_reward_view                rewardList      =3;//分解所得物品列表
+}
+
+message p_item_decompose_unit[id=10646]{
+	required    int8                         decomposetype   =1;//分解类型
+	// 1=> 精灵分解
+	// 2=> 精灵装备分解
+	// 3=> 符文分解
+	// 4=> 训练是装备分解
+    // 5=> mage石和键石分解
+	required    int64                        itemUID         =2;//分解物品UID
+}
+
+//message cs_item_decompose_by_money[id=10647]{
+//}
+
+//message sc_item_decompose_by_money[id=10648]{
+//	required    int8                          result          = 1;//分解结果
+	//1=> 分解成功
+	//2=> 分解需要的钻石不足
+//	repeated    p_reward_view                 rewardList      = 2;//分解所获得的物品列表
+//}
+
+message cs_item_decompose_again[id=10649]{
+	required    int64                         decomposeID        =1;//分解编号
+}
+
+message sc_item_decompose_again[id=10650]{
+	required    int8                          result          =1;//分解结果
+	//1=> 再次分解成功
+	//2=> 上次的分解结果已经不存在
+	//3=> 与上次的分解序号不符
+	//4=> 上次分解获得的物品已经有使用的，不能再次分解 
+	//5=> 再次分解需要的材料不足
+	//6=> 异常错误
+	required    int64                         decomposeID     =2;//此次分解的序号，在重新分解的时候需要使用此编号
+	repeated    p_reward_view                 rewardList      =3;//分解所获得的物品列表
+}
+
+message cs_item_decompose_by_money_cost[id=10651]{
+	
+}
+
+message sc_item_decompose_by_money_cost[id=10652]{
+	required     int8                         result          =1;
+	//1=> 成功
+	//2=> 系统错误
+	required     int32                        cost            =2;//钻石分解消耗
+}
+
+message cs_item_decompose_again_cost[id=10653]{
+	
+}
+
+message sc_item_decompose_again_cost[id=10654]{
+	required     int8                         result          =1;
+	repeated     p_reward_view                costlist        =2;//再次分解需要消耗的物品列表
+}
+
+message cs_item_enchant[id=10655]{
+	required     int8                         type            =1;//附魔类型
+	//1->水
+	//2->火
+	//3->草
+	//4->电
+	//5->飞行
+	//6->格斗
+	//7->超能
+	//8->岩石
+	required     int64                        gerID           =2;//装备穿戴的精灵，如果在背包，则填0
+	required     int64                        itemUID         =2;//附魔装备UID
+}
+
+message sc_item_enchant[id=10656]{
+	required     int8                         result          =1;//附魔结果
+	//1->成功
+	//2->附魔装备不存在
+	//3->附魔类型不合法
+	//4->附魔等级达到最大
+	//5->附魔消耗不足
+	//6->不能进行附魔的道具
+	//7->附魔等级不够
+	required     p_equip2                     equip           =2;//附魔后装备
+}
+
+message p_equip2[id=10657]{
+	required	int64		                  itemUID			     =1;//道具UID
+	required	int16		                  itemTypeID		     =2;//道具模版ID
+	required	int16		                  itemLevel		         =3;//道具强化等级
+	required	int8		                  itemRank		         =4;//道具品阶
+	required	int64		                  itemGerID		         =5;//道具所属武将的ID，训练师装备，此处gerid为1000
+	required	int8		                  itemPos			     =6;//道具在武将身上的位置，针对训练师121~126，表示训练师装备，131~133表示训练师能量石
+	required	int32		                  itemDecay		         =7;//道具下次品阶衰减时间，0表示不衰减
+	required 	int16	 	                  itemExp			     =8;//宝物经验
+	required    int8                          itemenchantType        =9;//装备附魔类型
+	required    int8                          itemenchantLevel       =10;//装备附魔等级
+}
+
+message cs_item_x_get[id=10658]{
+	required	int16				targetTypeID	=1;//目标道具的typeID
+	repeated	int64				itemIDs		=2;//兑换使用的道具UID列表
+}
+
+message	sc_item_x_get[id=10659]{
+	required	int8				result		=1;
+	//1 => 成功
+	//2 => targetTypeID不对
+	//3 => itemIDs不存在
+	//4 => 消耗品不足
+	//5 => 消耗品的星级，类型不对
+	//6 => 消耗品升过品阶
+	//7 => 成功，前端不主动删除
+}
+
+message	cs_item_down_rank[id=10660]{
+	required	int64				itemUID		=1;
+	required	int64				srcGerUID	=2;
+}
+
+message	sc_item_down_rank[id=10661]{
+	required	int8				result		=1;
+	//1 => 成功
+	//2 => 品阶为0
+	//3 => 没有这个装备
+	//4 => 消耗品不足
+	//5 => 道具类型不符合
+	repeated    p_reward_view       add_item_list    =2;//退化得到的卡牌
+	required	int64				itemUID		=3[default=0];
+	required	int8				rank		=4[default=0];
+}
+
+message cs_item_pft_uprank[id=10662]{
+	required	int64				srcItemUID		=1;//选择提升品阶的道具UID
+	required	int64				srcItemGerID		=2;//主道具  在哪个武将身上穿着，如果在背包，则填0
+	repeated	int64				foodItemUID		=3;//材料道具UID
+}
+
+message	sc_item_pft_uprank[id=10663]{
+	required	int8				result			=1;
+	//1 => 成功
+	//2 => 失败,没找到主道具
+	//3 => 失败,没找到材料道具
+	//4 => 失败,材料道具已升品,不满足条件
+	//5 => 失败,完美精炼已满级
+	//6 => 失败,消耗品不足
+	//7 => 失败,不满足升品条件
+	//8 => 失败,该道具无法继续升品
+	required	int8				newRank			=2[default=0];
+	required	int64				srcUID			=3[default=0];
+	repeated	int64				foodUIDs		=4[default=0];
+}
+
+message cs_item_stone_uprank[id=10664]{
+	required    int64               srcStoneUID     =1;//选择提升品阶的符文UID
+	required    int64               srcStoneGerID   =2;//主符文在哪个精灵身上，如果在背包，则使用0
+	required    int64               foodStoneUID    =3;//材料符文UID
+}
+
+message sc_item_stone_uprank[id=10665]{
+	required    int8                result          =1;
+	//1=> 成功
+	//2=> 失败，没有找到主符文
+	//3=> 失败，被精炼的不是符文
+	//4=> 失败，主符文已达到最大品阶，不能继续升品
+	//5=> 失败，没有找到材料符文
+	//6=> 失败，材料符文与主符文不是同种符文
+	//7=> 失败，需要的金币不足
+	//8=> 失败，精炼的等级没有对应的消耗配置
+	required    p_item              newstone        =2;
+	required    int64               srcStoneUID          =3;
+	required    int64               foodStoneUID        =4;
+}
+
+message sc_item_dtl_update[id=10666]{
+	required    p_equip2             item            =1;
+}
+
+// 一键强化
+message	cs_item_max_reinforce_for_ger[id=10667]{
+	required	int64		gerID			=1;
+	required    int8        type            =2;
+	//1->精灵普通装备
+	//2->训练师装备
+}
+
+message p_reinforce_result[id=10668]{
+	required    int64       equipID         =1;
+	required    int16       equipTypeID     =2;
+	required    int8        result          =3;
+	// 1=> 强化成功
+	// 2=> 强化失败-银两不足
+	// 3=> 强化失败-装备等级大于等于主公等级
+	// 4=> 强化失败-该装备不存在
+	// 5=> 强化失败-未知错误
+    // 9=> 强化失败-徽章不足
+    // 10=> 强化失败-已达到最高等级
+    repeated	int16		tempLevelList	=4;//中间的强化等级，如从3级，经过三次强化，分别强化到5，10，12， 则此数组一次为5，10，12，客户端自行更新此道具信息
+}
+
+message sc_item_max_reinforce_for_ger[id=10669]{
+	required    int64                gerID       =1;
+	required    int8                 type        =2[default=0];
+	repeated    p_reinforce_result   resultlist  =3;   
+}
+
+message cs_item_make_legend[id=10670]{
+    required    int64   srcItemUID      =1;//要打造的的道具UID
+    required    int64   srcItemGerID    =2;//主道具  在哪个武将身上穿着，如果在背包，则填0
+}
+
+message sc_item_make_legend[id=10671]{
+    required    int8                result          =1;
+    //1 => 成功
+    //2 => 失败,没找到主道具
+    //3 => 失败,消耗材料不满足条件
+    //4 => 失败,主材料不满足打造传奇条件
+    //5 => 失败,已经是传奇
+    //6 => 失败,消耗不足
+    required    int64               newLegendItemUID   =2; // 和cs_item_make_legend传入的相同
+    required    int16               equipTypeID     =3;
+}
+
+message cs_item_legend_uprank[id=10672]{
+	required    int64   itemUID         =1;
+	required    int64   itemGerID       =2;
+}
+
+message sc_item_legend_uprank[id=10673]{
+	required    int8    result          =1;
+	//0->功能未开放
+	//1->成功 
+	//2->失败,对应装备不存在
+	//3->失败,对应装备不能进行传奇锻造
+	//4->失败,对应装备传奇锻造已经到达最大
+	//5->失败,对应装备完美精炼等级不满足条件
+	//6->失败,传奇锻造材料不足
+	required    int64   itemUID         =2[default=0];
+	required    int8    itemLegendRank  =3[default=0];
+}

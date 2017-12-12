@@ -1,0 +1,4 @@
+%% 扫荡配置
+
+{need_level, 1}.
+{need_vipLevel, 1}.

@@ -1,0 +1,44 @@
+//模块=talent 
+//编号=14600
+
+// 查看天赋信息
+message cs_talent_get_info[id=14601]{
+}
+message sc_talent_get_info[id=14602]{
+    repeated    p_talent    talent_list     =1; //天赋
+    required    int16       remains_point   =2; //残余天赋点
+    required    int32       unlock_level    =3; //天赋开启等级
+}
+
+message p_talent[id=14603]{
+    required    int32   talent_id       =1; //天赋id,通过id检索配置得到等级信息等
+    required    int32   cool_down_time  =2; //天赋学习冷却时间戳
+}
+
+//学习天赋信息
+message cs_talent_study[id=14604]{
+    required    int32   talent_type     = 1; //学习的天赋类型，即哪一格天赋
+//    required    int32   talent_level    = 2; //学到多少级
+}
+message sc_talent_study[id=14605]{
+    required    int8        result      =1; //1：成功，2：条件不满足 3：已达到顶级 4：冷却中，可以购买 5：冷却中，不能买了 6：材料不足
+    required    p_talent    new_talent  =2; //该字段表示新的天赋状态
+    required    int32       need_gold   =3; //如果冷却中，该字段提示玩家购买冷却的价格
+    required    int16       can_buy_times   =4; //剩余购买次数
+}
+
+// 收回天赋点
+message cs_talent_undo[id=14606]{
+    required    int32   talent_type =1; //学习的天赋类型，即哪一格天赋
+}
+message sc_talent_undo[id=14607]{
+    required    int8    result      =1; //1：成功，2：失败
+}
+
+// 花钱消除冷却
+message cs_talent_cooldown[id=14608]{
+    required    int32   talent_type =1; //学习的天赋类型，即哪一格天赋
+}
+message sc_talent_cooldown[id=14609]{
+    required    int8    result      =1; //1：成功，2：失败
+}

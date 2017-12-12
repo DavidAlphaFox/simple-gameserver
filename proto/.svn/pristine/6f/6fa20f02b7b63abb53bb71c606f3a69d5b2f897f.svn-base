@@ -1,0 +1,198 @@
+//模块=gather
+//编号=11700
+
+
+//====================核心协议流程==================================
+//
+//      Client								Server
+// 请求好友列表
+// #cs_friend_get_list  		===>>>>
+//					  			<<<<===		#sc_friend_get_list
+// 
+
+// 请求更多
+// #cs_friend_more		  		===>>>>
+//					  			<<<<===		#sc_friend_more
+// 
+
+// 向客户端同步新增的好友
+//					  			<<<<===		#sc_friend_new
+// 
+
+// 请求更多
+// #cs_friend_more		  		===>>>>
+//					  			<<<<===		#sc_friend_more
+// 
+
+// 请求推荐好友列表
+// #cs_friend_get_add_list 		===>>>>
+//					  			<<<<===		#sc_friend_get_add_list
+// 
+
+// 请求搜索玩家
+// #cs_friend_explore	 		===>>>>
+//					  			<<<<===		#sc_friend_explore
+// 
+
+// 请求添加好友
+// #cs_friend_add		 		===>>>>
+//					  			<<<<===		#sc_friend_add
+
+// 请求删除好友
+// #cs_friend_delete	 		===>>>>
+//					  			<<<<===		#sc_friend_delete
+
+//=================流程完成==================================
+
+// 请求好友或者仇人列表
+message	cs_friend_get_list[id=11701,route=friend_server]{
+	required		int8			type			=1;//类型
+	// 1=> 好友
+	// 2=> 仇人
+}
+
+message	sc_friend_get_list[id=11702]{
+	required		int8			type			=1;//类型
+	repeated		p_friend		roleInfoList	=2;//所有好友或者仇人的信息
+	required		int8						giveTimes		=3[default=0];//领取体力剩余次数
+	required		int8						allTimes			=4[default=20];//每天领取体力总次数
+}
+
+// 好友或者仇人的信息
+message	p_friend[id=11703]{
+	required		int32			roleID			=1;//玩家ID
+	required		bool			isMale			=2;//是否是男的
+	required		int16			level			=3;//等级
+	required		int8			title			=4;//官爵
+	required		string			roleName		=5;//玩家名称
+	required		int64			fightPower		=6;//总战斗力
+	required		int32			logoutTime		=7;//0=当前在线，非0=下线的时间
+	required		string			location			=8;//位置
+	required		int32				head			=9[default=0];//
+	required		int32			matingCoolSecond	=10[default=0];//交配冷却结束时间
+	required		int32			gerTypeID					=11[default=0];//守护武将类型
+	required		int16			gerQuality					=12[default=0];//守护武将品质
+	required		int8				canGive						=13[default=0];//是否可领取体力
+	required		int8				canSend						=14[default=0];//是否可送体力
+	required		int32			sendS							=15[default=0];//好友送体力时间
+	required		int32				beginGold				=16[default=0];//充能(金币)开始时间
+	required		int32				endGold					=17[default=0];//充能(金币)结束时间
+	required		int32				beginBadge			=18[default=0];//充能(徽章)开始时间
+	required		int32				endBadge				=19[default=0];//充能(徽章)结束时间
+	required        int16               chapterID              =20[default=0];//当前挂机开启的chapterID
+}
+
+// 请求更多好友的信息
+message	cs_friend_more[id=11704]{
+	repeated		int32			roleIDList		=1;//请求的好友信息列表
+}
+
+message	sc_friend_more[id=11705]{
+	repeated		p_friend		roleInfoList	=2;//请求的玩家列表的信息
+}
+
+// 请求添加好友列表
+message	cs_friend_get_add_list[id=11706,route=friend_server]{
+}
+
+message	sc_friend_get_add_list[id=11707]{
+	repeated		p_stranger			roleList	=1;//推荐的好友列表
+}
+
+// 请求添加好友
+message	cs_friend_add[id=11708,route=friend_server]{
+	required		int32				roleID		=1;//请求添加的好友列表
+}
+
+message	sc_friend_add[id=11709]{
+	required		int8				result		=1;//请求结果
+	// 1=> 成功
+	// 2=> 失败-已经是你的好友
+	// 3=> 失败-未知原因
+	// 4=> 失败-你的好友已满
+	// 5=>已经邀请过
+}
+
+// 搜索玩家
+message cs_friend_explore[id=11720,route=friend_server]{
+	required		string				name		=1;//玩家名字
+}
+
+message	sc_friend_explore[id=11721]{
+	repeated		p_stranger			roleInfoList=1;//搜索出的玩家列表，为空时，表示没有搜索到对应玩家
+}
+
+// 陌生人的信息
+message	p_stranger[id=11722]{
+	required		int32			roleID			=1;//玩家ID
+	required		bool			isMale			=2;//是否是男的
+	required		int16			level			=3;//等级
+	required		int8			title			=4;//官爵
+	required		string			roleName		=5;//玩家名称
+	required		int64			fightPower		=6;//总战斗力
+	required		int32			logoutTime		=7;//0=当前在线，非0=下线的时间
+	required		string			location			=8;//位置
+	required		int32				head			=9[default=0];//
+	required		int8				canAdd			=10[default=0];// 0不可添加  1可以添加  2已经添加
+}
+
+// 删除好友或者仇人
+message	cs_friend_delete[id=11730,route=friend_server]{
+	required		int8			type			=1;//类型
+	required		int32			roleID			=2;//删除好友的ID
+}
+	
+message sc_friend_delete[id=11731]{
+	required		int8			result			=1;//请求结果
+	// 1=> 删除成功
+	// 2=> 删除失败-未知原因
+	required		int8			type			=2;//类型
+	required		int32			roleID			=3;//删除好友的ID
+}
+//通知删除好友
+message sc_friend_notify_delete[id=11732]{
+	required		int8				type				=1;//类型
+	required		int32			roleID			=2;//删除好友的ID
+}
+
+// 通知客户端增加新的好友或者仇人
+message	sc_friend_new[id=11740]{
+	required		int8			type			=1;//类型
+	required		p_friend		newFriend		=2;//该好友信息
+}
+
+message cs_friend_send_enargy[id=11741,route=friend_server]{
+	required		int32					roleID				=1;
+}
+message sc_friend_send_enargy[id=11742]{
+	required		int8						result				=1[default=1];
+	//2:不是好友
+	//3:已经赠送
+	required		int32					roleID				=2[default=0];
+}
+//通知玩家有好友赠送体力
+message sc_friend_send_enargy_me[id=11743]{
+	required		int32					roleID				=1;
+}
+
+message cs_friend_give_enargy[id=11744]{
+	repeated		int32					roleIDList				=1;
+}
+message sc_friend_give_enargy[id=11745]{
+    required        int8                    result                  =1;//0表示成功，1表示体力值已满,2表示领取roleIDList为空，3表示没有可领取的体力，4表示没有可领取次数
+	repeated		int32					roleIDList				=2;
+	required		int8				    giveTimes			    =3[default=0];
+}
+//通知玩家有好友已领取赠送的体力
+message sc_frend_give_enargy_me[id=11746]{
+	required		int32					roleID				=1;
+	required		int8						canSend			=2;
+}
+//领取全部体力
+message cs_friend_give_all_enargy[id=11747]{
+}
+
+//拒绝加好友请求成功
+message sc_friend_remove_request[id=11748]{
+
+}

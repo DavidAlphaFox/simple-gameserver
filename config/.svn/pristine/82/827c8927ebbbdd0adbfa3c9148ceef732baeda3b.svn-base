@@ -1,0 +1,59 @@
+%% 喊话间隔
+{trumpet_interval_limit, 2}.
+
+%% 说话的内容长度
+{trumpet_words_limit, 50}.
+
+%% 说话需要的等级限制
+{trumpet_need_level, 0}.
+
+%% 小喇叭聊天消耗
+%% 格式:物品TypeID 数量
+{{trumpet_cost_item, 1, false}, {20031,1}}.
+
+%% 大喇叭聊天消耗
+{{trumpet_cost_item, 2, false}, {20032,1}}.
+
+%% 小红包消耗
+{{trumpet_cost_item, 1, true}, {20033,1}}.
+
+%% 大红包消耗
+{{trumpet_cost_item, 2, true}, {20034,1}}.
+
+%% 小喇叭推送间隔
+{{trumpet_push_interval, 1}, 30000}.
+
+%% 大喇叭推送间隔
+{{trumpet_push_interval, 2}, 30000}.
+
+%% 小喇叭缓存记录个数
+{{trumpet_log_limit, 1}, 50}.
+
+%% 大喇叭缓存记录个数
+{{trumpet_log_limit, 2}, 50}.
+
+%%%============================================================================
+%红包相关配置
+
+%% 小喇叭红包金额
+{{bonus_amount, 1}, {gold, 80}}.
+
+%% 大喇叭红包金额
+{{bonus_amount, 2}, {gold, 500}}.
+%% 红包配置格式:{类型, 数量} 
+%% 类型: gold 钻石, coin 金币, reputation 声望 
+
+%% 小喇叭红包个数
+{{bonus_number, 1}, 20}.
+
+%% 大喇叭红包个数
+{{bonus_number, 2}, 50}.    %% 按照目前的存在数据大小,这个需要控制在100以内，最多90左右。
+
+%% 小喇叭红包随机区间
+{{bonus_range, 1}, {1, 8}}.
+
+%% 大喇叭红包随机区间
+{{bonus_range, 2}, {1, 20}}.
+
+%% 红包有效时间
+{bonus_valid_time, 86400}.

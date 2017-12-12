@@ -1,0 +1,505 @@
+//模块=联盟战
+//编号=15900
+
+
+message cs_familycross_info[id=15901]{
+}
+
+message sc_familycross_info[id=	15902]{
+	required		int8		result		=1;//结果
+	//1 => 成功
+	//2 => 失败,尚未加入任何联盟
+	//3 => 失败,功能尚未开放
+	//4 => 失败,数据同步中
+	repeated	p_familycross_info_dtl	info	=2;
+}
+
+message cs_familycross_sign[id=15903]{
+}
+
+message	sc_familycross_sign[id=15904]{
+	required	int8			result		=1;
+	//1 => 报名成功
+	//2 => 失败,尚未加入联盟
+	//3 => 失败,联盟等级不足
+	//4 => 失败,已报名
+	//5 => 失败,权限不足
+	//6 => 失败,不在报名时间
+}
+
+message	p_familycross_info_dtl[id=15905]{
+	required		int8			state		=1;
+	//1 报名阶段   2  战斗阶段    3 排行阶段  4 本届尚未开始
+	required		int8			isSign		=2;
+	//1 未报名   2 已报名
+	required		int8			needLevel	=3;
+	required		int32			signStartTime	=4;
+	required		int32			signEndTime	=5;
+	required		int32			fightStartTime	=6;
+	required		int32			periodEndTime	=7;
+	repeated		p_familycross_enermy	enermy		=8;
+}
+
+message	p_familycross_car[id=15906]{
+	required		int32			driver		=1;
+	required		int32			c1		=2;
+	required		int32			c2		=3;
+	required		int32			c3		=4;
+	required		int8			type		=5;
+	required		int8			id		=6;
+}
+
+message	cs_familycross_displayer[id=15907]{		//队员分配到打飞机
+	repeated		p_familycross_car	cars		=1;
+}
+
+message	sc_familycross_displayer[id=15908]{
+	required		int8			result		=1;
+	// 1 => 成功
+	// 2 => 失败,已分配过
+	// 3 => 失败,没有联盟
+	// 4 => 失败,没有报名
+	// 5 => 失败,不在分配时间段
+	// 6 => 失败,没有权限
+}
+
+message	cs_familycross_displayer_info[id=15909]{
+}
+
+message	sc_familycross_displayer_info[id=15910]{
+	repeated		p_familycross_car	cars		=1;
+}
+
+message	p_familycross_player_fly[id=15911]{
+	required		int32			roleID		=1;
+	required		int8			fly		=2;
+}
+
+message	cs_familycross_player_fly[id=15912]{
+}
+
+message	sc_familycross_player_fly[id=15913]{
+	repeated		p_familycross_player_fly	fly		=1;
+}
+
+message	cs_familycross_enermy_info[id=15914]{
+}
+message	sc_familycross_enermy_info[id=15915]{
+	required		string			familyName1		=1;//对手1
+	required		string			familyName2		=2;//对手2
+	required		int16			serverID1		=3;
+	required		int16			serverID2		=4;
+}
+
+message	p_familycross_enermy[id=15916]{
+	required		int16			serverID		=1;
+	required		string			familyName		=2;
+}
+
+
+message	p_familycross_war_site3[id=15920]{
+	required	int8			city			=1;
+	required	int8			site			=2;
+	required	int8			owner			=3;
+}
+
+message	p_city_pos[id=15921]{
+	required	int32			x			=1;
+	required	int32			y			=2;
+}
+
+message	p_site_pos[id=15922]{
+	required	int8			city			=1;
+	required	int32			x			=2;
+	required	int32			y			=3;
+}
+
+message	p_born_pos[id=15923]{
+	required	int8			city			=1;// 0=> 大地图 其他表示各个小地图
+	required	int8			type			=2;
+	required	int32			x			=3;
+	required	int32			y			=4;
+}
+
+message	p_familycross_war_car[id=15924]{
+	required	int8			id			=1;
+	required	int8			type			=2;//类型,分配时为0,进战场后变成1,2,3表示三个不同阵营
+	required	p_city_pos		startPos		=3;
+	required	int8			tarCity			=4;
+	required	int32			startTime		=5;
+	required	int32			driver			=6;
+	repeated	int32			all			=7;
+	required	int32			driver2			=8;
+}
+
+message	p_familycross_war_fly[id=15925]{
+	required	int8			car			=1;
+	required	int8			city			=2;
+	required	int8			type			=3;//所属family区分
+	required	int8			flyType			=4;//飞机id
+	required	p_site_pos		startPos		=5;
+	required	int8			tarSite			=6;
+	required	int32			startTime		=7;
+	required	int32			rebornTime		=8;
+	required	int32			roleID			=9;
+	required	int32			serverID		=10;
+	repeated	p_familycross_fighter	fighters		=11;
+	required	string			roleName		=12;
+    required    int32           level           =13;
+	required 	int16 			speed 			=14;
+}
+
+message	p_familycross_war_site[id=15926]{
+	required	int8			id			=1;
+	required	int8			city			=2;
+	required	p_site_pos		pos			=3;
+	repeated	p_familycross_war_fly2	fly1			=4;// 飞机
+	repeated	p_familycross_war_fly2	fly2			=5;
+	repeated	p_familycross_war_fly2	fly3			=6;
+	required	int8			ownType			=7;
+	required	int32			onwSec			=8;
+}
+
+message	p_familycross_war_city[id=15927]{
+	required	int8			id			=1;
+	required	p_city_pos		pos			=2;
+//	repeated	p_familycross_war_car2	cars			=3;
+	repeated	p_familycross_war_site3	siteInfo		=3;
+//	repeated	p_familycross_war_fly	flys			=4;
+//	repeated	p_familycross_war_site	sites			=5;
+}
+
+message	p_familycross_war_fly2[id=15928]{
+	required	int32			roleID			=1;
+	required	int32			serverID		=2;
+}
+
+message	p_familycross_war_car2[id=15929]{
+	required	int8			id			=1;
+	required	int8			type			=2;
+}
+
+message	p_familycross_war_family_dtl[id=15930]{
+	required	int32			familyID		=1;
+	required	int8			type			=2;//自己阵营id
+	required	string			familyName		=3;
+}
+
+
+message	cs_familycross_war_info[id=15931]{
+}
+
+message	sc_familycross_war_info[id=15932]{
+	required	int32			startTime		=1;
+	required	int32			interval		=2;
+	required	int32			needGas			=3;//获胜条件
+	repeated	p_familycross_war_family_dtl	familys		=4;
+	repeated	p_familycross_war_city	city			=5;
+	repeated	p_familycross_war_car	cars			=6;
+	repeated	p_born_pos		bornPos			=7;
+	repeated	p_familycross_head_des	des			=8;//全场统计
+	repeated	p_familycross_city_des	cityDes			=9;
+}
+
+message	cs_familycross_self_info[id=15933]{
+}
+
+message	sc_familycross_self_info[id=15934]{
+	required	p_familycross_war_fly	self			=1;
+}
+
+message	cs_familycross_drive_car[id=15935]{
+	required	int8			id			=1;//car ID
+//	required	int8			fromCity		=2;
+	required	int8			tarCity			=2;
+}
+
+message	sc_familycross_drive_car[id=15936]{
+	required	int8			result			=1;
+	//1 => 成功 2 => 非驾驶员 3 => 没有这个飞机 4=> 已在该目标点 5=> 没找到city
+}
+
+message	cs_familycross_mov[id=15937]{
+	required	int8			city			=1;
+	required	int8			tarSite			=2;
+}
+
+message	sc_familycross_mov[id=15938]{
+	required	int8			result			=1;
+	//1 => 成功 2 => 没在这个city 3=>等待复活 4 => 已经在这个目标奠
+}
+
+message	cs_familycross_attack[id=15939]{
+	required	int8			city			=1;
+	required	int8			site			=2;
+	required	int32			tarRoleID		=3;
+	required	int32			tarServerID		=4;
+}
+
+message	sc_familycross_attack[id=15940]{
+	required	int8			result			=1;
+	//1 => 成功  2 => 不在这个city或者site 3 => 异常战斗 5 => 同阵营
+	repeated	sc_fight_request	fightInfo		=2;
+}
+
+message	cs_familycross_city_dtl[id=15941]{
+	required	int8			city			=1;
+}
+
+message	sc_familycross_city_dtl[id=15942]{
+	required	int8			id			=1;
+	required	p_city_pos		pos			=2;
+	repeated	p_familycross_war_car2	cars			=3;
+	repeated	p_familycross_war_fly	flys			=4;
+	repeated	p_familycross_war_site	sites			=5;
+	repeated	p_born_pos		bornPos			=6;
+}
+
+message	cs_familycross_site_dtl[id=15943]{
+	required	int8			city			=1;
+	required	int8			site			=2;
+}
+
+message	sc_familycross_site_dtl[id=15944]{
+	required	int8			id			=1;
+	required	p_site_pos		pos			=2;
+	repeated	p_familycross_war_fly	fly			=3;// 飞机
+	required	int8			ownerType		=4;
+	required	int32			ownSec			=5;
+}
+
+
+message	cs_familycross_fly_dtl[id=15945]{
+	required	int32			roleID			=1;
+	required	int32			serverID		=2;
+}
+message	sc_familycross_fly_dtl[id=15946]{
+	required	p_familycross_war_fly	fly			=1;
+	repeated	p_familycross_replay_dtl	replay		=2;
+	required	int16			grade			=3;
+}
+
+//大地图更新
+message	sc_familycross_map_update[id=15947]{
+	repeated	p_familycross_war_car	car			=1;
+	repeated	p_familycross_war_site3	site			=2;
+}
+//小地图更新
+message	sc_familycross_city_update[id=15948]{
+	repeated	p_familycross_war_fly	fly			=1;
+	repeated	p_familycross_war_site	site			=2;
+}
+//矿坑更新
+message	sc_familycross_site_update[id=15949]{
+	repeated	p_familycross_war_site	site			=2;
+}
+//玩家更新
+message	sc_familycross_fly_update[id=15950]{
+	repeated	p_familycross_war_fly	fly			=1;
+}
+
+message	cs_familycross_be_driver[id=15951]{
+	required	int8			city			=1;
+	required	int8			car			=2;
+}
+
+message	sc_familycross_be_driver[id=15952]{
+	required	int8			result			=1;
+	//1 => 成功   2 => 失败,有driver  3 => 失败,没这个飞机 4 => 失败,没在   5 => 没在飞机上   6 => 已经是驾驶员
+}
+
+message	p_familycross_fighter[id=15953]{
+	required	int16			typeID			=1;
+	required	int8			pos			=2;
+	required	int64			blood			=3;
+	required	int64			nowBlood		=4;
+}
+
+message	cs_familycross_drive_car_stop[id=15954]{
+	required	int8			id			=1;//car ID
+}
+
+message	sc_familycross_drive_car_stop[id=15955]{
+	required	int8			result			=1;
+	//1 => 成功 2 => 非驾驶员 3 => 没有这个飞机 4=> 已在该目标点 5=> 没找到city
+}
+
+message	cs_familycross_mov_stop[id=15956]{
+}
+
+message	sc_familycross_mov_stop[id=15957]{
+	required	int8			result			=1;
+	//1 => 成功 2 => 没在这个city 3=>等待复活 4 => 已经在这个目标奠
+}
+
+//返回大飞船,先来的是驾驶员
+message	cs_familycross_mov_back[id=15958]{
+	required	int8			city			=1;
+	required	int8			carID			=2;
+}
+
+message	sc_familycross_mov_back[id=15959]{
+	required	int8			result			=1;
+	//1 => 成功 2 => 没在这个city 3=>等待复活 4 => 已经在这个目标奠
+}
+
+message	cs_familycross_reborn[id=15960]{
+}
+
+message	sc_familycross_reborn[id=15961]{
+	required	int8			result			=1;
+	//1 => 成功　2 => 不能复活  3 => 消耗品不足
+}
+
+message	p_familycross_replay_dtl[id=15962]{
+	required	int8			isRole1Win	=1;//role1是不是赢了
+	required	int64			replayUID	=2;
+	required	string			role1Name	=3;
+	required	string			role2Name	=4;
+}
+
+message	cs_familycross_replay[id=15963]{
+	required	int64			replayUID	=1;
+}
+
+message	sc_familycross_replay[id=15964]{
+	required	int8			result		=1;
+	repeated	sc_fight_request	fightInfo	=2;
+}
+
+message	sc_familycross_attack_update[id=15965]{
+	repeated	p_familycross_war_fly	flys		=1;
+}
+
+message	cs_familycross_own_site[id=15966]{
+	required	int8			city		=1;
+	required	int8			site		=2;
+}
+
+message	sc_familycross_own_site[id=15967]{
+	required	int8			result		=1;
+	// 1 => 成功
+	// 2 => player没在该site
+	// 5 => 有敌人
+	// 3 => 己方已经占领
+	// 4 => 
+	required	int32			ownSec		=2;
+}
+message cs_familycross_season_rank[id=15968]{
+	required                          int32                              seasonid                   =1;   //赛季编号
+	required                          int16                              beginpos                      =2;   //开始位置
+}
+
+message sc_familycross_season_rank[id=15969]{
+	required                          int8                               result                     =1;                            
+	//1->成功
+	//2->没有对应赛季排名
+	//3->开始位置越界
+	required                          int32                              seasonid                   =2;
+	required                          int16                              beginpos                      =3;
+	required                          int8                               isend                      =4;
+	//1->读取排名最后
+	//0->未读取完毕
+	repeated                          p_anubis_family                    familylist                 =5;
+	repeated                          p_anubis_family                    ourfamily                  =6;  //请求第一次的时候会附带上，后面都是[]
+}
+
+message p_anubis_family[id=15970]{
+	required                          int32                              familyid                   =1;
+	required                          string                             familyname                 =2;
+	required                          int16                              serverid                   =3;
+	required                          string                             leadername                 =4;
+	required                          int32                              score                      =5;
+	required                          int32                              rank                       =6;
+}
+
+message cs_familycross_seasoninfo[id=15971]{
+	
+}
+
+message sc_familycross_seasoninfo[id=15972]{
+	required                          int8                               result                     =1;
+	required                          int32                              currentseasonid            =2;
+	repeated                          int32                              existseasonid              =3; //存在的赛季列表中包括了当前赛季
+}
+
+message cs_familycross_family_rank[id=15973]{
+	required                          int32                              seasonid                   =1;
+}
+
+message sc_familycross_family_rank[id=15974]{
+	required                          int8                               result                     =1;
+	//1->成功
+	//2->不存在公会
+	//3->数据异常
+	repeated                          p_anubis_family_member             memberlist                 =3;
+}
+
+message p_anubis_family_member[id=15975]{
+	required                          int32                              roleid                     =1;
+	required                          string                             rolename                   =2;
+	required                          int32                              killnum                    =3;
+	required                          int32                              resource                   =4;
+	required                          int16                              rank                       =5;
+}
+
+message	p_familycross_head_des[id=15976]{
+	required			int32				familyID	=1;
+	required			int16				serverID	=2;
+	required			int16				count		=3;//抢点数量
+	required			int32				total		=4;//资源获取量
+}
+
+//全场资源信息统计
+message	sc_familycross_des_update[id=15977]{
+	repeated		p_familycross_head_des		des		=1;
+}
+
+message	p_familycross_city_des[id=15978]{
+	required			int8				cityID		=1;
+	required			int16				familyID	=2;
+	required			int16				serverID	=3;
+	required			int16				count		=4;
+}
+
+message p_familycross_battle_rank_dtl[id=15979]{
+	required	int32			roleID		=1;
+	required	int32			serverID	=2;
+	required	int16			level		=3;
+	required	int16			get		=4;//占领资源
+	required	int16			score		=5;//荣誉
+	required	int16			kill		=6;
+	required	string			name		=7;
+	required	int8			roleType	=8;
+}
+
+message	cs_familycross_battle_get_rank[id=15980]{
+}
+
+message	sc_familycross_battle_get_rank[id=15981]{
+	repeated	p_familycross_battle_rank_dtl	rank		=1;
+}
+
+message	sc_familycross_battle_end[id=15982]{
+	repeated	p_familycross_battle_rank_dtl	rank		=1;
+}
+
+message	cs_familycross_be_driver2[id=15983]{
+	required	int8			city			=1;
+	required	int8			car			=2;
+}
+
+message	sc_familycross_be_driver2[id=15984]{
+	required	int8			result			=1;
+	//1 => 成功   2 => 失败,有driver  3 => 失败,没这个飞机 4 => 失败,没在 5 => 没在飞机上  6 => 已经是驾驶员
+}
+
+message	cs_familycross_self_car[id=15985]{
+}
+
+message	sc_familycross_self_car[id=15986]{
+	required	int8			result			=1;
+	//1 => 成功  2 => 没有信息
+	repeated	p_familycross_war_car	car			=2;
+	repeated	p_familycross_war_fly	flys			=3;
+}

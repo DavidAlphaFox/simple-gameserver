@@ -1,0 +1,208 @@
+%%双排协议
+message cs_doublematch_lineup[id=21203]{
+	
+}
+
+message sc_doublematch_lineup[id=21204]{
+	required    int8      result      =1;      //结果
+	//1->成功
+	//2->失败
+	repeated    p_doublematch_team_member     memberlist      =2;      //成员列表
+}
+
+message p_doublematch_team_ger_info[id=21205]{
+	required    int32     pos     =1;      //精灵布阵位置，此处的位置和上阵的位置不同
+	required    int32     flage       =2;      
+	//1->表示队长精灵
+	//3->表示队员精灵      
+	required    p_ger     ger     =3;      //精灵信息
+	repeated    p_equip       equip       =4;      //对应精灵的装备列表      
+}
+
+message p_doublematch_team_trainer_info[id=21206]{
+	required	    int32		      roleID			      =1;      //玩家唯一ID
+	required	    string		      roleName		      =2;      //玩家名字
+	required	    bool		      isMale			      =3;      //性别
+	required    int8      title       =4;      //称号
+    required    int32     head    =5;      //自定义头像
+    required    int32     skinID      =6;      //装备的皮肤ID
+    required    int16     trSpecialID   =7;     //专精ID
+    required    int32     level         =8;     //等级
+}
+
+message p_doublematch_team_member[id=21207]{
+	required    p_doublematch_team_trainer_info       trainer     =1;      //玩家的信息
+	repeated    p_doublematch_team_ger_info       gerlist     =2;      //布阵的精灵信息
+}
+
+message cs_doublematch_update_lineup[id=21208]{
+	repeated    p_ger_pos_unit    gerposlist      =1;      //精灵位置列表       
+}
+
+message sc_doublematch_update_lineup[id=21209]{
+	required    int8      result      =1;      //
+	//1->成功
+	//2->不在双排组队中
+	//3->不具有提交布阵权限
+	//4->提交布阵数据不合法
+	repeated    p_doublematch_team_member     memberlist      =2;      //成员列表
+}
+
+message p_ger_pos_unit[id=21210]{
+	required    int64     gerID      =1;      //精灵唯一ID
+	required    int32     pos    =2;      //精灵位置
+}
+
+message cs_doublematch_sign[id=21211]{
+	
+}
+
+message sc_doublematch_sign[id=21212]{
+	required    int8      result     =1;      //报名结果
+	//1->成功
+	//2->已经处于报名状态
+	//3->没有报名权限
+	//4->有玩家报名次数不够
+    //5->积分段相差过大
+    //6->未能先转换成双排队形
+    //7->等级不足
+    //8->队伍人数不满足新的队伍类型
+}
+
+message cs_doublematch_sign_cancel[id=21213]{
+	
+}
+
+message sc_doublematch_sign_cancel[id=21214]{
+	required    int8      result    =1;       //报名结果
+	//1->成功
+	//2->未处于报名状态
+	//3->没有取消报名的权限
+}
+
+message cs_doublematch_times_buy[id=21215]{
+	
+}
+
+message sc_doublematch_times_buy[id=21216]{
+	required    int8      result    = 1;     // 结果
+    // 1 -> 成功
+    // 2 -> 钻石不够
+    // 3 -> 请稍后再试
+    required    int16     cur_times     = 2;     // 当前是第几次购买
+    required    int32     next_buy_cost     = 3;     // 下次购买花费钻石
+}
+
+message cs_doublematch_roleinfo[id=21217]{
+	
+}
+
+message sc_doublematch_roleinfo[id=21218]{
+	required    int8      result    =1;      //结果
+	//1->成功
+	//2->失败
+	required    int8      grade     =2;      //段位
+	required    int16     grade_level       =3;      //等级
+	required    int32     score     =4;      //积分
+	required    int32     times     =5;      //当前次数
+	required    int32     next_buy_cost     =6;      //下次购买花费钻石
+	required    int32     timestamp     =7;      //赛季结束时间
+	required    int32     rank      =8;      //本人排名
+	required    int32     max_free_time     =9;      //每日免费最大次数
+    required    int32     local_rank    =10;     //本区名次
+    required    int32     before_rank    =11;     //之前的排名
+    required    int8      before_grade          =12;      //段位
+    required    int16     before_grade_level    =13;      //等级
+    required    int32     before_score          =14;      //积分
+}
+
+message cs_doublematch_rankinfo[id=21219]{
+	required    int8      type      =1;      // 排行榜类型
+	//1->好友排名
+	//2->全区排名
+    //3->本区排名
+    //4->上届全区排名
+	required    int32     position      =2;      // 开始位置
+    required    int32     length    =3;      // 长度
+}
+
+message sc_doublematch_rankinfo[id=21220]{
+	required    int8      result    =1;      // 请求结果
+	//1->成功
+	//2->失败
+	required    int8      type      =2;      // 排行榜类型
+	required    int32     position      =3;      // 开始位置
+	repeated    p_doublematch_rank_unit       ranklist      =4;      // 排行榜列表
+    required    int32     length    =5;      // 长度
+}
+
+message p_doublematch_rank_unit[id=21221]{
+	required       int32      roleID    =1;      //玩家ID
+	required       string     roleName      =2;      //玩家名称
+	required       bool       isMale    =3;      //性别
+	required       int8       title     =4;      //称号
+    required       int32      head      =5;  	
+    required       int16      level     =6;      //玩家角色等级
+    required       int32      serverID      =7;      //区服ID
+    required       int8       grade     =8;      //段位
+    required       int16      gradeLevel    =9;      //段位等级
+    required       int32      score     =10;     //积分
+    required       int32      rank      =11;     //排名
+    required       int32      score_change      =12;     //上次战斗的积分变化
+    required       int8       vip       =13;
+}
+
+message sc_doublematch_quit[id=21222]{
+	required       int8       result    =1;      //退出双排结果
+	//1->退出双排模式
+}
+
+message cs_doublematch_record_list[id=21223]{
+	required       int32      beginindex    =1;
+    required       int8       type      =2;      // 录像
+    required       int32      length    =3;      // 长度
+}
+
+message sc_doublematch_record_list[id=21224]{
+	required       int8       result    =1;
+	//1->成功
+	//2->失败
+	repeated       p_record_unit      recordlist    =2;   
+    required       int32      beginindex    =3;
+    required       int8       type      =4;      // 录像
+    required       int32      length    =5;      // 长度
+}
+
+message cs_doublematch_replay[id=21225]{
+	required       int64      recordID      =1;
+}
+
+message sc_doublematch_replay[id=21226]{
+	required       int8       result    =1;
+	//1->成功
+	//2->失败,可能排名已经变化，录像id更新了
+    //3->没有战报，仅对于个人战报返回
+	required       sc_fight_double_request    fight_info    =2;     //战斗内容
+	required       int8       dice_numA     =3;     //骰子数A
+	required       int8       dice_numB     =4;     //骰子数B 
+}
+
+message p_record_unit[id=21227]{
+	required       int64      recordID      =1;
+	repeated       p_doublematch_rank_unit    recordteammember      =2;
+	required       int32      timestamp     =3;
+}
+
+message sc_doublematch_fight[id=21228]{
+	repeated       p_doublematch_rank_unit    rolelist      =1;    //4个玩家的信息
+	required       int8       dice_numA     =2;    //骰子数A
+	required       int8       dice_numB     =3;    //骰子数B
+	required       sc_fight_double_request    fight_info    =4;
+	required       int32      score_change      =5;    //增加的积分
+}
+
+//message p_role_fight_info[id=21229]{
+//    required       int32      roleID       =1;
+//	required       string     roleName     =2;
+//	required       int16      rolelevel    =3;
+//}

@@ -1,0 +1,41 @@
+%%签到功能协议
+message cs_sign_reward_info[id=20701]{
+	
+}
+
+message sc_sign_reward_info[id=20702]{
+	required              int8               result            =1;            //结果
+	//1->成功
+	//2->失败
+	repeated              p_sign_reward      rewardlist        =2;	          //奖励列表
+	repeated              p_sign_reward      accrewardlist     =3;            //累积奖励配置
+	required              int8               signcount         =4;            //已经签到天数
+	required              int8               is_get_sign_reward=5;            //是否已经领取了签到奖励
+}
+
+message p_sign_reward[id=20703]{
+	required              int8               sign_count        =1;           //签到天数
+	repeated              p_reward_view      sign_reward       =2;           //签到的奖励
+	required              int8               is_get_reward     =3;           //是否领取
+	//0->没有领取
+	//1->已经领取            
+}
+
+message cs_sign_reward[id=20704]{
+	required              int8               rewardtype        =1;           //获取奖励类型
+	//1->每日签到奖励
+	//2->累积签到奖励
+	required              int8               rewardcount       =2;           //领取的奖励天数
+}
+
+message sc_sign_reward[id=20705]{
+	required              int8               result            =1;           //结果
+	//1->成功
+	//2->失败
+	//3->类型不存在
+	//4->奖励为空,没有配置
+	required              int8               rewardtype        =2;           //奖励类型
+	required              int8               rewardcount       =3;           //奖励的天数
+	repeated              p_reward_view      sign_reward       =4;           //获得的签到奖励
+}
+

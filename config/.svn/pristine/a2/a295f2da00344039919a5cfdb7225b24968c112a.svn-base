@@ -1,0 +1,208 @@
+%% 每天报名次数
+{times_limit, 1}.
+
+%% 每天购买次数和对应的钻石消耗
+{buy_limit, {3, [100, 200, 400]}}.
+
+%% 卡洛斯匹配的人数
+{match_need, 10}. 
+
+%% 参与卡洛斯的等级要求
+{lv_limit, 25}.
+
+% 挂机最长时间
+{afk_check_time,300}.
+
+% 优化平衡的等待时间
+{match_balance_time,30}.
+% 优化平衡等待的数量
+{match_balance_num,4}.
+
+%% 合成人数的方式(用最大的数加起来的方式,比如10就是[[5,5]],8就是[[5,3]])
+{match_need_list, [[5,5]]}.
+
+%% 飞机的配置, {data_carlos_plane, 速度加成, 消耗列表(gold 钻石,coin 金币,reputation 声望)}
+{{plane, 1}, {data_carlos_plane, 0, [{gold, 1000}, {coin, 5000000}]}}.
+{{plane, 2}, {data_carlos_plane, 30, [{gold, 5000}, {coin, 25000000}]}}.
+{{plane, 3}, {data_carlos_plane, 60, [{gold, 10000}, {coin, 50000000}]}}.
+{{plane, 4}, {data_carlos_plane, 100, [{gold, 25000}, {coin, 100000000}]}}.
+{{plane, 5}, {data_carlos_plane, 160, [{gold, 50000}, {coin, 200000000}]}}.
+{{plane, 6}, {data_carlos_plane, 240, []}}.
+
+%% 飞机速度 {{speed, Type},Speed}
+{{speed, 1},60}.
+{{speed, 2},78}.
+{{speed, 3},96}.
+{{speed, 4},120}.
+{{speed, 5},156}.
+{{speed, 6},204}.
+{{speed, 7},216}.
+{{speed, 8},228}.
+{{speed, 9},240}.
+{{speed, 10},216}.
+{{speed, 11},240}.
+{{speed, 12},240}.
+{{speed, 13},240}.
+{{speed, 14},240}.
+{{speed, 15},240}.
+{{speed, 16},240}.
+{{speed, 17},240}.
+{{speed, 18},240}.
+
+
+
+
+% 默认飞机的最高等级
+{max_plane_level,6}.
+
+%% 道具获得临时飞机信息{{plane_item,ItemTypeID},{CostNum,PlaneLevel, ValidTime}}
+{{plane_item,21041},{1,7,2592000}}.
+{{plane_item,21040},{1,8,2592000}}.
+{{plane_item,20054},{1,9,-1}}.
+{{plane_item,20055},{1,10,2592000}}.
+
+{{plane_item,20085},{1,11,2592000}}.
+{{plane_item,20086},{1,12,2592000}}.
+{{plane_item,20087},{1,13,2592000}}.
+{{plane_item,20088},{1,14,2592000}}.
+{{plane_item,20089},{1,15,2592000}}.
+{{plane_item,20090},{1,16,2592000}}.
+{{plane_item,20091},{1,17,2592000}}.
+{{plane_item,20092},{1,18,2592000}}.
+
+%大师,王者标识.
+{{planeTag,18},18}.
+{{planeTag,17},17}.
+{{planeTag,16},16}.
+{{planeTag,15},15}.
+{{planeTag,14},14}.
+{{planeTag,13},13}.
+{{planeTag,12},12}.
+{{planeTag,11},11}.
+
+{{planeTag, 10},10}.
+{{planeTag,9},9}.
+{{planeTag, 8},8}.
+{{planeTag,7},7}.
+
+%% 资源列表   {MineID, MinePos{X,Y}, TotalGas}
+{mine_list, [
+		 {1, {1550,3400}, 3600}
+		,{2, {3840,7000}, 3600}
+		,{3, {6130,10600}, 3600}
+		,{4, {6480,4500}, 3600}
+		,{5, {1200,9500}, 3600}
+		]}.
+
+%% 占有资源的倒计时
+{own_mine_interval, 60}.
+
+%% 最多保存战报数量
+{max_replay_num , 10}.
+
+%% 出生点
+{{born_pos, attacker}, {5480,1300}}.
+{{born_pos, defender}, {2200,12700}}.
+
+%% 时长
+{war_interval, 1811}.
+
+
+%% 重算资源时长
+{check_interval, 3}.
+
+%% 复活时长
+{reborn_interval, 30}.
+
+%% 战场服务器列表
+{war_servers, {2,[26001,26001]}}.
+
+%% 获胜资源采集
+{winner_gas, 2000}.
+
+%% 邮件奖励 sell_reward 结构
+{equal, {sell_reward,0,0,0,0,[{new_item,20040, 75, 1, 0},{new_item,20051, 6, 1, 0}],0,[]}}.%平局
+{win, {sell_reward,0,0,0,0,[{new_item,20040, 150, 1, 0},{new_item,20051, 12, 1, 0}],0,[]}}.%赢了
+{fail, {sell_reward,0,0,0,0,[{new_item,20040, 75, 1, 0},{new_item,20051, 4, 1, 0}],0,[]}}.%输了
+
+
+{score_limit, {0,500}}.
+
+
+%% 荣誉点
+{mine_score, 10}.
+{kill_score, 15}.
+
+% 复活消耗
+{reborn_money, 20}.
+% 聊天内容长度
+{talk_len, 10}.
+
+%聊天系统填充
+{tuxi,"1003"}.
+{fangshou,"1004"}.
+{zhanling,"1005"}.
+
+%卡洛斯排名最大上榜排名
+{max_rank_num,1000}.
+
+%卡洛斯显示给前端的最大上榜排名
+{max_show_rank_num,50}.
+
+%匹配服保存的最大玩家排名数
+{max_store_rank_num,1000}.
+
+%每个分段长度
+{max_seg_length,200}.
+
+%排名同步时间间隔(S)
+{syn_rankinfo_interval,3600}.
+
+%是否为赛季测试模式，测试模式下赛季时间能够设置，非测试模式下，赛季开始时间为月初
+{season_test,false}.
+
+%赛季间隔时间（S）,在测试模式下生效
+{season_interval,200}.
+
+%赛季发奖延迟时间测试模式，在测试模式下按照设置时间执行，非测试模式下为3600（s）
+{season_delay_test,false}.
+
+%%赛季延迟发奖(S),在测试模式下有效
+{carlos_reward_delay,60}.
+
+%%是否开启赛季末清楚购买的卡洛斯战斗次数
+{is_clear_carlos_buy_time,true}.
+
+{rank_reward,[
+	{{1,1},{sell_reward,0,0,0,0,[{new_item,20040, 10000, 1, 0},{new_item,59, 1, 1, 0}],0,[]}},
+	{{2,2},{sell_reward,0,0,0,0,[{new_item,20040, 8000, 1, 0},{new_item,59, 1, 1, 0}],0,[]}},
+	{{3,3},{sell_reward,0,0,0,0,[{new_item,20040, 6000, 1, 0},{new_item,59, 1, 1, 0}],0,[]}},
+	{{4,10},{sell_reward,0,0,0,0,[{new_item,20040, 5000, 1, 0},{new_item,60, 1, 1, 0}],0,[]}},
+	{{11,50},{sell_reward,0,0,0,0,[{new_item,20040, 4000, 1, 0},{new_item,63, 1, 1, 0}],0,[]}},
+	{{51,100},{sell_reward,0,0,0,0,[{new_item,20040, 3000, 1, 0},{new_item,64, 3, 1, 0}],0,[]}},
+	{{101,500},{sell_reward,0,0,0,0,[{new_item,20040, 2000, 1, 0},{new_item,64, 2, 1, 0}],0,[]}},
+	{{501,1000},{sell_reward,0,0,0,0,[{new_item,20040, 1000, 1, 0},{new_item,64, 1, 1, 0}],0,[]}}
+	]
+}.
+
+{win_score,3}.
+{equal_score,1}.
+{lose_score,0}.
+
+% 采集加速
+{full_speed,4}.
+
+% 日志清除的时间点,和日志保留的天数
+{reply_del_info, {{1,0,0}, 1}}.
+
+% 匹配等待房间的超时时间(毫秒)
+{match_room_wait_time, 30000}.
+
+% 是否需要进入准备房间
+{need_in_room, false}.
+
+% 两次报名间隔时间
+{unrequest_inteval_second, 10}.
+
+% 日志功能开关
+{log_switch, true}.

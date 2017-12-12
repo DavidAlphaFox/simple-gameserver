@@ -1,0 +1,58 @@
+//模块=challengeGod
+//编号=12700
+
+
+// 神将录
+message cs_challengeGod_info[id=12701]{
+}
+
+message sc_challengeGod_info[id=12702]{
+	required	int16	freeTimes	=1;//免费赠送的挑战次数
+	required	int16	buyTimes	=2;//购买的次数
+	required	int8	gerPos		=3;//出战武将的位置
+	required	int8	price		=4;//单次购买的价格
+}
+
+message	cs_challengeGod_select_ger[id=12703]{
+	required	int8	pos			=1;//出战武将的位置
+}
+
+message	sc_challengeGod_select_ger[id=12704]{
+	required	int8	result		=1;
+	// 2 => 成功
+	// 1 => 该位置没有武将
+}
+
+message cs_challengeGod_challenge_dungeon_one[id=12705]{
+	required	int16	dungeonID	=1;//挑战的dungeonID
+}
+
+message	sc_challengeGod_challenge_dungeon_one[id=12706]{
+	required	int8	result		=1;
+	// 1 -> 发起成功
+	// 2 -> 元宝不足
+	// 3 -> dungeonID错误
+	// 4 -> 次数不足
+	repeated	sc_fight_request	fightInfo	=2;//战斗的结果
+	repeated	p_reward			reward		=3;//战斗奖励
+}
+
+message	cs_challengeGod_challenge_dungeon_ten[id=12707]{
+	required	int16	dungeonID	=1;//挑战的dungeonID
+}
+
+message	p_challengeGod_result[id=12708]{
+	required	int8	result		=1;
+	//1 ->挑战胜利
+	//2 ->挑战失败
+	required	p_reward			reward		=2;
+}
+
+message	sc_challengeGod_challenge_ten[id=12709]{
+	required	int8					result	=1;
+	// 1=> 发起成功
+	// 2=> 元宝不足	
+	// 3=> dungeonID 错误
+	// 4=> 次数不足
+	repeated	p_challengeGod_result	info	=2;
+}

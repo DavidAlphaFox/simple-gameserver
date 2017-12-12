@@ -1,0 +1,196 @@
+//模块=explore
+//编号=105
+
+// 点击探索
+message cs_explore_one[id=10501]{
+}
+
+message sc_explore_one[id=10502]{
+	required	int8		result		=1;//抽取结果
+	// 1=> 成功抽到遭遇战
+	// 2=> 激活上限已满
+	// 3=> 探索次数不足
+	// 4=> 探索未冷却
+	// 5=> 未知错误
+	// 6=> 抽取到了奇遇商店
+	repeated	p_echapter	chapterList	=2;//获取到的遭遇战,逆序：最新获取的遭遇战在此列表第一个
+	required	int32		roleExp		=3;//玩家经验
+	required	int32		gerExp		=4;//武将经验
+	required	int32		coin		=5;//银两
+	required	int8		crit		=6;//暴击数
+}
+
+// 搜索基础结构
+message p_echapter[id=10503]{
+	required	int16		chapterID	=1;//章节ID
+	required	int32		endTime		=2;//结束时的unixTime,-1表示永不关闭
+	required	int32		value		=3;//征收或者探宝时，此值表示，征收结束时间。其它类型，此值为0。
+	required	bool		isCollected	=4;//是否已经被征收、探宝过
+}
+
+// 遭遇战中某一章节的关卡列表请求
+message cs_explore_dungeon_list[id=10504]{
+	required	int16		chapterID	=1;//章节ID
+}
+
+message sc_explore_dungeon_list[id=10505]{
+	required	int16		chapterID	=1;//章节ID
+	repeated	p_edungeon	dungeonList	=2;//章节中的关卡列表
+	required	int8		state		=3;//最后战斗的关卡血量比
+}
+
+// 关卡基础结构
+message p_edungeon[id=10506]{
+	required	int16 		dungeonID	=1;//关卡ID
+	required	bool		isPassed	=2;//是否通关
+}
+
+
+// 请求挑战一个关卡
+message cs_explore_challenge_encounter[id=10507]{
+	required	int16		dungeonID	=1;//关卡ID
+}
+
+message sc_explore_challenge_encounter[id=10508]{
+	required	int8		result		=1;//请求结果
+	// 1=> 挑战成功
+	// 2=> 体力不足
+	// 3=> 已挑战成功，不能再挑战
+	// 4=> 该关卡未激活,请先完成前面的关卡
+	// 5=> 你不拥有该关卡
+	repeated	sc_fight_request	fightInfo	=2;//战斗的结果
+	repeated	p_reward			reward		=3;//战斗奖励
+	required	int8				score		=4;//星级评价
+	required	int8				state		=5;//剩余状态
+}
+
+
+// 通知前端有个章节消失了,如：倒计时到了，打完了
+message	sc_explore_delete_encounter[id=10509]{
+	required	int16			chapterID		=1;//删除的章节ID
+}
+
+// 放弃一个遭遇战章节
+message cs_explore_giveup_encounter[id=10510]{
+	required	int16			chapterID		=1;
+}
+
+message sc_explore_giveup_encounter[id=10511]{
+	required	int8			result			=1;//请求放弃的结果
+	// 1=> 成功，客户端自己将该章节干掉
+	// 2=> 失败，该关卡不存在
+	// 3=> 失败，该关卡不能放弃
+}
+
+// 请求已搜索结果列表
+message cs_explore_list[id=10512]{
+}
+
+message sc_explore_list[id=10513]{
+	repeated	p_echapter	chapterList			=1;//已搜索章节列表
+}
+
+// 请求：征收或者探宝
+message	cs_explore_collect[id=10514]{
+	required	int16		chapterID			=1;//章节ID
+}
+
+message sc_explore_collect[id=10515]{
+	required	int16		chapterID			=1;//章节ID
+	required	int8		result				=2;//结果
+	// 1=> 成功，获得奖品
+	// 2=> 失败-时间未到
+	// 3=> 失败-不存在该章节
+	// 4=> 失败-未知原因
+	// 5=> 失败-已领取奖品
+}
+
+
+// 请求：强行征收或者探宝
+message cs_explore_force_collect[id=10516]{
+	required	int16		chapterID			=1;//章节ID
+	required	int8		type				=2;//强行征收、探宝使用的资源类型
+	// 1=> 道具
+	// 2=> 声望
+	// 3=> 元宝
+}
+
+message sc_explore_force_collect[id=10517]{
+	required	int16		chapterID			=1;//章节ID
+	required	int8		type				=2;//强行征收、探宝使用的资源类型
+	required	int8		result				=3;//结果
+	// 1=> 成功，获得奖品
+	// 2=> 失败-时间未到
+	// 3=> 失败-不存在该章节
+	// 4=> 失败-资源不足
+	// 5=> 失败-未知原因
+	// 6=> 失败-已领取该奖品
+}
+
+// 请求是否可以开启自动探索功能
+message cs_explore_auto_explore_check[id=10518]{
+}
+
+message sc_explore_auto_explore_check[id=10519]{
+	required	int8		result				=1;// 打开自动探索功能的 vip 最低等级
+	required	int16		needLevel			=2;//自动探索需要的等级
+    required    int8        allresult           =3;// 一次全部探险的vip最低等级
+    required    int16       allneedLevel        =4;// 一次全部探险需要的等级
+}
+
+message cs_explore_encounter_pass_reward[id=10520]{
+	required	int16		chapterID			=1;// 请求领取遭遇战通关奖励
+}
+
+message sc_explore_encounter_pass_reward[id=10521]{
+	required	int8		result				=1;//结果
+	// 1 => 领取成功
+	// 2 => 没有这个章节，领取失败
+	// 3 => 没有全部通过，领取失败
+}
+
+message cs_explore_encounter_dungeon_state[id=10522]{
+	required	int16		chapterID			=1;//请求的chapterID
+}
+
+message sc_explore_encounter_dungeon_state[id=10523]{
+	required	int8		result				=1;//result
+	// 1 => 成功
+	// 2 => 没有这个章节
+	required	int16		chapterID			=2;//chapterID
+	required	int16		dungeonID			=3;//dungeonID
+	required	int8		state				=4;//state,剩余血量百分比
+}
+
+// 解锁奇遇格子
+message cs_explore_free[id=10530]{
+}
+
+message	sc_explore_free[id=10531]{
+	required		int8		result			=1;//请求结果
+	// 1=> 成功
+	// 2=> 失败-钱不够
+	// 3=> 失败-不能再激活了
+}
+
+// 消耗所有次数
+message cs_explore_all[id=10532]{
+    required    int8        type    =1; // 1自动探险；2一键探险
+}
+
+message p_explore_reward[id=10533]{
+	required	int32		roleExp		=1;//玩家经验
+	required	int32		gerExp		=2;//武将经验
+	required	int32		coin		=3;//银两
+	required	int8		crit		=4;//暴击数
+}
+
+message sc_explore_all[id=10534]{
+    required    int8        result      =1;//抽取结果
+    // 0 => 成功
+    // 1 => 没有次数了
+    // 2 => vip或等级不满足
+    required	int32	    totalTimes  =2;//次数
+    required	p_reward_info reward	=3;//全部奖励信息
+}
+    

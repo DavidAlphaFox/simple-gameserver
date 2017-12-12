@@ -1,0 +1,99 @@
+//模块=payGuide
+//编号=15800
+
+
+message	cs_payGuide_info[id=15801]{
+}
+
+message	sc_payGuide_info[id=15802]{
+	required		int16			mainGerTypeID		=1;
+	required		p_payGuide_unit		unit			=2;
+	
+}
+
+message	p_payGuide_unit[id=15803]{
+	required		int16			openState		=1;
+	required		int16			task1ID			=2;
+	required		int16			task2ID			=3;
+	required		int8			task1State		=4;//0 不满足条件  1 可以领取  2 已领取
+	required		int8			task2State		=5;
+	required		int16			task2Value		=6;
+	repeated		p_reward_info		task1Reward		=7;
+	repeated		p_reward_info		task2Reward		=8;
+}
+
+message	cs_payGuide_get_reward[id=15804]{
+	required		int16			taskID			=1;
+}
+
+message	sc_payGuide_get_reward[id=15805]{
+	required		int8			result			=1; // 1 => 成功 2=> 没有该任务 4 => 任务没完成 3 => 已领取
+	repeated		p_reward_info		reward			=2;
+}
+
+%%新的HeadSeven成长计划
+message cs_payGuide_seven_info[id=15806]{
+	
+}
+
+message sc_payGuide_seven_info[id=15807]{
+	required       int8             state           =1[default=0]; //0->关闭，1->开启
+	required       int32            begintime       =2[default=0]; //开始时间
+	required       int32            endtime1        =3[default=0]; //关闭时间1
+    required       int32            endtime2        =4[default=0]; //关闭时间2 
+    required       int8             period          =5[default=0]; //当前时期
+    repeated       period_state     periodState     =6;
+    required       int8             isFirst         =7[default=0];//1->true;0->false
+}
+
+message cs_payGuide_seven_period_info[id=15808]{
+	required       int8             period          =1;//阶段数
+}
+
+%%单独请求和隔天刷新都会推送这个协议
+message sc_payGuide_seven_period_info[id=15809]{
+	required       int8             result          =1;
+	required       int8             period          =2[default=0];
+	//1->成功
+	//2->失败，活动未开启
+	//3->失败，没有对应阶段
+	//4->失败，对应阶段未开启
+	repeated       p_task_unit      tasklist        =3;
+}
+
+message p_task_unit[id=15810]{
+	required       int32            taskID      =1;
+	required       int64            taskFinish  =3[default=0]; //任务完成度
+	required       int8             taskState   =4[default=0]; //任务状态 0->未完成 1->已经完成 2->已经领取奖励
+}
+
+message cs_payGuide_seven_draw[id=15811]{
+	required       int32            taskID      =1; //领取任务的ID
+}
+
+message sc_payGuide_seven_draw[id=15812]{
+	required       int8             result      =1;
+	//1->成功
+	//2->失败，对应任务不存在
+	//3->失败，对应任务已经领取
+	//4->失败，对应任务未完成
+	//5->失败，对应任务未开启
+	//6->失败，钻石不足（主要针对钻石购买）
+	repeated       p_reward_view    reward      =2;
+}
+
+message sc_payGuide_seven_task_update[id=15813]{
+	repeated       p_task_unit     updateTask   =1;
+}
+
+message period_state[id=15814]
+{
+	required       int8            period       =1;
+	required       int8            state        =2;//1->有奖励0->无奖励
+}
+
+message sc_payGuide_seven_period_summary[id=15815]
+{
+	repeated       period_state     periodState =1;
+}
+

@@ -1,0 +1,27 @@
+%% {train_reward, chapterID, coin, exp, {rate,boxid}}. 
+%%rate中的时候再掉落boxid 否则无掉落
+
+{{train_reward,10001},{6,6,{500,101}}}.
+{{train_reward,10002},{10,10,{500,101}}}.
+{{train_reward,10003},{11,11,{500,101}}}.
+{{train_reward,10004},{12,12,{500,101}}}.
+{{train_reward,10005},{13,13,{500,101}}}.
+
+%% {train_boss,chapterID,bossHP ,{sell_reward}}. 
+
+{{train_boss,10001},{100,{sell_reward,100000, 0, 0, 0, [{new_item, 20043, 10, 1, 0}], 0, []}}}.
+{{train_boss,10002},{200,{sell_reward,100000, 0, 0, 0, [{new_item, 20043, 10, 1, 0}], 0, []}}}.
+{{train_boss,10003},{300,{sell_reward,100000, 0, 0, 0, [{new_item, 20043, 10, 1, 0}], 0, []}}}.
+{{train_boss,10004},{400,{sell_reward,100000, 0, 0, 0, [{new_item, 20043, 10, 1, 0}], 0, []}}}.
+{{train_boss,10005},{500,{sell_reward,100000, 0, 0, 0, [{new_item, 20043, 10, 1, 0}], 0, []}}}.
+
+%%{{train_box,boxid},[{rate,{sellreward}]}.
+{{train_box,101},[{10000,{sell_reward,400000,0,0,0,[{new_item,7807,1,1,0}],0,[]}}
+                   ,{4000,{sell_reward,0,0,0,0,[{new_item,7807,1,1,0}],0,[]}}
+                   ,{1000,{sell_reward,0,0,0,0,[{new_item,7807,1,1,0}],0,[]}}
+                   ,{10000,{sell_reward,0,0,0,0,[{new_item,7220,1,1,0}],0,[]}}
+                   ,{5000,{sell_reward,0,0,0,0,[{new_item,7220,1,1,0}],0,[]}}
+                   ,{3000,{sell_reward,0,0,0,0,[{new_item,7220,1,1,0}],0,[]}}
+                   ]}.
+
+

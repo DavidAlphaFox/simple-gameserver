@@ -1,0 +1,194 @@
+%%组队系统协议
+message cs_generalteam_create[id=20501]{
+	required              int32               tarRoleID         =1;           //邀请组队的目标玩家ID
+	required              int8                teamType          =2;           //队伍类型
+}
+
+message sc_generalteam_create[id=20502]{
+	required              int8                result            =1;           //组队结果
+	// 1-> 创建组队邀请已发送
+	// 2-> 目标玩家不在线
+	// 3-> 目标玩家已经有组队
+	// 4-> 玩家已经有组队
+}
+
+message cs_generalteam_invite[id=20503]{
+	required              int32               tarRoleID         =1;           //被邀请玩家ID
+}
+
+message sc_generalteam_invite[id=20504]{
+	required              int8                result            =1;           //组队邀请结果
+	//1-> 邀请者不在队伍中
+	//2-> 邀请者没有邀请权限
+	//3-> 队伍成员达到上限
+	//4-> 被邀请玩家不在线
+	//5-> 被邀请玩家已经存在组队
+	//6-> 发送邀请
+}
+
+message sc_generalteam_invite_request[id=20505]{
+	required              p_team_member_info  memberinfo        =1;           //邀请者信息         
+	required              int8                teamType          =2;           //队伍类型
+	required              int8                teamStatu         =3;           //队伍状态    是否队伍存在
+	required              int64               teamID            =4;           //队伍ID
+	required              int64               endtime           =5;          //邀请有效时间，后端没有对时间进行判断，需要前端根据这个时间戳自动隐藏界面或者发送拒绝信息
+}
+
+message cs_generalteam_invite_response[id=20506]{
+	required              int8                inviteAccept      =1;           //是否接受组队邀请
+	// 1->接受组队邀请
+	// 2->拒绝组队邀请
+	required              int64               teamID            =2;           //队伍ID
+	required              int32               inviteRoleID      =3;           //邀请者ID
+	required              int8                teamType          =4;           //队伍类型
+	required              int8                teamStatu         =5;           //队伍状态               
+}
+
+message sc_generalteam_invite_response[id=20507]{
+	required              int8                inviteAccept      =1;           //邀请结果
+	//1->接受邀请
+	//2->拒绝邀请
+	//3->已经在队伍中，不能再接受邀请
+	//4->邀请者已经不在线
+	//5->队伍人数已满
+	//6->队伍已经解散
+	//7->邀请者没有权限
+	required              int64               teamID            =2;           //邀请队伍ID
+	required              int32               inviteRoleID      =3;           //邀请者
+	required              p_team_member_info  invitedRole       =4;           //被邀请玩家信息
+}
+
+message p_team_member_info[id=20508]{
+	required              int32               roleID            =1;           //玩家ID
+	required              string              roleName          =2;           //玩家名称
+	required              bool                isMale            =3;           //玩家性别
+	required	          int32		          head				=4;           //玩家头像 0:默认
+	required	          int8		          title			    =5;           //玩家官爵
+	required	          int16		          level			    =6;           //玩家等级  
+	required	          int64				  fightPower		=7;           //玩家总战斗力
+	required              int32               position          =8;           //成员所在位置  
+}
+
+message update_generalteam_info[id=20509]{
+	required              int8                team_statu        =1;           //队伍状态信息
+	//1->队伍还存在
+	//2->队长解散队伍
+	//3->由于队伍人数少于2人，解散队伍
+	required              p_team_info         team_info         =2;           //队伍信息      
+}
+
+message p_team_info[id=20510]{
+	required              int8                teamType          =1;           //队伍类型
+	required              int64               teamID            =2;           //队伍ID
+	required              int32               leaderID          =3;           //队长ID
+	repeated              int32               viceleaderIDList  =4;           //副队长ID列表
+	repeated              p_team_member_info  memberList        =5;           //成员列表
+}
+
+message cs_generalteam_leaveteam[id=20511]{
+	
+}
+
+message sc_generalteam_leaveteam[id=20512]{
+	required              int8                result            =1;           //离开组队结果 
+	//1-> 成功离开组队
+	//2-> 玩家不在组队中
+	//3-> 没有离开的权限
+	required              int32               roleID            =2;           //离开玩家ID
+}
+
+message cs_generalteam_disbandteam[id=20513]{
+	
+}
+
+message sc_generalteam_disbandteam[id=20514]{
+	required              int8                result            =1;           //解散队伍结果
+	//1->  成功解散队伍
+	//2->  玩家不在队伍中
+	//3->  玩家没有解散队伍权限              
+}
+
+message cs_generalteam_kick[id=20515]{
+	required              int32               kickRoleID         =1;           //踢出队伍的玩家ID
+}
+
+message sc_generalteam_kick[id=20516]{
+	required              int8                result             =1;           //踢出队伍结果
+	//1-> 成功踢出队伍
+	//2-> 玩家不在队伍中
+	//3-> 玩家不具有踢出队友权限
+	//4-> 被踢出玩家不在队伍中
+	//5-> 不能踢自己
+	//6-> 操作间隔
+	required              int32               roleID             =2;           //踢人玩家ID
+	required              int32               kickRoleID         =3;           //被踢出玩家ID
+}
+
+message cs_generalteam_change_authority[id=20517]{
+	required              int8                type               =1;           //操作类型
+	//3-> 任命队长
+	//4-> 任命副队长
+	//5-> 撤销副队长
+	required              int32               tarRoleID          =2;           //目标玩家ID
+}
+
+message sc_generalteam_change_authority[id=20518]{
+	required              int8                result             =1;           //结果
+	//1-> 操作成功
+	//2-> 玩家不在组队中
+	//3-> 玩家不具有对应权限
+	//4-> 目标玩家不在组队中
+	//5-> 目标玩家不能是玩家本身
+	//6-> 副队长人数限制
+	//7-> 操作间隔
+	//8-> 当前阶段不能够更改权限
+	required              int8                type               =2;           //操作类型
+	required              int32               roleID             =3;           //操作者ID
+	required              int32               tarRoleID          =4;           //目标玩家ID
+}
+
+message cs_generalteam_talk[id=20519]{
+	required              string              message            =1;           //发言内容
+}
+
+message sc_generalteam_talk[id=20520]{
+	required              int8                result             =1;           //发言结果
+	//1->发言成功
+	//2->玩家不在组队中
+	//3->发送的消息长度为空
+	//4->发送的消息长度超过最大长度
+	//5->消息发送过于频繁
+}
+
+message update_generalteam_talk[id=20521]{
+	required              p_team_member_info  messageRole        =1;           //发送消息的玩家
+	required              string              message            =2;           //发送的消息内容 
+}
+
+message cs_generalteam_info[id=20522]{
+	
+}
+
+message sc_generalteam_info[id=20523]{
+	required              int8                result             =1;           //结果
+	//1-> 玩家不在组队中
+	//2-> 成功
+	required              p_team_info         teamInfo           =2;           //组队信息      
+}
+
+message cs_generalteam_change_teamtype[id=20524]{
+	required              int8                oldTeamType        =1;           //旧的队伍类型
+	required              int8                newTeamType        =2;           //新的队伍类型
+}
+
+message sc_generalteam_change_teamtype[id=20525]{
+	required              int8                result             =1;           //结果
+	//1->成功
+	//2->不在组队中
+	//3->旧的队伍类型不符
+	//4->新的组队类型不存在
+	//5->不具有更改队伍类型权限
+	//6->队伍人数不满足新的队伍类型
+	//7->新旧队伍类型一致
+	required              int8                newTeamType        =2;           //返回新的组队类型 
+}

@@ -1,0 +1,27 @@
+1.在setting/setting.config里面新加msg_env字段,格式如下:
+{msg_env,
+     [ 
+       {username, <<"t1">>}     %%rabbitmq用户名
+      ,{password, <<"1">>}      %%密码
+      ,{host,"10.10.11.11"}     %%rabbitmq_server地址
+      ,{port, 5672}             %%端口
+      ,{heartbeat,10}
+      ,{virtualhost, <<"pm_queue">>}    %%虚拟主机名
+      ]}. 
+2.rabbitmq默认用户名和密码为guest,guest.可以通过rabbitmqctl add_user username password来添加新用户
+TODO
+3.data_serverID_map,需要将之前在master上的这个配置同步到各个服务器上
+4.data_srv_name这个配置保存了server_name到server_id的映射
+5.各个server的id不能重复
+6.对于第一次安装后运行的rabbitmq-server需要先创建交换机、用户、虚拟主机
+    用户:见2
+    添加虚拟主机:
+            add_vhost <vhostpath>
+    设置权限:
+            set_permissions [-p <vhostpath>] <user> <conf> <write> <read> 
+            例子：
+            添加  rabbitmqctl add_vhost az
+            rabbitmqctl set_permissions -p az guest ".*" ".*" ".*"
+    创建交换机:
+            进入游戏控制台执行:send_msg:create_exchange().
+7.上面都ok就可以开服了

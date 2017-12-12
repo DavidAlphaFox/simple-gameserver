@@ -1,0 +1,174 @@
+//模块=trumpet 
+//编号=14500
+
+// 聊天
+message cs_trumpet_message[id=14501]{
+    required        int8            type     =1;//类型: 1小喇叭，2大喇叭
+    required        int16           serverID =2;//服务器ID, 小喇叭时传0
+	required		string			message	 =3;//喊话内容
+    required        bool            bonusP   =4;//是否发红包
+}
+
+message sc_trumpet_message[id=14502]{
+	required		int8			result		=1;//喊话结果
+	// 1 => 成功
+	// 2 => 喇叭不足(如果是发红包,代表红包不够)
+	// 3 => 说话太快
+	// 4 => 说话内容太长
+    // 5 => 等级不够
+    // 6 => 金额不够(发红包)
+	required        int8            type     =2;//类型: 1小喇叭, 2大喇叭 
+    required        int32           bonus_id =3;//红包ID:0 没有红包
+}
+
+message	sc_trumpet_message_info[id=14503]{
+    required        int8            type        =1;//类型: 1小喇叭, 2大喇叭 
+    required        int16           serverID    =2;//服务器ID
+	required		string			roleName	=3;//喊话人的名字
+    required        int16           level       =4;//喊话人的等级
+	required		string			message		=5;//喊话内容
+	required		int8			roleTitle	=6;//喊话人官爵
+	required		int64			timeStamp	=7;//喊话的时间戳
+	required		int32			roleID		=8;//喊话人的ID
+    required        int32           head        =9;//喊话人的头像
+    required        bool            is_male     =10;//性别
+    required        int32           bonus_id    =11;//红包ID, 0代表没有发ID
+}
+
+//获取最近的聊天记录
+message	cs_trumpet_recent_list[id=14504,route=trumpet_server]{
+    required        int8            type = 1;       //类型: 1小喇叭, 2大喇叭 
+}
+
+message	sc_trumpet_recent_list[id=14509]{
+    required        int8                            type    = 1;//类型，1小喇叭, 2大喇叭, 
+	repeated		sc_trumpet_message_info		    list	= 2;//聊天记录列表
+}
+
+//拆红包
+message cs_trumpet_get_bonus[id=14510]{
+    required        int8            bonus_type  =1;//红包类型(大喇叭、小喇叭)
+    required        int32           bonus_id    =2;//红包ID
+}
+
+//拆红包失败
+message sc_trumpet_get_bonus_failed[id=14511]{
+    required        int8            bonus_type  =1;//红包类型
+    required        int32           bonus_id    =2;//红包ID
+    required        int8            reason      =3;//失败原因
+    required        p_bonus_info    info        =4;//红包数据
+    // reason = 
+    //          1, 金额已经全部领取
+    //          2, 领取次数达到上限 
+    //          3, 红包过期
+    //          4, 玩家已经领取过这个红包了
+    //          5, 红包不存在
+}
+
+//红包数据(领取成功时会收到)
+message sc_trumpet_get_bonus[id=14512]{
+    required        int8            bonus_type  =1;//红包类型
+    required        int32           bonus_id    =2;//红包ID
+    required        int32           amount      =3;//领取的金额
+    required        p_bonus_info    info        =4;//红包数据
+}
+
+//红包数据结构
+message p_bonus_info[id=14513]{
+    required        int32           amount      =1;//总金额
+    required        int32           left        =2;//剩余金额
+    required        int16           number      =3;//总个数
+    required        int16           divided     =4;//发了的个数
+    required        int32           timestamp   =5;//发红包时间
+    repeated        p_get_info      list        =6;//领取详情
+}
+
+//领取详情
+message p_get_info[id=14514]{
+    required        int16           serverID    =1;//区服
+    required        int32           roleID      =2;//玩家ID
+    required        string          roleName    =3;//玩家姓名
+    required        int32           amount      =4;//获得的金额
+}
+
+
+// 3.2.0版本红包。1~7分别表示6元、30元、50元、100元、200元、500元、1000元
+// 获取红包状态，是否开启
+message cs_trumpet_redpacket_status[id=14521]{
+}
+message sc_trumpet_redpacket_status[id=14522]{
+    required        int32       is_open     =1; //活动是否开启 0关闭1开启
+    required        int32       end_time    =2; //活动结束时间
+    required        int32       get_all_num =3;
+    required        int8        pos_index   =4;
+    required        int32       this_num    =5; // 本期累计获得红宝数
+}
+
+// 红包出现通知
+message sc_trumpet_new_redpacket_status[id=14523]{
+    required        string      role_name   =1;     // 充值玩家姓名
+    required        int32       rmb_num     =2;     // 充值金额，具体金额6、30...
+}
+
+// 获取红包排行榜信息
+message cs_trumpet_get_all_publishers[id=14524,route=redpacket_server]{
+}
+message sc_trumpet_get_all_publishers[id=14525]{
+    repeated        p_publisher_info    publisher_list  =1;
+}
+// 自己领取和别人充值时发送
+message sc_trumpet_notice_publisher[id=14526]{
+    required        int8       update_type         =1;     // 1增加2修改
+    required        p_publisher_info    publisher   =2;
+}
+
+// 开启通知或关闭通知
+message cs_trumpet_redpacket_openclose[id=14527,route=redpacket_server]{
+    required        int32       type     =1;        // 1open2close
+}
+// 开启通知或关闭通知
+message sc_trumpet_redpacket_openclose[id=14532]{
+    required        int32       result    =1;
+}
+
+// 领取红包
+message cs_trumpet_redpacket_get_reward[id=14528,route=redpacket_server]{
+    required        int32       roleID          =1;
+    required        int8        redpacket_type  =2; // 红包宝箱类型，1~7分别表示6元、30元、50元、100元、200元、500元、1000元
+}
+message sc_trumpet_redpacket_get_reward[id=14529]{
+    required        int32       result      =1;         // 1成功2红包被领完3已经达到上限
+    required        int32       get_add_num     =2;     // 本次领取到的金额
+}
+
+// 
+message p_publisher_info[id=14530]{
+    required        int32       roleID          =1;
+    required        string      roleName        =2;
+    required        int32       head            =3;     //
+    required        int8        roleTitle       =4;     //
+    required        bool        is_male         =5;     //性别
+    required        int32       level           =6;
+    required        p_skin_info skinInfo        =7;     //训练师皮肤信息     
+    required        int32       redpacket_num   =8;     // 
+    repeated        redpacket_info      redpacket_list  =9; 
+    required        int32       serverID  =10;
+    required        int32       pay_timestamp  =11;
+}
+message redpacket_info[id=14531]{
+    required        int8        redpacket_type      =1; // 红包宝箱类型，1~7分别表示6元、30元、50元、100元、200元、500元、1000元
+    required        int32       can_get_num         =2; // 还能领取的宝箱数
+    required        int32       total_num           =3; // 总共的宝箱数
+}
+
+// 跨区红包排行榜信息
+message cs_trumpet_get_world_publishers[id=14533,route=redpacket_server]{
+}
+message sc_trumpet_get_world_publishers[id=14534]{
+    required        int32       server_id_start         =1;
+    required        int32       server_id_end           =2;
+    repeated        p_publisher_info    publisher_list  =3;
+}
+
+
+

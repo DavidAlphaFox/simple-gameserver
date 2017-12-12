@@ -1,0 +1,1 @@
+ALTER TABLE gFighterList modify column fighterList varbinary(2000) not null comment '上阵武将列表';

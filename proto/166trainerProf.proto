@@ -1,0 +1,74 @@
+%% 训练师职业相关协议
+
+message cs_trainerProf_info[id=16601]{
+	
+}
+
+message sc_trainerProf_info[id=16602]{
+	repeated              p_trainerProf_unit                     prof                   =1;
+}
+
+message p_trainerProf_unit[id=16603]
+{
+	required              int8                                   type                   =1;
+	//1->战斗训练师
+	//2->饲养训练师
+	//3->协调训练师
+	required              int8                                   level                  =2;//初始化为0
+}
+
+message cs_trainerProf_uplevel[id=16604]
+{
+	required              int8                                   type                   =1;
+}
+
+message sc_trainerProf_uplevel[id=16605]
+{
+	required              int8                                   result                 =1;
+	//1->成功
+	//2->已经达到当前阶段最高等级
+	//3->升级的前置条件不满足
+	//4->升级需要的材料不足
+	//5->不存在的训练师职业
+	required              int8                                   newLevel               =2[default=0];
+	required              int8                                   type                   =3;
+}
+
+
+message cs_trainerProf_battle_info[id=16651]{
+}
+
+message sc_trainerProf_battle_info[id=16652]{
+	repeated 	p_trainerProf_battle_unit 	battleInfo		=1;
+}
+
+message p_trainerProf_battle_unit[id=16653]{
+	required 	int8			tagID 			=1;
+	required 	int16 			level 			=2;
+}
+
+message cs_trainerProf_battle_uplevel[id=16654]{
+	required 	int8 			tagID 			=1;
+}
+
+message sc_trainerProf_battle_uplevel[id=16655]{
+	required 	int8 			result 			=1;
+	//1 => 成功
+	//2 => 未开启
+	//3 => 消耗品不足
+	//4 => 满级
+	required 	int8 			tagID 			=2;
+}
+
+message cs_trainerProf_battle_unclock[id=16656]{
+	required 	int8 			tagID 			=1;
+}
+
+message sc_trainerProf_battle_unclock[id=16657]{
+	required 	int8 			result 			=1;
+	//1 => 成功
+	//2 => 不满足开启条件
+	//3 => 消耗品不足
+	//4 => 已解锁
+	required 	int8 			tagID 			=2;
+}

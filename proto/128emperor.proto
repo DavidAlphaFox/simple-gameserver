@@ -1,0 +1,151 @@
+//模块=emperor
+//编号=12800
+
+
+// 帝王争霸
+
+//请求该活动的开启时间
+message cs_emperor_get_open_time[id=12801,route=emperor_server]{
+}
+
+message sc_emperor_get_open_time[id=12802]{
+	required	int64		firstOpenTime	=1;//开启时间
+}
+
+//请求打开帝王争霸战,加入帝王争霸战广播列表
+message cs_emperor_enter[id=12803, route=emperor_server]{
+}
+
+message sc_emperor_enter[id=12804]{
+	required	int8		result			=1;
+	// 1 => 成功
+	// 2 => 尚未开启
+	// 3 => 未知错误
+	required	int8		session			=2;//第几届
+	required	int8		round			=3;//第几轮,1,2,3比赛轮数,4,等待下届
+	required	int8		lround			=4;//第几局
+	required	int16		isBet			=5;//是否已下注,1=>true, 2=>false
+	required	int32		betMoney		=6;//下注的金额
+	required	int32		betRoleID		=7;//竞猜的主公ID
+	required	int32		emperorID		=8;//皇帝的ID,0表示还没有产生皇帝
+	repeated	p_emp_fighter	fighterInfo	=9;//比赛的主公的信息
+	required	int64		nextFightTime	=10;//下一场比赛的时间:下一届或者下一轮
+}
+
+//参赛的一个主公的信息
+message	p_emp_fighter[id=12805]{
+	required	int32		roleID			=1;
+	required	string		roleName		=2;
+	required	int8		roleTitle		=3;
+	required	int8		roundNum		=4;//该玩家已经进入第X轮争斗,1为8进4,2为4进2, 3为决赛,4等待下届
+	required	int8		isMale			=5;//male=>1 female=>2
+}
+
+//直播战斗
+message	sc_emperor_broadcast_fightInfo[id=12806]{
+	required		string			attackerName	=1;//攻击方
+	required		string			defenderName	=2;//防守方
+	required		int8			isWin			=3;//类型
+	// 1 => 攻击方胜利
+	// 2 => 防守方胜利
+	required		int8			pos				=4;//第几大局,8进4 => 1,2,3,4 4进2 => 5,6 决赛 7
+	required		int8			lround			=5;//第几小局 1,2,3,4,5
+	required		int64			fightReplayUID	=6;//战斗录像UID
+}
+
+// 请求播放某场战斗
+message		cs_emperor_replay[id=12807,route=emperor_server]{
+	required		int8			round_id	=1;//获取第X场比赛的战斗录像,值为按战斗顺序,1到7,即第一个人和第二个人战斗的战斗id为1,最后决赛的战斗id为7
+}
+
+message 	sc_emperor_replay[id=12808]{
+	repeated		p_emperor_replayInfo		repList		=1;//战斗录像信息列表
+}
+
+//请求退出
+message	cs_emperor_quit[id=12809, route=emperor_server]{
+}
+
+//获取玩家的下注竞猜信息记录
+message	cs_emperor_get_bet_info[id=12810, route=emperor_server]{
+}
+
+message sc_emperor_get_bet_info[id=12811]{
+	required	int8				result	=1;//获取竞猜结果
+	//1 => 成功
+	//2 => 失败,未竞猜
+	repeated	p_bet				betInfo	=2;
+}
+
+//下注信息的结构
+message p_bet[id=12812]{
+	required	string				roleNameA	=1;
+	required	string				roleNameB	=2;
+	required	string				roleNameBet	=3;
+	required	int32				betMoney	=4;
+	required	int8				isRight		=5;//竞猜是否正确
+	// 1 => 正确
+	// 2 => 错误
+	// 3 => 该轮比赛还没出结果
+}
+
+
+//玩家下注
+message	cs_emperor_role_bet[id=12813, route=emperor_server]{
+	required	int8				pos			=1;//下注的比赛场次位置,1-7
+	required	int8				betID		=2;//下注的金额ID
+	required	int32				betRoleID	=3;//下注的fighterRoleID
+}
+
+message	sc_emperor_role_bet[id=12814]{
+	required	int8				result		=1;
+	//1 => 下注成功
+	//2 => 失败,该位置不存在
+	//3 => 失败,已下注,无法重复下注
+	//4 => 失败,不在下注时间内
+	//5 => 失败,没有这个ID
+	//6 => 失败,没有这个参赛者
+	//7 => 失败,不能下注自己
+}
+
+//玩家打开下注界面
+message	cs_emperor_bet_info[id=12815,route=emperor_server]{
+	required	int8				pos			=1;//选择下注位置,值按战斗顺序为1-7
+}
+
+message	sc_emperor_bet_info[id=12816]{
+	required	int8				result		=1;//打开结果
+	// 1 => 成功
+	// 2 => 该位置不存在
+	// 3 => 已下注
+	// 4 => 不再下注时间内
+	required	int8				betID1		=2;//可下注的id1
+	required	int32				betMoney1	=3;//可下注的金额1
+	required	int8				betID2		=4;//可下注的id2
+	required	int32				betMoney2	=5;//可下注的金额2
+	required	int8				betID3		=6;//可下注的id3
+	required	int32				betMoney3	=7;//可下注的金额3
+	required	int32				roleID1		=8;//被下注玩家的1的roleID
+	required	int32				aBetMoney1	=9;//玩家1的被下注金额
+	required	int32				roleID2		=10;//被下注玩家2的roleID
+	required	int32				aBetMoney2	=11;//玩家2的被下注金额
+}
+
+//请求战斗录像
+message	cs_emperor_get_replay[id=12817, route=emperor_server]{
+	required	int64				repUID		=1;
+} 
+
+message	sc_emperor_get_replay[id=12818]{
+	required		sc_fight_request	fightInfo	=1;//战斗内容
+}
+
+message p_emperor_replayInfo[id=12819]{
+	required	string				attackerName	=1;
+	required	string				defenderName	=2;
+	required	int8				isWin			=3;//谁获得了胜利
+	required	int64				replayUID		=4;
+}
+
+message sc_emperor_bc_fight_end[id=12820]{
+}

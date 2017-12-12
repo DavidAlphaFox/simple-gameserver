@@ -1,0 +1,83 @@
+%%砸金蛋协议
+message cs_goldenegg_use_item[id=21101]{
+	required              int32               itemTypeID        =1;           //使用的道具ID
+}
+
+message sc_goldenegg_use_item[id=21102]{
+	required              int8                result            =1;           //使用道具结果
+	//1=>成功
+	//2=>道具不存在
+	//3=>不能累计使用该道具
+	//4=>不在使用时间内
+	//5=>未知错误
+	//6=>buff道具ID错误
+	required              int32               itemTypeID        =2;           //使用的道具ID
+	repeated              int32               useItemTypeIDList =3;           //已经使用了的道具列表
+}
+
+message cs_goldenegg_smash[id=21103]{
+	required              int32                itemTypeID           =1;        //砸蛋使用的锤子ID
+	repeated              int32                extraitemTypeIDList  =2;        //使用药水IDList
+}
+
+message sc_goldenegg_smash[id=21104]{
+	required              int8                 result           =1;           //砸蛋结果
+	//1=>获得积分
+	//2=>没有砸蛋的道具
+	//3=>不在活动时间内
+	//4=>没砸中
+	//5=>砸蛋道具ID错误
+	//6=>获得道具
+	//7=>使用药水不存在
+	required              int32                score            =2;           //当前的积分
+	repeated              p_reward_view        rewardlist       =3;           //获得的道具奖励
+}
+
+
+message cs_goldenegg_roleinfo[id=21107]{
+	
+}
+
+message sc_goldenegg_roleinfo[id=21108]{
+	required              int32                totalscore       =1;           //玩家当前的总积分
+	required              int32                validtimestamp   =2;           //玩家积分的有效时间戳(如果积分为0时，这个有效时间戳有可能是一个过去的时间)
+	repeated              int32                useItemTypeIDList=3;           //玩家当前已经使用了的道具列表
+}
+
+message cs_goldenegg_shop[id=21109]{
+	
+}
+
+message sc_goldenegg_shop[id=21110]{
+	required              int8                 result           =1;           //请求商店信息结果
+	//1=>成功
+	//2=>未知错误
+	repeated              p_goods_unit         goodslist        =2;           //商品列表
+	required              int32                validtimestamp   =3;           //商品有效期
+}
+
+message p_goods_unit[id=21111]{
+	required              int32                goodsID          =1;           //商品ID
+	required              p_reward_info        goods            =2;           //售卖的物品
+	required              int32                price            =3;           //兑换需要的积分
+	required              int8                 moneytype        =4;           //货币类型(主要是想兼容非变化部分的推送)
+	//10->积分
+	//2->钻石(当前只支持者两种类型)
+	required              int32                maxbuytimes      =5;           //最大购买次数
+	required              int32                buytime          =6;           //当前已经购买次数
+	required              int32                shopid           =7;           //商店ID
+}
+
+message cs_goldenegg_open[id=21112]{
+	
+}
+
+message sc_goldenegg_open[id=21113]{
+	required              int8                 status           =1;           //1->砸蛋阶段，2->兑换阶段 3->结束阶段(其中兑换阶段和砸蛋阶段都能够兑换物品)
+	required              int32                endtimestamp     =2;           //当前阶段结束时间
+}
+
+message sc_goldenegg_update_score[id=21114]{
+	required              int32                totalscore       =1;           //当前玩家积分
+	required              int32                validtimestamp   =2;           //玩家积分有效时间           
+}

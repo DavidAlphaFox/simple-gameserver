@@ -1,0 +1,93 @@
+//模块=combine
+//编号=13200
+
+
+message		cs_combine_do[id=13201]{
+	required 		int8			combineType			=1;//合成类型，1固定合成，2随机合成，3 72合成, 4 批量合成 5 符文三合一
+	required		int16			combineTypeID		=2;//固定合成的配方ID,若为随机合成，该字段没有意义
+	required		int8			combineOutType		=3;//合成物品类型，1为卡牌，2为装备,3训练师装备
+	repeated		int64			uIDList				=4;//参与合成的物品UID的List		
+}
+
+message		sc_combine_fail[id=13202]{
+	required		int8			result				=1;//合成结果
+    // 0=> 合成成功
+    // 1=> 合成失败，错误的配方ID
+    // 2=> 合成失败，材料不足
+    // 3=> 合成失败，合成的材料组合与配方不一致
+    // 4=> 合成失败，缺少配方道具
+    // 5=> 合成失败，coin不足
+    // 6=> 合成失败，合成所需的材料数量不对
+    // 7=> 合成失败，参与合成的材料星等不一致
+    // 8=> 合成失败，参与合成的材料超过最大星等限制
+    // 9=> 合成失败，经验卡牌不能参与合成
+    // 10=>合成失败，家园守护神不能参与合成
+    // 12=>合成失败，魔镜精灵不能参与合成
+
+    // 13=>合成失败，批量合成选择的星级不符合要求
+    // 14=>合成失败，参与合成的精灵星级不能合成
+}
+
+message     sc_combine_ger[id=13203]{
+    repeated    p_newGer    newGer          =1;
+    repeated    int32       crt_num_list    =2;
+}
+
+message     sc_combine_equip[id=13204]{
+    repeated    p_newEquip  newEquip        =2;
+    repeated    int32       crt_num_list    =3;
+}
+
+message p_newGer[id=13205]{ 
+    required        int16           gerTypeID               =1;
+    required        int16            gerLevel                =2;
+    required        int8            gerQuality              =3;
+}
+
+message p_newEquip[id=13206]{
+    required        int16           itemTypeID              =1;
+    required        int16           itemNum                 =2;
+    required        int16            itemLevel               =3;
+    required        int8            itemRank                =4;
+}
+
+message cs_combine_info[id=13207]{
+
+}
+message sc_combine_info[id=13208]{
+    required        int32           stopTime                = 1;
+    required        string          content                 = 2;
+    repeated        int8            gerStarList             = 3;
+    repeated        int8            equipStarList           = 4;
+}
+
+message cs_combine_mage_info[id=13209]{
+}
+message sc_combine_mage_info[id=13210]{
+    repeated p_mage_config config_list  =1;
+}
+message p_mage_config[id=13211]{
+    required int16   gerTypeID              =1;
+    required p_sell_reward_unit need_unit   =2;
+}
+message cs_combine_do_mage[id=13212]{
+    required int16   gerTypeID      =1;
+    required int64   gerUidID       =2;
+}
+message sc_combine_do_mage[id=13213]{
+    required int8   result          =1;//mage合成结果。1、成功；2、找不到对应配方；3、材料不足，4、mega的精灵处于魔镜中,5、阵型中存在mega后的精灵
+    required int8   pos             =2;
+    required int64  newGerID        =3;
+    required p_reward_info  return_reward   =4;
+}
+
+%message cs_combine_do_mage2[id=13214]{
+%    required int16   gerTypeID      =1;
+%    required int64   gerUidID       =2;
+%}
+%message sc_combine_do_mage2[id=13215]{
+%    required int8 result =1;//mage合成结果。1、成功；2、找不到对应配方；3、材料不足
+%    required int8 pos	 =2;
+%    required int64 newGerID =3;
+%}
+

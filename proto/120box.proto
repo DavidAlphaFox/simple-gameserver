@@ -1,0 +1,224 @@
+//模块=box
+//编号=12000
+
+
+//====================核心协议流程==================================
+//
+//      Client								Server
+
+//=================流程完成==================================
+
+// 道具开宝箱，如果开宝箱成功，前端自行同步道具的扣除
+message	cs_box_item[id=12001]{
+	required		int16		itemTypeID			=1;//道具模版ID
+}
+
+message	sc_box_item[id=12002]{
+	required		int8		result				=1;//开宝箱结果
+	// 1=> 成功
+	// 2=> 失败-道具不足
+	// 3=> 失败-未知原因
+	repeated		p_reward_view	reward			=2;//奖励信息
+	required		int16		itemTypeID			=3;//道具模版ID
+}
+
+// 商店开宝箱
+message    cs_box_shop[id=12003]{
+    required        int32       tab         =1;//24001=召唤精灵    24002=祈祷装备   24100=祈祷训练师装备
+    required        int8        type        =2;//0:道具抽取  1:钻石抽1次  2:钻石抽取10次  3:道具10连抽 4:道具100抽
+}
+
+message sc_box_shop[id=12004]{
+	required		int8		result				=1;//请求结果
+	// 1=> 成功
+	// 2=> 失败-元宝不足
+	// 3=> 失败-材料不足
+	// 4=> 失败-未知原因
+	repeated		p_reward_view	reward			=2;//奖励信息
+}
+
+// 奖励
+message	p_reward_view[id=12005]{
+	required		int8			type			=1;//类型
+	// 1=> 银两
+	// 2=> 元宝
+	// 3=> 声望
+	// 4=> 主公经验
+	// 5=> 武将经验
+	// 6=> 道具
+	// 7=> 武将
+	required		int32			value			=2;//值，当类型为道具和武将时，此字段前16位表示模版ID，后16位表示数量
+}
+
+// 奖励2
+message p_reward_view2[id=12006]{
+	required		int8			type			=1;//类型 1=>item 2=>ger
+	required		int16			typeID			=2;//模版ID
+	required		int16			num				=3;//数量
+}
+
+//商店开宝箱信息
+message cs_box_shop_info[id=12007]{
+}
+
+message sc_box_shop_info[id=12008]{
+	repeated		p_shop_box_info			info		=1;//商店售卖信息
+}
+
+message p_shop_box_info[id=12009]{
+	required		int16			itemTypeID		=1;//道具id
+	required		int32			valueOne		=2;//单次价格
+	required		int32			valueTen		=3;//10次价格
+	required		int8				isOpenActivity	=4;//是否开启打折活动
+	required		int32			discount				=5;//打折信息(1到100之间)
+	required		int32			endtime				=6;//活动结束时间戳
+}
+
+message p_reward_view3[id=12010]{
+	required		int8			type			=1;//类型 1=>item 2=>ger
+	required		int16			typeID			=2;//模版ID
+	required		int32			num				=3;//数量
+}
+
+message cs_box_get_spirit_equip_count[id=12011]{
+}
+message sc_box_get_spirit_equip_count[id=12012]{
+	required	int32		count1 = 1;
+	required	int32		count2 = 2;
+	required	int32		needItemTypeID1=3;
+	required	int32		needNum1=4;
+	required	int32		needItemTypeID2=5;
+	required	int32		needNum2=6;
+    required    int32       count3 = 7;
+    required    int32       needItemTypeID3=8;
+    required    int32       needNum3=9;
+}
+
+// 道具开宝箱，如果开宝箱成功，前端自行同步道具的扣除
+message	cs_box_item_multi[id=12013]{
+	required		int16		itemTypeID			=1;//道具模版ID
+	required		int8		itemNum				=2;//道具数量
+}
+
+message	sc_box_item_multi[id=12014]{
+	required		int8		result				=1;//开宝箱结果
+	// 1=> 成功
+	// 2=> 失败-道具不足
+	// 3=> 失败-未知原因
+	repeated		p_reward_view	reward			=2;//奖励信息
+	required		int16		itemTypeID			=3;//道具模版ID
+}
+
+message cs_box_free_info[id=12015]{
+}
+
+message sc_box_free_info[id=12016]{
+    required    int8                gerTime1        =1;
+    required    int8                gerTime2        =2;
+    required    int8                itemTime1       =3;
+    required    int8                itemTime2       =4;
+    required    int8                trainerTime1    =5;
+    required    int8                trainerTime2    =6;
+    required    int8                itemfreeTimeMax =7;
+    required    int8                buyfreeTimeMax  =8;
+}
+
+message	cs_box_free_open[id=12017]{
+		required	int8		type							=1;
+		//1 => 武将  11 => gold ger
+		//2 => 道具  12 => gold item
+        //100 => trainer 110 => gold trainer
+}
+
+message sc_box_free_open[id=12018]{
+	required		int8		result				=1;//请求结果
+	// 1=> 成功
+	// 2=> 失败-没有免费次数,重新获取信息
+	// 3=> 失败-未知原因
+	repeated		p_reward_view	reward			=2;//奖励信息
+}
+
+message sc_box_mystery_notice[id=12019]{
+    required    string          title       =1;//标题
+    required    string          content     =2;//文字内容
+    repeated    p_reward_view   reward      =3;//奖励信息
+}
+
+message	cs_box_shopBoxDtl[id=12020]{
+}
+message	sc_box_shopBoxDtl[id=12021]{
+	required	int32		spiritItemTS	=1[default=0];
+	required	int32		spiritOneTS	=2[default=0];
+	required	int32		spiritTenTS	=3[default=0];
+	required	int32		itemItemTS	=4[default=0];
+	required	int32		itemOneTS	=5[default=0];
+	required	int32		itemTenTS	=6[default=0];
+	required	int32		trainerItemTS	=7[default=0];
+	required	int32		trainerOneTS	=8[default=0];
+	required	int32		trainerTenTS	=9[default=0];
+}
+
+// 商店开宝箱
+message    cs_box_shop_view[id=12022]{
+    required        int32       tab         =1;//24001=召唤精灵    24002=祈祷装备   24100=祈祷训练师装备
+    required        int8        type        =2;//0:道具抽取  1:钻石抽1次  2:钻石抽取10次  3:道具10连抽  4:道具100抽
+}
+
+message sc_box_shop_view[id=12023]{
+	required		int8		result				=1;//请求结果
+	// 1=> 成功
+	// 2=> 失败-没有未获取内容
+	repeated		p_reward_view	reward			=2;//奖励信息
+}
+
+message    cs_box_shop_refresh[id=12024]{
+    required        int32       tab         =1;//24001=召唤精灵    24002=祈祷装备   24100=祈祷训练师装备
+    required        int8        type        =2;//0:道具抽取  1:钻石抽1次  2:钻石抽取10次  3:道具10连抽 4:道具100抽
+}
+
+message sc_box_shop_refresh[id=12025]{
+	required		int8		result			=1;// 1 => 成功,2=> 刷新冷却 3=> 没有道具
+	repeated		p_reward_view	reward			=2;//奖励信息
+	required		int32		ts			=3[default=0];//倒计时
+}
+
+message	cs_box_shop_get[id=12026]{
+	required	int32		tab		=1;
+	required	int8		type		=2;
+}
+
+message	sc_box_shop_get[id=12027]{
+	required		int8		result		=1;
+	//1 => 成功
+	//2 => 失败，没有未获取内容
+	//3 => 失败，消耗品不足
+}
+
+message cs_box_free_get[id=12028]{
+	required		int8		type		=1; //1,2,100   精灵，道具，训练师
+}
+
+message	sc_box_free_get[id=12029]{
+	required		int8		result				=1;//请求结果
+	// 1=> 成功
+	// 2=> 失败-没有免费次数,重新获取信息
+	// 3=> 失败-需要刷新
+}
+
+message cs_box_ticket_shop[id=12030]{
+	required		int8		type		=1;//1 => 单抽 2=> 十连抽
+}
+
+message sc_box_ticket_shop[id=12031]{
+	required		int8		result		=1;
+	//1 => 成功  2 => 失败,消耗品不足
+	repeated		p_reward_view	reward			=2;//奖励信息
+}
+
+message	cs_box_ticket_info[id=12032]{
+}
+
+message	sc_box_ticket_info[id=12033]{
+	required		int16		cost1		=1;
+	required		int16		cost10		=2;
+}

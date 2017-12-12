@@ -1,0 +1,14 @@
+//模块=push
+//编号=12500
+
+
+// 推送提示
+message sc_push_highlight_Info[id=12501]{
+	required	int8		value		=1;
+	//1 => 虎牢关
+	//2 => 战南蛮
+	//3 => waiting ... 
+	required	int8		type		=2;
+	//1 => open
+	//2 => close
+}

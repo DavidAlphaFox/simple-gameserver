@@ -1,0 +1,89 @@
+%%聚宝盆功能协议
+
+message cs_treasurebowl_info[id=16501]
+{
+	
+}
+
+message sc_treasurebowl_info[id=16502]
+{
+	required                  int8                       result             =1;
+	//1->成功
+	//2->失败
+	repeated                  p_treasurebowl_activity    activitylist       =2;
+	required                  int8                       period             =3[default=0];
+	repeated                  int32                      periodendtime      =4[default=0];
+	required                  int32                      activitybegin      =5[default=0];
+	required                  int32                      activityend        =6[default=0];
+	required                  string                     content            =7;
+}
+
+message p_treasurebowl_activity[id=16503]
+{
+	required                  int32                      activityID         =1[default=0];
+	required                  int8                       activitystate      =2[default=0];
+	//1->完成
+	//2->未完成
+	repeated                  p_treasurebowl_draw        drawlist           =3;
+	required                  int8                       type               =4[default=0];
+	//1->充值活动
+	//2->兑换活动
+	required                  int32                      condition          =5[default=0]; //需要完成的额度
+}
+
+message p_treasurebowl_draw[id=16504]
+{
+	required                  int32                      drawID             =1[default=0];
+	required                  int8                       state              =2[default=0];
+	//1->完成
+	//2->未完成
+	required                  int8                       period             =3;
+	required                  p_reward_info              reward             =4;
+}
+
+message sc_treasurebowl_update[id=16505]
+{
+	required                  int8                       period             =1;
+}
+
+message cs_treasurebowl_exchange[id=16506]
+{
+	required                  int32                      activityID         =1;
+}
+
+message sc_treasurebowl_exchange[id=16507]
+{
+	required                  int8                       result             =1;
+	//1->成功
+	//2->失败，不在完成任务的时间段
+	//3->失败，不存在对应任务
+	//4->失败，对应任务已经完成，不需要再完成
+	//5->失败，完成任务的条件不足（此处目前就是钻石不足)
+	//6->失败，对应活动不是兑换活动
+}
+
+message cs_treasurebowl_draw[id=16508]
+{
+	required                  int32                      activityID         =1;
+	required                  int32                      drawID             =2;	
+}
+
+message sc_treasurebowl_draw[id=16509]
+{
+	required                  int8                       result             =1;
+	//1->成功
+	//2->失败，对应奖励条目不存在
+	//3->失败，不在领取时间段内
+	//4->失败，任务没有完成
+	//5->失败，对应奖励已经领取
+	repeated                  p_reward_info              reward             =2;
+}
+
+message sc_treasurebowl_open[id=16510]
+{
+	required                  int8                       state              =1;
+	//0->未开启阶段
+	//1->任务阶段
+	//3->不能完成任务阶段
+	//4->整个活动结束阶段
+}

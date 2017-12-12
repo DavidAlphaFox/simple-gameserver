@@ -1,0 +1,62 @@
+跨服战配置说明
+
+需要修改的配置在setting.config中
+另外活动的时间和奖励等配置在data_cross.config中
+
+运维通过修改setting.config中的配置项来启动跨服战功能
+
+注意，跨服主服是单独起的一个服务器，不是玩家登入连接的服务器，只用作处理跨服活动的功能，
+跨服的从服务器就是玩家登入连接的普通服务器，从服务器和主服务器的配置有些差别，具体如下
+
+配置项如下
+
+
+%% 是否为跨服主服务器，主服务器为true，从服务器（即玩家连接的普通服务器）为false
+{is_cross_master, false}.
+
+%% 是否需要保持跨服服务器之间的连接，若配置为true，则开启跨服功能，若配置为false，则关闭跨服功能
+{is_need_connect, true}.
+
+%% 跨服主服的IP，这里填上跨服主服务器所在的内网IP
+{cross_master_ip, '192.168.1.130'}.
+
+%% 跨服主服的ID，一个主服负责一个跨服战活动，如果有多个跨服战活动，就需要多个跨服主服，ID需要区别开
+{cross_master_id, 1}.
+
+%% 跨服从服务器的列表,这个配置主服务器会去读取，从服务器不关心此配置，主服务器会根据配置去连接这些从服务器
+格式：[{服务器ID, '服务器机器内网IP'}, {服务器ID, '服务器机器内网IP'}...]
+{cross_slave_server_list, [{4, '192.168.1.130'}, {22, '192.168.1.130'}, {28, '192.168.1.130'}]}.
+
+%% 跨服连接需要设置的cookie， 这个不用修改
+{cookie, crimoon}.
+
+%% 服务器所属平台，比如混服就是zz,苹果就是game_app
+{platform, dev}.
+
+备注：另外在erlang shell控制台留了几个接口供运维使用
+
+cross_server:update_server_list(). 
+在跨服活动关闭后可以通过调用此函数让主服务器和从服务器从配置更新需要连接的服务器
+如需更新，配置修改如下
+主服务器端修改cross_slave_server_list
+从服务器端修改cross_master_ip， cross_master_id
+
+更新成功后日志会输出提示
+
+cross_server:update_left_seconds(Y, Mo, D, H, Mi, S).
+此函数用于修改跨服战活动开启后，当前阶段结束的时刻，六个参数指定年月日时分秒，
+更新成功后日志会输出提示
+
+关于服务器启动脚本start.sh 需要加启动参数
+主服务器：如果setting.config中配置为 {platform, dev}. {cross_master_id, 1}.
+则加上 -name dev_master_1@192.168.1.130
+
+从服务器：如果setting.config中配置为 {platform, dev}. {server_id, 4}.
+则加上 -name dev4@192.168.1.130
+
+
+
+
+
+
+

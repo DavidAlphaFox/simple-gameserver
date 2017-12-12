@@ -1,0 +1,81 @@
+%1星1转
+{data_ger_breakthrough, 10001,"",9,[{item,20018,1},{item,20019,1},{item,20020,1},{item,20021,1}]}.
+%2星1转
+{data_ger_breakthrough, 10002,"",9,[{item,20018,1},{item,20019,1},{item,20020,1},{item,20021,1}]}.
+%3星1转
+{data_ger_breakthrough, 10003,"",9,[{item,20018,5},{item,20019,1},{item,20020,1},{item,20021,1}]}.
+%4星1转
+{data_ger_breakthrough, 10004,"",9,[{item,20018,10},{item,20019,2},{item,20020,1},{item,20021,1}]}.
+%5星1转
+{data_ger_breakthrough, 10005,"",9,[{item,20018,40},{item,20019,20},{item,20020,2},{item,20021,5}]}.
+%6星1转
+{data_ger_breakthrough, 10006,"",9,[{item,20018,200},{item,20019,100},{item,20020,10},{item,20021,25}]}.
+%7星1转
+{data_ger_breakthrough, 10007,"",9,[{item,20018,1000},{item,20019,500},{item,20020,50},{item,20021,125}]}.
+%1星2转
+{data_ger_breakthrough, 20001,"",19,[{item,20022,1},{item,20023,1},{item,20024,1},{item,20025,1}]}.
+%2星2转
+{data_ger_breakthrough, 20002,"",19,[{item,20022,1},{item,20023,1},{item,20024,1},{item,20025,1}]}.
+%3星2转
+{data_ger_breakthrough, 20003,"",19,[{item,20022,5},{item,20023,1},{item,20024,1},{item,20025,1}]}.
+%4星2转
+{data_ger_breakthrough, 20004,"",19,[{item,20022,10},{item,20023,2},{item,20024,1},{item,20025,1}]}.
+%5星2转
+{data_ger_breakthrough, 20005,"",19,[{item,20022,40},{item,20023,20},{item,20024,2},{item,20025,5}]}.
+%6星2转
+{data_ger_breakthrough, 20006,"",19,[{item,20022,200},{item,20023,100},{item,20024,10},{item,20025,25}]}.
+%7星2转
+{data_ger_breakthrough, 20007,"",19,[{item,20022,1000},{item,20023,500},{item,20024,50},{item,20025,125}]}.
+%7星3转1
+{data_ger_breakthrough, 30007,"",24,[{item,20046,400},{item,20047,200},{item,20048,20},{item,20049,50}]}.
+%7星3转2
+{data_ger_breakthrough, 30008,"",24,[{item,20046,600},{item,20047,300},{item,20048,30},{item,20049,75}]}.
+%7星3转3
+{data_ger_breakthrough, 30009,"",24,[{item,20046,1000},{item,20047,500},{item,20048,50},{item,20049,125}]}.
+%7星4转1
+{data_ger_breakthrough, 40007,"",29,[{item,20046,800},{item,20047,400},{item,20048,40},{item,20049,100}]}.
+%7星4转2
+{data_ger_breakthrough, 40008,"",29,[{item,20046,1200},{item,20047,600},{item,20048,60},{item,20049,150}]}.
+%7星4转3
+{data_ger_breakthrough, 40009,"",29,[{item,20046,2000},{item,20047,1000},{item,20048,100},{item,20049,250}]}.
+
+%1星1转
+{data_ger_breakthrough, 10011,"",9,[{item,20018,1},{item,20019,1},{item,20020,1},{item,20021,1}]}.
+%2星1转
+{data_ger_breakthrough, 10012,"",9,[{item,20018,1},{item,20019,1},{item,20020,1},{item,20021,1}]}.
+%3星1转
+{data_ger_breakthrough, 10013,"",9,[{item,20018,5},{item,20019,1},{item,20020,1},{item,20021,1}]}.
+%4星1转
+{data_ger_breakthrough, 10014,"",9,[{item,20018,10},{item,20019,2},{item,20020,1},{item,20021,1}]}.
+%5星1转
+{data_ger_breakthrough, 10015,"",9,[{item,20018,40},{item,20019,20},{item,20020,2},{item,20021,5}]}.
+%6星1转
+{data_ger_breakthrough, 10016,"",9,[{item,20018,200},{item,20019,100},{item,20020,10},{item,20021,25}]}.
+%7星1转
+{data_ger_breakthrough, 10017,"",9,[{item,20018,1000},{item,20019,500},{item,20020,50},{item,20021,125}]}.
+%1星2转
+{data_ger_breakthrough, 20011,"",19,[{item,20022,1},{item,20023,1},{item,20024,1},{item,20025,1}]}.
+%2星2转
+{data_ger_breakthrough, 20012,"",19,[{item,20022,1},{item,20023,1},{item,20024,1},{item,20025,1}]}.
+%3星2转
+{data_ger_breakthrough, 20013,"",19,[{item,20022,5},{item,20023,1},{item,20024,1},{item,20025,1}]}.
+%4星2转
+{data_ger_breakthrough, 20014,"",19,[{item,20022,10},{item,20023,2},{item,20024,1},{item,20025,1}]}.
+%5星2转
+{data_ger_breakthrough, 20015,"",19,[{item,20022,40},{item,20023,20},{item,20024,2},{item,20025,5}]}.
+%6星2转
+{data_ger_breakthrough, 20016,"",19,[{item,20022,200},{item,20023,100},{item,20024,10},{item,20025,25}]}.
+%7星2转
+{data_ger_breakthrough, 20017,"",19,[{item,20022,1000},{item,20023,500},{item,20024,50},{item,20025,125}]}.
+%7星3转1
+{data_ger_breakthrough, 30017,"",24,[{item,20046,400},{item,20047,200},{item,20048,20},{item,20049,50}]}.
+%7星3转2
+{data_ger_breakthrough, 30018,"",24,[{item,20046,600},{item,20047,300},{item,20048,30},{item,20049,75}]}.
+%7星3转3
+{data_ger_breakthrough, 30019,"",24,[{item,20046,1000},{item,20047,500},{item,20048,50},{item,20049,125}]}.
+%7星4转1
+{data_ger_breakthrough, 40017,"",29,[{item,20046,800},{item,20047,400},{item,20048,40},{item,20049,100}]}.
+%7星4转2
+{data_ger_breakthrough, 40018,"",29,[{item,20046,1200},{item,20047,600},{item,20048,60},{item,20049,150}]}.
+%7星4转3
+{data_ger_breakthrough, 40019,"",29,[{item,20046,2000},{item,20047,1000},{item,20048,100},{item,20049,250}]}.
