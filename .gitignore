@@ -3,3 +3,4 @@
 /.settings/
 *.beam
 *.html
+*.dump
